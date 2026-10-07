@@ -41,6 +41,8 @@ enum EscrowStatus {
   HELD_IN_ESCROW
   RELEASED
   REFUNDED
+  FAILED
+  EXPIRED
 }
 
 // ==========================================
@@ -80,6 +82,7 @@ model Profile {
   bio          String?  @db.Text
   companyName  String?
   portfolioUrl String?
+  cityCode     String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -124,22 +127,36 @@ model UserSkill {
   @@map("user_skills")
 }
 
+model MinimumWage {
+  id         String   @id @default(uuid())
+  cityCode   String   @unique
+  cityName   String
+  hourlyRate Decimal  @db.Decimal(10, 2)
+  year       Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([cityCode])
+  @@map("minimum_wages")
+}
+
 // ==========================================
 // JOB & PROPOSAL MODELS
 // ==========================================
 
 model Job {
-  id          String    @id @default(uuid())
-  employerId  String
-  employer    User      @relation("EmployerJobs", fields: [employerId], references: [id], onDelete: Cascade)
-  title       String
-  description String    @db.Text
-  category    String
-  budget      Float
-  status      JobStatus @default(OPEN)
-  deadline    DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id             String    @id @default(uuid())
+  employerId     String
+  employer       User      @relation("EmployerJobs", fields: [employerId], references: [id], onDelete: Cascade)
+  title          String
+  description    String    @db.Text
+  category       String
+  budget         Decimal   @db.Decimal(14, 2)
+  estimatedHours Int       @map("estimated_hours")
+  status         JobStatus @default(OPEN)
+  deadline       DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
   jobSkills   JobSkill[]
   proposals   Proposal[]
@@ -170,7 +187,7 @@ model Proposal {
   freelancerId  String
   freelancer    User           @relation("FreelancerProposals", fields: [freelancerId], references: [id], onDelete: Cascade)
   coverLetter   String?        @db.Text
-  bidAmount     Float
+  bidAmount     Decimal        @db.Decimal(14, 2)
   estimatedDays Int
   status        ProposalStatus @default(PENDING)
   createdAt     DateTime       @default(now())
@@ -214,7 +231,7 @@ model EscrowTransaction {
   employer          User         @relation("EmployerEscrow", fields: [employerId], references: [id])
   freelancerId      String?
   freelancer        User?        @relation("FreelancerEscrow", fields: [freelancerId], references: [id])
-  amount            Float
+  amount            Decimal      @db.Decimal(14, 2)
   midtransSnapToken String?
   paymentStatus     EscrowStatus @default(PENDING)
   createdAt         DateTime     @default(now())

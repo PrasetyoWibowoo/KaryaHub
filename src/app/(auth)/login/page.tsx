@@ -5,8 +5,17 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 
 export default function LoginPage() {
+
+
+
+
   return (
+
     <div className="min-h-screen flex items-center justify-center p-4 bg-bg-base">
+
+
+      
+
       <Card className="w-full max-w-md p-6 sm:p-8 space-y-6">
         <div className="text-center space-y-2">
           <Link href="/" className="inline-flex items-center gap-2 mb-2">
@@ -39,6 +48,8 @@ export default function LoginPage() {
           </Link>
         </div>
       </Card>
+
+     
     </div>
   );
 }

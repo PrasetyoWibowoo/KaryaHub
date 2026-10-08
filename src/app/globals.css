@@ -1,0 +1,57 @@
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-background text-text-body antialiased;
+}
+
+::selection {
+  @apply bg-primary/20 text-primary;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-surface-alt;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-border-strong rounded-sm;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-text-muted;
+}
+
+/* Focus ring system */
+*:focus-visible {
+  @apply outline-2 outline-primary outline-offset-2;
+}
+
+/* Disable focus ring for mouse users */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Hero Infinite Scroll Animations */
+@keyframes scrollVertical {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-33.333333%); }
+}
+
+.animate-scroll-y {
+  animation: scrollVertical 15s linear infinite;
+}
+
+.animate-scroll-y-reverse {
+  animation: scrollVertical 20s linear infinite reverse;
+}
+
+/* Smooth transitions for interactive elements */
+button, a, input, textarea, select {
+  @apply transition-colors duration-200;
+}

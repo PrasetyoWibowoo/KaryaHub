@@ -1,0 +1,73 @@
+# ==========================================
+# 1. CUSTOM RULES (Berdasarkan Struktur Anda)
+# ==========================================
+
+# Abaikan semua file Markdown (.md / .MD)
+*.md
+*.MD
+
+# KECUALI README.md (File ini tetap akan di-track oleh Git)
+!README.md
+
+# Abaikan file teks sementara / error log
+*.txt
+build-errors.txt
+register-temp.txt
+
+# Abaikan folder cache/config dari IDE & AI Agents
+/.gitHub/
+/.augment/
+/.codewhale/
+/.warp/
+/.factory/
+/.kilocode/
+/.codebuddy/
+/.continue/
+/.trae/
+/.gemini/
+/.qoder/
+/.opencode/
+/.roo/
+/.agents/
+/.kiro/
+/.windsurf/
+/.claude/
+/.cursor/
+
+# ==========================================
+# 2. NEXT.JS & NODE.JS STANDARD RULES
+# ==========================================
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+build/
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (SANGAT PENTING: Jangan pernah commit .env ke GitHub)
+.env
+.env*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts

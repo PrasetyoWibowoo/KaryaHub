@@ -1,0 +1,210 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model escrow_transactions {
+  id                                            String       @id
+  jobId                                         String       @unique
+  employerId                                    String
+  freelancerId                                  String?
+  amount                                        Float
+  midtransSnapToken                             String?
+  paymentStatus                                 EscrowStatus @default(PENDING)
+  createdAt                                     DateTime     @default(now())
+  updatedAt                                     DateTime
+  users_escrow_transactions_employerIdTousers   users        @relation("escrow_transactions_employerIdTousers", fields: [employerId], references: [id])
+  users_escrow_transactions_freelancerIdTousers users?       @relation("escrow_transactions_freelancerIdTousers", fields: [freelancerId], references: [id])
+  jobs                                          jobs         @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([employerId])
+  @@index([freelancerId])
+}
+
+model job_skills {
+  id      String @id
+  jobId   String
+  skillId String
+  jobs    jobs   @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  skills  skills @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, skillId])
+}
+
+model job_submissions {
+  id            String           @id
+  jobId         String
+  freelancerId  String
+  submissionUrl String
+  notes         String?
+  status        SubmissionStatus @default(PENDING_REVIEW)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime
+  users         users            @relation(fields: [freelancerId], references: [id], onDelete: Cascade)
+  jobs          jobs             @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([freelancerId])
+  @@index([jobId])
+}
+
+model jobs {
+  id                  String               @id
+  employerId          String
+  title               String
+  description         String
+  category            String
+  budget              Float
+  status              JobStatus            @default(OPEN)
+  deadline            DateTime?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime
+  escrow_transactions escrow_transactions?
+  job_skills          job_skills[]
+  job_submissions     job_submissions[]
+  users               users                @relation(fields: [employerId], references: [id], onDelete: Cascade)
+  proposals           proposals[]
+  reviews             reviews?
+
+  @@index([employerId])
+  @@index([status])
+}
+
+model notifications {
+  id        String   @id
+  userId    String
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  users     users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model profiles {
+  id           String   @id @default(uuid())
+  userId       String   @unique
+  phoneNumber  String?
+  avatarUrl    String?
+  bio          String?
+  companyName  String?
+  portfolioUrl String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  users        users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model proposals {
+  id            String         @id
+  jobId         String
+  freelancerId  String
+  coverLetter   String?
+  bidAmount     Float
+  estimatedDays Int
+  status        ProposalStatus @default(PENDING)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime
+  users         users          @relation(fields: [freelancerId], references: [id], onDelete: Cascade)
+  jobs          jobs           @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([freelancerId])
+  @@index([jobId])
+}
+
+model resumes_ats {
+  id               String   @id
+  userId           String
+  fileUrl          String
+  atsScore         Int
+  feedbackAnalysis Json?
+  createdAt        DateTime @default(now())
+  users            users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model reviews {
+  id                              String   @id
+  jobId                           String   @unique
+  reviewerId                      String
+  revieweeId                      String
+  rating                          Int
+  comment                         String?
+  createdAt                       DateTime @default(now())
+  jobs                            jobs     @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  users_reviews_revieweeIdTousers users    @relation("reviews_revieweeIdTousers", fields: [revieweeId], references: [id])
+  users_reviews_reviewerIdTousers users    @relation("reviews_reviewerIdTousers", fields: [reviewerId], references: [id])
+}
+
+model skills {
+  id          String        @id @default(uuid())
+  name        String        @unique
+  job_skills  job_skills[]
+  user_skills user_skills[]
+}
+
+model user_skills {
+  id      String @id @default(uuid())
+  userId  String
+  skillId String
+  skills  skills @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  users   users  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, skillId])
+}
+
+model users {
+  id                                                          String                @id @default(uuid())
+  email                                                       String                @unique
+  passwordHash                                                String
+  fullName                                                    String
+  role                                                        Role                  @default(FREELANCER)
+  createdAt                                                   DateTime              @default(now())
+  updatedAt                                                   DateTime              @updatedAt
+  escrow_transactions_escrow_transactions_employerIdTousers   escrow_transactions[] @relation("escrow_transactions_employerIdTousers")
+  escrow_transactions_escrow_transactions_freelancerIdTousers escrow_transactions[] @relation("escrow_transactions_freelancerIdTousers")
+  job_submissions                                             job_submissions[]
+  jobs                                                        jobs[]
+  notifications                                               notifications[]
+  profiles                                                    profiles?
+  proposals                                                   proposals[]
+  resumes_ats                                                 resumes_ats[]
+  reviews_reviews_revieweeIdTousers                           reviews[]             @relation("reviews_revieweeIdTousers")
+  reviews_reviews_reviewerIdTousers                           reviews[]             @relation("reviews_reviewerIdTousers")
+  user_skills                                                 user_skills[]
+}
+
+enum EscrowStatus {
+  PENDING
+  HELD_IN_ESCROW
+  RELEASED
+  REFUNDED
+}
+
+enum JobStatus {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum ProposalStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum Role {
+  FREELANCER
+  UMKM
+  ADMIN
+}
+
+enum SubmissionStatus {
+  PENDING_REVIEW
+  REVISION_REQUESTED
+  APPROVED
+}

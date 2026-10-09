@@ -11,20 +11,45 @@ body {
 
 .dashboard-sidebar {
   display: flex;
+  z-index: 20;
   background: rgba(255, 255, 255, 0.64);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-color: rgba(255, 255, 255, 0.72);
-  box-shadow: 12px 0 40px rgba(82, 75, 142, 0.06);
+  border-color: rgba(255, 255, 255, 0.82);
+  box-shadow:
+    10px 0 35px rgba(74, 78, 128, 0.08),
+    inset -1px 0 0 rgba(255, 255, 255, 0.72);
 }
 
 .dashboard-main {
   position: relative;
+  z-index: 1;
   isolation: isolate;
   padding-left: 16rem;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.42), rgba(238, 241, 255, 0.62)),
     #eef1f8;
+}
+
+.dashboard-sidebar a {
+  position: relative;
+  border: 1px solid transparent;
+}
+
+.dashboard-sidebar a:hover {
+  background: rgba(255, 255, 255, 0.46);
+  border-color: rgba(255, 255, 255, 0.64);
+  box-shadow: 0 6px 18px rgba(74, 78, 128, 0.06);
+}
+
+.dashboard-sidebar a.bg-primary\/10 {
+  background: rgba(129, 140, 248, 0.16);
+  border-color: rgba(129, 140, 248, 0.26);
+  box-shadow:
+    0 8px 20px rgba(99, 102, 241, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.68);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .dashboard-main::before,

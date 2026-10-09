@@ -12,7 +12,7 @@ interface SkillsBarChartProps {
   data: SkillData[]
 }
 
-const COLORS = ['#27272A', '#B4534B', '#71717A', '#A1A1AA', '#963F39']
+const COLORS = ['#27272A', '#15803D', '#71717A', '#A1A1AA', '#166534']
 
 export function SkillsBarChart({ data }: SkillsBarChartProps) {
   const chartData = data.map(item => ({

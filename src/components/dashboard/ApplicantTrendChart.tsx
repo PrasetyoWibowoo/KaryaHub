@@ -43,7 +43,7 @@ export function ApplicantTrendChart({ data }: ApplicantTrendChartProps) {
         <Line 
           type="monotone" 
           dataKey="hired" 
-          stroke="#B4534B" 
+          stroke="#15803D"
           strokeWidth={2}
           name="Hired"
         />

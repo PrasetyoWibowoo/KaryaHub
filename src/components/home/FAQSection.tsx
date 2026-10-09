@@ -9,7 +9,7 @@ export function FAQSection() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <FadeIn className="text-center mb-16">
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-text-heading tracking-tight mb-4">
-            Got Questions? We've Got Answers
+            Got Questions? We&apos;ve Got Answers
           </h2>
           <p className="text-text-muted text-lg max-w-2xl mx-auto">
             Find quick answers about our service, features, pricing, and how to get the most out of it.
@@ -32,9 +32,9 @@ export function FAQSection() {
           </div>
           <div className="md:col-span-2">
             <Card className="p-8 text-center bg-white h-full flex flex-col justify-center items-center shadow-card">
-              <div className="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mb-6">
-                <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-sm">
-                  <FileText className="w-5 h-5 text-text-heading" />
+              <div className="w-16 h-16 bg-accent-light rounded-2xl flex items-center justify-center mb-6">
+                <div className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center shadow-sm">
+                  <FileText className="w-5 h-5 text-white" />
                 </div>
               </div>
               <h3 className="font-bold text-text-heading text-lg mb-2">Do you have more Questions?</h3>

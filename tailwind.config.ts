@@ -36,11 +36,11 @@ const config: Config = {
           light: '#F3F4F6',
         },
 
-        // Accent (Muted Coral) - Only for special highlights, badges
+        // Accent (Muted Emerald) - Only for special highlights, badges
         accent: {
-          DEFAULT: '#B4534B',
-          hover: '#963F39',
-          light: '#FCEDEA',
+          DEFAULT: '#15803D',
+          hover: '#166534',
+          light: '#ECFDF3',
         },
 
         // Success (Neutral) - Success states, "Hired" badges, active status
@@ -49,7 +49,7 @@ const config: Config = {
           light: '#F4F4F5',
         },
 
-        // Warning (Muted Coral)
+        // Warning (Muted Amber)
         warning: {
           DEFAULT: '#9A5B13',
           light: '#FEF3C7',
@@ -93,7 +93,7 @@ const config: Config = {
         'gradient-hero': 'radial-gradient(50% 50% at 50% 50%, rgba(39,39,42,0.06) 0%, rgba(250,250,250,0) 100%)',
         'gradient-mesh': 'radial-gradient(at 20% 40%, rgba(39,39,42,0.05) 0px, transparent 50%), radial-gradient(at 80% 60%, rgba(82,82,91,0.04) 0px, transparent 50%)',
         'gradient-primary': 'linear-gradient(135deg, #27272A 0%, #18181B 100%)',
-        'gradient-accent': 'linear-gradient(135deg, #B4534B 0%, #963F39 100%)',
+        'gradient-accent': 'linear-gradient(135deg, #15803D 0%, #166534 100%)',
       },
       animation: {
         'float': 'float 6s ease-in-out infinite',

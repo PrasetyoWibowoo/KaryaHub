@@ -6,6 +6,16 @@ import { Button } from "@/components/ui/Button"
 import { Briefcase } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 
+const navButtonVariants = {
+  rest: { y: 0, scale: 1 },
+  hover: { y: -2, scale: 1.03 },
+}
+
+const navArrowVariants = {
+  rest: { rotate: -45 },
+  hover: { rotate: 0 },
+}
+
 export function Navbar() {
   const [isVisible, setIsVisible] = useState(true)
   const lastScrollY = useRef(0)
@@ -42,20 +52,27 @@ export function Navbar() {
           <Link href="#about" className="px-6 py-2.5 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors">About</Link>
           <Link href="#features" className="px-6 py-2.5 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors">Features</Link>
           <Link href="#faqs" className="px-6 py-2.5 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors">FAQs</Link>
-          <Link href="/jobs" className="group">
-            <Button variant="black" className="rounded-full px-5 py-2.5 ml-2 text-sm h-auto flex items-center gap-2">
+          <motion.div
+            className="inline-flex ml-2"
+            initial="rest"
+            whileHover="hover"
+            variants={navButtonVariants}
+            transition={{ type: "spring", stiffness: 360, damping: 20 }}
+          >
+            <Link href="/jobs">
+            <Button variant="black" className="rounded-full px-5 py-2.5 text-sm h-auto flex items-center gap-2">
               Find jobs
               <motion.span
                 aria-hidden="true"
                 className="font-bold text-accent"
-                initial={{ rotate: -45 }}
-                whileHover={{ rotate: 0 }}
+                variants={navArrowVariants}
                 transition={{ type: "spring", stiffness: 360, damping: 18 }}
               >
                 →
               </motion.span>
             </Button>
-          </Link>
+            </Link>
+          </motion.div>
         </div>
 
         <div className="flex items-center gap-3">

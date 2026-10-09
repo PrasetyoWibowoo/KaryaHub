@@ -11,7 +11,7 @@ interface ProjectStatusChartProps {
   data: ProjectData[]
 }
 
-const COLORS = ['#3F3F46', '#B4534B', '#A1A1AA', '#B91C1C']
+const COLORS = ['#3F3F46', '#15803D', '#A1A1AA', '#B91C1C']
 
 export function ProjectStatusChart({ data }: ProjectStatusChartProps) {
   return (

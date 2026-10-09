@@ -31,13 +31,13 @@ export function Navbar() {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between">
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 font-display text-2xl font-black tracking-tight text-text-heading hover:text-primary transition-colors">
           <Briefcase className="w-7 h-7 text-primary" />
           <span>KaryaHub</span>
         </Link>
 
-        <div className="hidden md:flex items-center bg-white/80 backdrop-blur-md border border-border/50 rounded-full p-1 shadow-soft">
+        <div className="hidden lg:flex lg:absolute lg:left-1/2 lg:-translate-x-1/2 items-center bg-white/80 backdrop-blur-md border border-border/50 rounded-full p-1 shadow-soft">
           <Link href="#about" className="px-6 py-2.5 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors">About</Link>
           <Link href="#features" className="px-6 py-2.5 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors">Features</Link>
           <Link href="#faqs" className="px-6 py-2.5 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors">FAQs</Link>

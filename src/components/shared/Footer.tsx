@@ -19,7 +19,7 @@ export function Footer() {
           </div>
           <div className="flex gap-4">
             <Button variant="outline" className="rounded-full px-6">Follow Us</Button>
-            <Button variant="primary" className="rounded-full px-6 text-text-heading">Sign Up Now</Button>
+            <Button variant="primary" className="rounded-full px-6">Sign Up Now</Button>
           </div>
         </div>
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-bold text-text-muted pt-6 border-t border-border uppercase tracking-widest">

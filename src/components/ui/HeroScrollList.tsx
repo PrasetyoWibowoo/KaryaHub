@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { motion, useMotionValue, animate } from "framer-motion"
+import { motion, useMotionValue, animate, useReducedMotion } from "framer-motion"
 
 interface HeroScrollListProps {
   items: string[]
@@ -15,7 +15,6 @@ interface HeroScrollListProps {
 const ITEM_H   = 20  // font line-height in px
 const GAP      = 34  // gap between items
 const STEP     = ITEM_H + GAP   // 54px per slot
-const VISIBLE  = 5               // how many items are visible at once
 // Container height that centers item-index 2 (the middle one) exactly at 50%
 // containerH/2 = STEP*2 + ITEM_H/2 → containerH = STEP*4 + ITEM_H = 236
 const CONTAINER_H = STEP * 4 + ITEM_H // 236px
@@ -28,6 +27,7 @@ export function HeroScrollList({
   stepDuration = 0.6,
 }: HeroScrollListProps) {
   const n = items.length
+  const shouldReduceMotion = useReducedMotion()
   // Triple: [copy A | copy B | copy C]
   // We start viewing copy B. Each step we move DOWN (+STEP).
   // After n steps we've moved to copy C — instantly reset to copy B (same content).
@@ -48,12 +48,14 @@ export function HeroScrollList({
     y.set(startY)
     curY.current = startY
     steps.current = 0
+    if (shouldReduceMotion) return
 
+    let animation: ReturnType<typeof animate> | undefined
     function tick() {
       const target = curY.current + STEP  // move DOWN by one slot
       steps.current++
 
-      animate(y, target, {
+      animation = animate(y, target, {
         duration: stepDuration,
         ease: [0.25, 0.46, 0.45, 0.94],
         onComplete: () => {
@@ -71,9 +73,11 @@ export function HeroScrollList({
     }
 
     timer.current = setTimeout(tick, intervalMs)
-    return () => { if (timer.current) clearTimeout(timer.current) }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    return () => {
+      if (timer.current) clearTimeout(timer.current)
+      animation?.stop()
+    }
+  }, [shouldReduceMotion, startY, stepDuration, intervalMs, n, y])
 
   const isRight = align === "right"
 

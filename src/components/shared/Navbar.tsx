@@ -3,11 +3,11 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/Button"
 import { Briefcase } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 export function Navbar() {
   const [isVisible, setIsVisible] = useState(true)
-  const [lastScrollY, setLastScrollY] = useState(0)
+  const lastScrollY = useRef(0)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,15 +19,15 @@ export function Navbar() {
       } 
       // Hide when scrolling down, show when scrolling up
       else {
-        setIsVisible(currentScrollY < lastScrollY)
+        setIsVisible(currentScrollY < lastScrollY.current)
       }
       
-      setLastScrollY(currentScrollY)
+      lastScrollY.current = currentScrollY
     }
 
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [lastScrollY])
+  }, [])
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
@@ -40,10 +40,10 @@ export function Navbar() {
         <div className="hidden md:flex items-center bg-white/80 backdrop-blur-md border border-border/50 rounded-full p-1 shadow-soft">
           <Link href="#about" className="px-6 py-2.5 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors">About</Link>
           <Link href="#features" className="px-6 py-2.5 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors">Features</Link>
-          <Link href="#faqs" className="px-6 py-2.5 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors">FAQ's</Link>
+          <Link href="#faqs" className="px-6 py-2.5 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors">FAQs</Link>
           <Link href="/jobs">
             <Button variant="black" className="rounded-full px-5 py-2.5 ml-2 text-sm h-auto flex items-center gap-2">
-              Find job's <span className="font-bold -rotate-45 text-accent">→</span>
+              Find jobs <span className="font-bold -rotate-45 text-accent">→</span>
             </Button>
           </Link>
         </div>

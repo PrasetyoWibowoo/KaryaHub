@@ -1,8 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { motion } from "framer-motion"
-import { Sparkles, TrendingUp, Users, MapPin } from "lucide-react"
+import { MapPin } from "lucide-react"
 import { Button } from "@/components/ui/Button"
 import { FadeIn } from "@/components/ui/FadeIn"
 import { HeroScrollList } from "@/components/ui/HeroScrollList"
@@ -53,7 +52,7 @@ export function HeroSection() {
           items={locations}
           align="right"
           indicator={
-            <span className="text-base leading-none">📍</span>
+            <MapPin className="h-4 w-4 text-primary" aria-hidden="true" />
           }
           intervalMs={2700}
           stepDuration={0.6}
@@ -103,7 +102,7 @@ export function HeroSection() {
           </div>
           
           <h2 className="text-2xl sm:text-3xl md:text-[2.5rem] font-medium leading-[1.3] text-center tracking-tight max-w-[90%] mx-auto">
-            <span className="text-text-heading">With smart algorithms, personalized job matches, and a clean, user-first design, we take the stress out of your job hunt. Whether you're starting fresh or looking for your next big move, our platform </span>
+            <span className="text-text-heading">With smart algorithms, personalized job matches, and a clean, user-first design, we take the stress out of your job hunt. Whether you&apos;re starting fresh or looking for your next big move, our platform </span>
             <span className="text-text-muted">helps you discover the right opportunities, stay updated in real-time, and apply with ease, so you can focus on what truly matters: getting hired.</span>
           </h2>
           

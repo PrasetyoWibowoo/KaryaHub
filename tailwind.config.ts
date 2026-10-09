@@ -23,8 +23,8 @@ const config: Config = {
 
         // Primary (Modern Blue) - Main buttons, navigation, links
         primary: {
-          DEFAULT: '#3B82F6',
-          hover: '#2563EB',
+          DEFAULT: '#1D4ED8',
+          hover: '#1E40AF',
           light: '#DBEAFE',
           glow: 'rgba(59,130,246,0.25)',
         },
@@ -38,8 +38,8 @@ const config: Config = {
 
         // Accent (Lime Green) - Only for special highlights, badges
         accent: {
-          DEFAULT: '#7FFF00',
-          hover: '#6FEF00',
+          DEFAULT: '#4D7C0F',
+          hover: '#3F6212',
           light: '#EEFFCC',
         },
 

@@ -34,7 +34,7 @@ export function Sidebar() {
   ]
 
   return (
-    <aside className="fixed left-0 top-0 hidden h-screen w-64 bg-surface border-r border-border lg:flex lg:flex-col">
+    <aside className="dashboard-sidebar fixed left-0 top-0 h-screen w-64 bg-surface border-r border-border flex flex-col">
       {/* Logo Area */}
       <div className="h-16 flex items-center px-6 border-b border-border">
         <Link href="/" className="flex items-center gap-1">

@@ -9,6 +9,57 @@ body {
   @apply bg-background text-text-body antialiased;
 }
 
+.dashboard-sidebar {
+  display: flex;
+}
+
+.dashboard-main {
+  padding-left: 16rem;
+}
+
+.jobs-page-content {
+  margin-left: 16rem;
+}
+
+.jobs-layout {
+  display: flex;
+}
+
+.jobs-filter {
+  width: 18rem;
+}
+
+.jobs-filter-panel {
+  position: sticky;
+  top: 1.5rem;
+}
+
+@media (max-width: 1023px) {
+  .dashboard-sidebar {
+    display: none;
+  }
+
+  .dashboard-main {
+    padding-left: 0;
+  }
+
+  .jobs-page-content {
+    margin-left: 0;
+  }
+
+  .jobs-layout {
+    flex-direction: column;
+  }
+
+  .jobs-filter {
+    width: 100%;
+  }
+
+  .jobs-filter-panel {
+    position: static;
+  }
+}
+
 ::selection {
   @apply bg-primary/20 text-primary;
 }

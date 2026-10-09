@@ -105,12 +105,12 @@ export default function JobsPage() {
       <Sidebar />
 
       {/* Main Content with left margin for sidebar */}
-      <div className="lg:ml-64">
+      <div className="jobs-page-content">
         <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col lg:flex-row gap-6">
+          <div className="jobs-layout gap-6">
             {/* Filter Sidebar - Sticky */}
-            <aside className="w-full lg:w-72 shrink-0">
-            <div className="lg:sticky lg:top-6 bg-surface border border-border rounded-xl p-5">
+            <aside className="jobs-filter shrink-0">
+            <div className="jobs-filter-panel bg-surface border border-border rounded-xl p-5">
               {/* Filter Header */}
               <div className="mb-6 pb-4 border-b border-border">
                 <h2 className="text-lg font-bold text-text-heading mb-1">Filter Proyek</h2>

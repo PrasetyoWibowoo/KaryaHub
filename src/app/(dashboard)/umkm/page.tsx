@@ -191,8 +191,8 @@ export default function UMKMDashboard() {
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[0.85fr_1.15fr]">
-        <Card hover={false} className="p-6">
+      <div className="workspace-analytics-grid">
+        <Card hover={false} className="workspace-insight-panel p-6">
           <h2 className="text-lg font-semibold text-text-heading mb-4 flex items-center gap-2">
             <Briefcase className="w-5 h-5 text-primary" />
             Project Status Overview
@@ -200,7 +200,7 @@ export default function UMKMDashboard() {
           <ProjectStatusChart data={umkmData.projectStatus} />
         </Card>
 
-        <Card hover={false} className="p-6">
+        <Card hover={false} className="workspace-primary-panel p-6">
           <h2 className="text-lg font-semibold text-text-heading mb-4 flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-accent" />
             Applicant Trends
@@ -210,7 +210,7 @@ export default function UMKMDashboard() {
       </div>
 
       {/* Active Projects & Recent Applicants */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="workspace-lower-grid">
         <Card hover={false} className="p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-text-heading">Active Projects</h2>

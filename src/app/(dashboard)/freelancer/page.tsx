@@ -175,8 +175,8 @@ export default function FreelancerDashboard() {
 
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-        <Card hover={false} className="p-6">
+      <div className="workspace-analytics-grid">
+        <Card hover={false} className="workspace-primary-panel p-6">
           <h2 className="text-lg font-semibold text-text-heading mb-4 flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-primary" />
             Skills Distribution
@@ -184,7 +184,7 @@ export default function FreelancerDashboard() {
           <SkillsRadarChart data={freelancerData.skillsData} />
         </Card>
 
-        <Card hover={false} className="p-6">
+        <Card hover={false} className="workspace-insight-panel p-6">
           <h2 className="text-lg font-semibold text-text-heading mb-4 flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-accent" />
             Skills vs Job Opportunities
@@ -194,7 +194,7 @@ export default function FreelancerDashboard() {
       </div>
 
       {/* Activity & Recommendations */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="workspace-lower-grid">
         <Card hover={false} className="p-6">
           <h2 className="text-lg font-semibold text-text-heading mb-4">Recent Activity</h2>
           <ActivityTimeline activities={freelancerData.recentActivity} />

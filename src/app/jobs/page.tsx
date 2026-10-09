@@ -100,7 +100,7 @@ export default function JobsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="jobs-page-shell min-h-screen">
       {/* Main Navigation Sidebar */}
       <Sidebar />
 

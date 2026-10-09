@@ -210,8 +210,8 @@ export default function UMKMDashboard() {
       </div>
 
       {/* Active Projects & Recent Applicants */}
-      <div className="workspace-lower-grid">
-        <Card hover={false} className="p-6">
+      <div className="workspace-projects-grid workspace-lower-grid">
+        <Card hover={false} className="workspace-projects-panel p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-text-heading">Active Projects</h2>
             <Button variant="ghost" size="sm">
@@ -259,7 +259,7 @@ export default function UMKMDashboard() {
           </div>
         </Card>
 
-        <Card hover={false} className="p-6">
+        <Card hover={false} className="workspace-projects-panel p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-text-heading">Recent Applicants</h2>
             <Button variant="ghost" size="sm">

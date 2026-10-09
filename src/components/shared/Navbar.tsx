@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/Button"
 import { Briefcase } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
@@ -41,9 +42,18 @@ export function Navbar() {
           <Link href="#about" className="px-6 py-2.5 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors">About</Link>
           <Link href="#features" className="px-6 py-2.5 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors">Features</Link>
           <Link href="#faqs" className="px-6 py-2.5 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors">FAQs</Link>
-          <Link href="/jobs">
+          <Link href="/jobs" className="group">
             <Button variant="black" className="rounded-full px-5 py-2.5 ml-2 text-sm h-auto flex items-center gap-2">
-              Find jobs <span className="font-bold -rotate-45 text-accent">→</span>
+              Find jobs
+              <motion.span
+                aria-hidden="true"
+                className="font-bold text-accent"
+                initial={{ rotate: -45 }}
+                whileHover={{ rotate: 0 }}
+                transition={{ type: "spring", stiffness: 360, damping: 18 }}
+              >
+                →
+              </motion.span>
             </Button>
           </Link>
         </div>

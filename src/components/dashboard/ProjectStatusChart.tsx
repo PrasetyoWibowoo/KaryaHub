@@ -11,7 +11,7 @@ interface ProjectStatusChartProps {
   data: ProjectData[]
 }
 
-const COLORS = ['#10b981', '#f59e0b', '#6366f1', '#ef4444']
+const COLORS = ['#3F3F46', '#B4534B', '#A1A1AA', '#B91C1C']
 
 export function ProjectStatusChart({ data }: ProjectStatusChartProps) {
   return (
@@ -24,7 +24,7 @@ export function ProjectStatusChart({ data }: ProjectStatusChartProps) {
           labelLine={false}
           label={({ name, percent }) => percent ? `${name} ${(percent * 100).toFixed(0)}%` : name}
           outerRadius={80}
-          fill="#8884d8"
+          fill="#71717A"
           dataKey="value"
         >
           {data.map((entry, index) => (

@@ -21,27 +21,27 @@ export function SkillsRadarChart({ data }: SkillsRadarChartProps) {
   return (
     <ResponsiveContainer width="100%" height={300}>
       <RadarChart data={chartData}>
-        <PolarGrid stroke="#e2e8f0" />
+        <PolarGrid stroke="#E4E4E7" />
         <PolarAngleAxis 
           dataKey="skill" 
-          tick={{ fill: '#64748b', fontSize: 12 }}
+          tick={{ fill: '#52525B', fontSize: 12 }}
         />
         <PolarRadiusAxis 
           angle={90} 
           domain={[0, 100]}
-          tick={{ fill: '#64748b', fontSize: 10 }}
+          tick={{ fill: '#52525B', fontSize: 10 }}
         />
         <Radar 
           name="Skill Level" 
           dataKey="value" 
-          stroke="#6366f1" 
-          fill="#6366f1" 
+          stroke="#27272A" 
+          fill="#27272A" 
           fillOpacity={0.6} 
         />
         <Tooltip 
           contentStyle={{ 
             backgroundColor: '#fff', 
-            border: '1px solid #e2e8f0',
+            border: '1px solid #E4E4E7',
             borderRadius: '8px',
             fontSize: '12px'
           }}

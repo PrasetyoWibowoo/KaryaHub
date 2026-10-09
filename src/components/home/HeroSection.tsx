@@ -68,17 +68,6 @@ export function HeroSection() {
               Other Way<br />
               Around
             </h1>
-            {/* The 3D Folder illusion */}
-            <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2">
-              <div className="relative">
-                <div className="absolute -top-10 left-[-20px] bg-white w-20 h-24 rounded-lg shadow-sm border border-border transform -rotate-[15deg]"></div>
-                <div className="absolute -top-12 left-[10px] bg-white w-20 h-24 rounded-lg shadow-sm border border-border transform rotate-[10deg]"></div>
-                <div className="absolute -top-8 left-[30px] bg-white w-20 h-24 rounded-lg shadow-sm border border-border transform rotate-[25deg]"></div>
-                <div className="w-32 h-24 sm:w-40 sm:h-28 bg-primary rounded-2xl rounded-tr-3xl shadow-2xl relative z-10 border-t-[12px] border-primary-hover">
-                  <div className="absolute -top-4 right-8 w-12 h-6 bg-primary-hover rounded-t-lg"></div>
-                </div>
-              </div>
-            </div>
           </div>
 
           <p className="text-xl text-text-muted mb-12 max-w-md mx-auto leading-relaxed font-medium">

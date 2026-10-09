@@ -12,7 +12,7 @@ interface SkillsBarChartProps {
   data: SkillData[]
 }
 
-const COLORS = ['#6366f1', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981']
+const COLORS = ['#27272A', '#B4534B', '#71717A', '#A1A1AA', '#963F39']
 
 export function SkillsBarChart({ data }: SkillsBarChartProps) {
   const chartData = data.map(item => ({
@@ -23,19 +23,19 @@ export function SkillsBarChart({ data }: SkillsBarChartProps) {
   return (
     <ResponsiveContainer width="100%" height={300}>
       <BarChart data={chartData}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+        <CartesianGrid strokeDasharray="3 3" stroke="#E4E4E7" />
         <XAxis 
           dataKey="skill" 
-          tick={{ fill: '#64748b', fontSize: 12 }}
+          tick={{ fill: '#52525B', fontSize: 12 }}
         />
         <YAxis 
-          tick={{ fill: '#64748b', fontSize: 12 }}
-          label={{ value: 'Jobs', angle: -90, position: 'insideLeft', fill: '#64748b' }}
+          tick={{ fill: '#52525B', fontSize: 12 }}
+          label={{ value: 'Jobs', angle: -90, position: 'insideLeft', fill: '#52525B' }}
         />
         <Tooltip 
           contentStyle={{ 
             backgroundColor: '#fff', 
-            border: '1px solid #e2e8f0',
+            border: '1px solid #E4E4E7',
             borderRadius: '8px',
             fontSize: '12px'
           }}

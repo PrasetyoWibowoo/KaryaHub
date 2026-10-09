@@ -4,7 +4,7 @@ import { Code2, Palette, Filter } from "lucide-react"
 
 export function FeaturesSection() {
   return (
-    <section className="py-24 bg-[#F5FFF4] relative border-t border-border/50">
+    <section className="py-24 bg-surface-alt relative border-t border-border/50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <FadeIn className="text-center mb-16">
           <h2 className="font-display text-4xl sm:text-5xl font-bold text-text-heading tracking-tight mb-4">
@@ -26,10 +26,10 @@ export function FeaturesSection() {
                 <div className="flex-1 flex items-center justify-center relative min-h-[220px]">
                   <div className="w-[85%] bg-white rounded-3xl shadow-card p-6 transform -translate-y-2 border border-gray-50 relative z-10">
                     <div className="flex items-center gap-4 mb-5">
-                      <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-500 font-bold text-xs"><Palette className="w-5 h-5"/></div>
+                      <div className="w-10 h-10 rounded-full bg-error-light flex items-center justify-center text-error font-bold text-xs"><Palette className="w-5 h-5"/></div>
                       <div>
                         <div className="font-bold text-base text-text-heading">Flutter Specialist</div>
-                        <div className="text-xs text-text-muted mt-0.5">French's</div>
+                        <div className="text-xs text-text-muted mt-0.5">French&apos;s</div>
                       </div>
                     </div>
                     <p className="text-sm text-text-heading font-medium leading-relaxed mb-6">
@@ -70,7 +70,7 @@ export function FeaturesSection() {
                     <div className="absolute top-5 right-[35%] w-5 h-5 border-t-[3px] border-r-[3px] rounded-tr-md border-text-muted"></div>
                     <div className="absolute bottom-[4.5rem] left-[35%] w-5 h-5 border-b-[3px] border-l-[3px] rounded-bl-md border-text-muted"></div>
                     <div className="absolute bottom-[4.5rem] right-[35%] w-5 h-5 border-b-[3px] border-r-[3px] rounded-br-md border-text-muted"></div>
-                    <div className="w-full h-10 bg-[#E8F8EE] rounded-lg border border-[#BCE8CD] mt-auto opacity-70 relative overflow-hidden flex items-center px-4">
+                    <div className="w-full h-10 bg-success-light rounded-lg border border-success/20 mt-auto opacity-70 relative overflow-hidden flex items-center px-4">
                        <div className="text-[10px] font-bold text-primary flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> Analyze Data...</div>
                        <div className="absolute bottom-0 left-0 w-full h-[3px] bg-primary/40 animate-pulse"></div>
                     </div>
@@ -89,13 +89,13 @@ export function FeaturesSection() {
                   <div className="w-20 h-28 bg-white rounded-xl shadow-card border border-gray-50 flex flex-col justify-end p-3 -rotate-12 translate-y-6">
                     <div className="w-full h-[3px] bg-gray-100 mb-2 rounded"></div>
                     <div className="w-3/4 h-[3px] bg-gray-100 mb-4 rounded"></div>
-                    <div className="bg-blue-500 text-[10px] text-white font-bold px-2 py-1 rounded w-fit">DOC</div>
+                    <div className="bg-accent-light text-accent text-[10px] font-bold px-2 py-1 rounded w-fit">DOC</div>
                   </div>
                   <div className="w-24 h-32 bg-white rounded-xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] border border-gray-50 flex flex-col justify-end p-3 z-10 transform scale-110">
                     <div className="w-full h-[3px] bg-gray-100 mb-2 rounded"></div>
                     <div className="w-full h-[3px] bg-gray-100 mb-2 rounded"></div>
                     <div className="w-2/3 h-[3px] bg-gray-100 mb-5 rounded"></div>
-                    <div className="bg-red-500 text-[10px] text-white font-bold px-2 py-1 rounded w-fit">PDF</div>
+                    <div className="bg-error-light text-error text-[10px] font-bold px-2 py-1 rounded w-fit">PDF</div>
                   </div>
                   <div className="w-20 h-28 bg-white rounded-xl shadow-card border border-gray-50 flex flex-col justify-end p-3 rotate-12 translate-y-4">
                     <div className="w-full h-[3px] bg-gray-100 mb-2 rounded"></div>
@@ -124,10 +124,10 @@ export function FeaturesSection() {
                 <div className="flex-1 flex flex-col justify-center relative border-b border-border/60 min-h-[160px]">
                    <div className="flex items-center justify-between mb-6">
                       <div className="flex -space-x-3">
-                        <div className="w-10 h-10 rounded-full bg-[#FCE3BA] border-[3px] border-white font-bold flex items-center justify-center text-sm shadow-sm">a</div>
-                        <div className="w-10 h-10 rounded-full bg-[#3B3D4D] border-[3px] border-white font-bold flex items-center justify-center text-sm text-white shadow-sm">G</div>
-                        <div className="w-10 h-10 rounded-full bg-[#CCD0FA] border-[3px] border-white font-bold flex items-center justify-center text-sm shadow-sm text-indigo-700">AI</div>
-                        <div className="w-10 h-10 rounded-full bg-[#FAD9D9] border-[3px] border-white font-bold flex items-center justify-center text-sm text-red-500 shadow-sm">O</div>
+                        <div className="w-10 h-10 rounded-full bg-primary-light border-[3px] border-white font-bold flex items-center justify-center text-sm shadow-sm">a</div>
+                        <div className="w-10 h-10 rounded-full bg-black border-[3px] border-white font-bold flex items-center justify-center text-sm text-white shadow-sm">G</div>
+                        <div className="w-10 h-10 rounded-full bg-primary-light border-[3px] border-white font-bold flex items-center justify-center text-sm shadow-sm text-primary">AI</div>
+                        <div className="w-10 h-10 rounded-full bg-error-light border-[3px] border-white font-bold flex items-center justify-center text-sm text-error shadow-sm">O</div>
                       </div>
                       <div className="flex items-center gap-2 px-4 py-2 border border-border rounded-full text-sm font-bold text-text-heading bg-white shadow-sm cursor-pointer hover:bg-surface-alt">
                         <Filter className="w-4 h-4" /> Filter
@@ -138,13 +138,13 @@ export function FeaturesSection() {
                         <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg" className="w-4 h-4" alt="BMW"/> UI/UX Design
                       </div>
                       <div className="px-4 py-2 bg-white border border-border/80 rounded-full shadow-sm text-[13px] font-bold flex items-center gap-2 text-text-heading">
-                        <div className="w-4 h-4 bg-[#FF4500] rounded-[4px] flex items-center justify-center text-white text-[10px]">S</div> Brand Designer
+                        <div className="w-4 h-4 bg-accent rounded-[4px] flex items-center justify-center text-white text-[10px]">S</div> Brand Designer
                       </div>
                    </div>
                    <div className="flex items-center justify-between text-[13px] text-text-muted font-semibold px-2">
                      <div>Surabaya, Indonesia</div>
                      <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 bg-primary rounded-full"></div> Level Junior</div>
-                     <div className="w-6 h-6 bg-[#2B84D3] rounded-full flex items-center justify-center text-white font-bold text-[9px] border-2 border-white shadow-sm">Ps</div>
+                     <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white font-bold text-[9px] border-2 border-white shadow-sm">Ps</div>
                    </div>
                 </div>
               </Card>
@@ -155,8 +155,8 @@ export function FeaturesSection() {
               <Card className="p-8 px-10 bg-white border-none shadow-sm hover:shadow-card transition-shadow flex items-center justify-between rounded-[2.5rem]" style={{ minHeight: 120 }}>
                 <div className="flex items-center gap-3">
                   <div className="w-14 h-14 bg-primary rounded-2xl shadow-md flex items-center justify-center transform -rotate-12 z-10"><Code2 className="w-7 h-7 text-white"/></div>
-                  <div className="w-14 h-14 bg-[#1769FF] rounded-2xl shadow-md flex items-center justify-center text-white font-bold text-2xl transform -translate-x-5 translate-y-3 z-20 border-2 border-white">Bē</div>
-                  <div className="w-14 h-14 bg-[#EA4C89] rounded-2xl shadow-md flex items-center justify-center text-white transform -translate-x-10 -rotate-12 z-0"><Palette className="w-7 h-7"/></div>
+                  <div className="w-14 h-14 bg-primary rounded-2xl shadow-md flex items-center justify-center text-white font-bold text-2xl transform -translate-x-5 translate-y-3 z-20 border-2 border-white">Bē</div>
+                  <div className="w-14 h-14 bg-accent rounded-2xl shadow-md flex items-center justify-center text-white transform -translate-x-10 -rotate-12 z-0"><Palette className="w-7 h-7"/></div>
                 </div>
                 <h3 className="text-xl font-bold text-text-heading max-w-[160px] leading-tight text-right">
                   Connect with your portfolio platforms.

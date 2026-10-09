@@ -16,18 +16,18 @@ export function ApplicantTrendChart({ data }: ApplicantTrendChartProps) {
   return (
     <ResponsiveContainer width="100%" height={300}>
       <LineChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+        <CartesianGrid strokeDasharray="3 3" stroke="#E4E4E7" />
         <XAxis 
           dataKey="month" 
-          tick={{ fill: '#64748b', fontSize: 12 }}
+          tick={{ fill: '#52525B', fontSize: 12 }}
         />
         <YAxis 
-          tick={{ fill: '#64748b', fontSize: 12 }}
+          tick={{ fill: '#52525B', fontSize: 12 }}
         />
         <Tooltip 
           contentStyle={{ 
             backgroundColor: '#fff', 
-            border: '1px solid #e2e8f0',
+            border: '1px solid #E4E4E7',
             borderRadius: '8px',
             fontSize: '12px'
           }}
@@ -36,14 +36,14 @@ export function ApplicantTrendChart({ data }: ApplicantTrendChartProps) {
         <Line 
           type="monotone" 
           dataKey="applicants" 
-          stroke="#6366f1" 
+          stroke="#27272A" 
           strokeWidth={2}
           name="Applicants"
         />
         <Line 
           type="monotone" 
           dataKey="hired" 
-          stroke="#10b981" 
+          stroke="#B4534B" 
           strokeWidth={2}
           name="Hired"
         />

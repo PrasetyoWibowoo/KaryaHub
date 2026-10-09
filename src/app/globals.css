@@ -11,10 +11,42 @@ body {
 
 .dashboard-sidebar {
   display: flex;
+  background: rgba(255, 255, 255, 0.64);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-color: rgba(255, 255, 255, 0.72);
+  box-shadow: 12px 0 40px rgba(82, 75, 142, 0.06);
 }
 
 .dashboard-main {
   padding-left: 16rem;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(129, 140, 248, 0.13), transparent 28rem),
+    radial-gradient(circle at 92% 24%, rgba(45, 212, 191, 0.1), transparent 24rem),
+    #f6f7fb;
+}
+
+.dashboard-main > div {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.dashboard-shell .dashboard-main .bg-surface.border-border {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(255, 255, 255, 0.82);
+  box-shadow:
+    0 18px 55px rgba(82, 75, 142, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.dashboard-shell .dashboard-main .bg-surface.border-border:hover {
+  border-color: rgba(129, 140, 248, 0.34);
+  box-shadow:
+    0 22px 60px rgba(82, 75, 142, 0.11),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
 }
 
 .jobs-page-content {
@@ -41,6 +73,10 @@ body {
 
   .dashboard-main {
     padding-left: 0;
+  }
+
+  .dashboard-main > div {
+    max-width: none;
   }
 
   .jobs-page-content {

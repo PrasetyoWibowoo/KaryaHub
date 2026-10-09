@@ -16,6 +16,7 @@ import {
   FileText,
   ArrowRight
 } from "lucide-react"
+import { motion } from "framer-motion"
 
 // Mock data - in production, fetch from API
 const umkmData = {
@@ -77,25 +78,42 @@ const umkmData = {
 }
 
 export default function UMKMDashboard() {
+  const reveal = {
+    hidden: { opacity: 0, y: 16 },
+    visible: (index: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: index * 0.06, duration: 0.35, ease: [0.16, 1, 0.3, 1] as const }
+    })
+  }
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pb-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="relative overflow-hidden rounded-3xl bg-primary px-6 py-7 text-white shadow-primary-lg sm:px-8">
+        <div className="absolute -right-14 -top-16 h-52 w-52 rounded-full border-[26px] border-white/10" />
+        <div className="absolute bottom-[-5rem] right-28 h-40 w-40 rounded-full border-[18px] border-accent/40" />
+        <div className="relative flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-text-heading">
-            Welcome, {umkmData.name}! 🚀
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/60">Business workspace</p>
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            Welcome, {umkmData.name}
           </h1>
-          <p className="text-text-muted mt-1">Manage your projects and team</p>
+          <p className="mt-2 max-w-lg text-sm leading-relaxed text-white/70">
+            Keep your hiring pipeline moving with a clear view of active work, applicants, and spend.
+          </p>
         </div>
-        <Button>
+        <Button variant="accent" className="shrink-0 bg-white text-primary hover:bg-accent-light">
           <PlusCircle className="w-4 h-4 mr-2" />
           Post New Job
         </Button>
+        </div>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="p-6">
+        <motion.div custom={0} initial="hidden" animate="visible" variants={reveal}>
+        <Card className="p-6 border-l-4 border-l-primary">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-text-muted mb-1">Active Projects</p>
@@ -112,8 +130,10 @@ export default function UMKMDashboard() {
             +15% from last month
           </div>
         </Card>
+        </motion.div>
 
-        <Card className="p-6">
+        <motion.div custom={1} initial="hidden" animate="visible" variants={reveal}>
+        <Card className="p-6 border-l-4 border-l-accent">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-text-muted mb-1">Total Applicants</p>
@@ -130,8 +150,10 @@ export default function UMKMDashboard() {
             +28% from last month
           </div>
         </Card>
+        </motion.div>
 
-        <Card className="p-6">
+        <motion.div custom={2} initial="hidden" animate="visible" variants={reveal}>
+        <Card className="p-6 border-l-4 border-l-warning">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-text-muted mb-1">Budget Spent</p>
@@ -147,8 +169,10 @@ export default function UMKMDashboard() {
             65% of total budget
           </div>
         </Card>
+        </motion.div>
 
-        <Card className="p-6">
+        <motion.div custom={3} initial="hidden" animate="visible" variants={reveal}>
+        <Card className="p-6 border-l-4 border-l-success">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-text-muted mb-1">Hired Freelancers</p>
@@ -165,10 +189,11 @@ export default function UMKMDashboard() {
             +3 this month
           </div>
         </Card>
+        </motion.div>
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[0.85fr_1.15fr]">
         <Card className="p-6">
           <h2 className="text-lg font-semibold text-text-heading mb-4 flex items-center gap-2">
             <Briefcase className="w-5 h-5 text-primary" />
@@ -282,5 +307,3 @@ export default function UMKMDashboard() {
     </div>
   )
 }
-
-

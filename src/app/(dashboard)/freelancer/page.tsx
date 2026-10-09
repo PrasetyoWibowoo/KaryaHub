@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/Badge"
 import { SkillsRadarChart } from "@/components/dashboard/SkillsRadarChart"
 import { SkillsBarChart } from "@/components/dashboard/SkillsBarChart"
 import { ActivityTimeline } from "@/components/dashboard/ActivityTimeline"
+import { motion } from "framer-motion"
 import { 
   Briefcase, 
   TrendingUp, 
@@ -59,25 +60,42 @@ const freelancerData = {
 }
 
 export default function FreelancerDashboard() {
+  const reveal = {
+    hidden: { opacity: 0, y: 16 },
+    visible: (index: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: index * 0.06, duration: 0.35, ease: [0.16, 1, 0.3, 1] as const }
+    })
+  }
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pb-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="relative overflow-hidden rounded-3xl bg-primary px-6 py-7 text-white shadow-primary-lg sm:px-8">
+        <div className="absolute -right-16 -top-20 h-56 w-56 rounded-full border-[28px] border-white/10" />
+        <div className="absolute bottom-[-5rem] right-24 h-40 w-40 rounded-full border-[20px] border-accent/40" />
+        <div className="relative flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-text-heading">
-            Welcome back, {freelancerData.name}! 👋
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/60">Freelancer workspace</p>
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            Welcome back, {freelancerData.name}
           </h1>
-          <p className="text-text-muted mt-1">{freelancerData.title}</p>
+          <p className="mt-2 max-w-lg text-sm leading-relaxed text-white/70">
+            Your next strong match is closer than you think. Review your progress and keep your profile ready.
+          </p>
         </div>
-        <Button>
+        <Button variant="accent" className="shrink-0 bg-white text-primary hover:bg-accent-light">
           <Target className="w-4 h-4 mr-2" />
           Find Jobs
         </Button>
+        </div>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="p-6">
+        <motion.div custom={0} initial="hidden" animate="visible" variants={reveal}>
+        <Card className="p-6 border-l-4 border-l-primary">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-text-muted mb-1">Jobs Applied</p>
@@ -94,8 +112,10 @@ export default function FreelancerDashboard() {
             +12% from last month
           </div>
         </Card>
+        </motion.div>
 
-        <Card className="p-6">
+        <motion.div custom={1} initial="hidden" animate="visible" variants={reveal}>
+        <Card className="p-6 border-l-4 border-l-accent">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-text-muted mb-1">Proposals Sent</p>
@@ -112,8 +132,10 @@ export default function FreelancerDashboard() {
             +8% from last month
           </div>
         </Card>
+        </motion.div>
 
-        <Card className="p-6">
+        <motion.div custom={2} initial="hidden" animate="visible" variants={reveal}>
+        <Card className="p-6 border-l-4 border-l-success">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-text-muted mb-1">Acceptance Rate</p>
@@ -130,8 +152,10 @@ export default function FreelancerDashboard() {
             +5% from last month
           </div>
         </Card>
+        </motion.div>
 
-        <Card className="p-6">
+        <motion.div custom={3} initial="hidden" animate="visible" variants={reveal}>
+        <Card className="p-6 border-l-4 border-l-warning">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-text-muted mb-1">Active Projects</p>
@@ -147,12 +171,13 @@ export default function FreelancerDashboard() {
             2 completing this week
           </div>
         </Card>
+        </motion.div>
       </div>
 
 
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.15fr_0.85fr]">
         <Card className="p-6">
           <h2 className="text-lg font-semibold text-text-heading mb-4 flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-primary" />

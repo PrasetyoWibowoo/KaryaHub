@@ -90,20 +90,18 @@ export default function UMKMDashboard() {
   return (
     <div className="space-y-8 pb-8">
       {/* Header */}
-      <div className="relative overflow-hidden rounded-3xl bg-primary px-6 py-7 text-white shadow-primary-lg sm:px-8">
-        <div className="absolute -right-14 -top-16 h-52 w-52 rounded-full border-[26px] border-white/10" />
-        <div className="absolute bottom-[-5rem] right-28 h-40 w-40 rounded-full border-[18px] border-accent/40" />
-        <div className="relative flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+      <div className="border-b border-border pb-7">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/60">Business workspace</p>
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-accent">Business workspace</p>
+          <h1 className="font-display text-3xl font-bold tracking-tight text-text-heading sm:text-4xl">
             Welcome, {umkmData.name}
           </h1>
-          <p className="mt-2 max-w-lg text-sm leading-relaxed text-white/70">
+          <p className="mt-2 max-w-lg text-sm leading-relaxed text-text-muted">
             Keep your hiring pipeline moving with a clear view of active work, applicants, and spend.
           </p>
         </div>
-        <Button variant="accent" className="shrink-0 bg-white text-primary hover:bg-accent-light">
+        <Button variant="black" className="shrink-0">
           <PlusCircle className="w-4 h-4 mr-2" />
           Post New Job
         </Button>
@@ -113,7 +111,7 @@ export default function UMKMDashboard() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <motion.div custom={0} initial="hidden" animate="visible" variants={reveal}>
-        <Card className="p-6 border-l-4 border-l-primary">
+        <Card hover={false} className="p-6 border-l-4 border-l-primary">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-text-muted mb-1">Active Projects</p>
@@ -133,7 +131,7 @@ export default function UMKMDashboard() {
         </motion.div>
 
         <motion.div custom={1} initial="hidden" animate="visible" variants={reveal}>
-        <Card className="p-6 border-l-4 border-l-accent">
+        <Card hover={false} className="p-6 border-l-4 border-l-accent">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-text-muted mb-1">Total Applicants</p>
@@ -153,7 +151,7 @@ export default function UMKMDashboard() {
         </motion.div>
 
         <motion.div custom={2} initial="hidden" animate="visible" variants={reveal}>
-        <Card className="p-6 border-l-4 border-l-warning">
+        <Card hover={false} className="p-6 border-l-4 border-l-warning">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-text-muted mb-1">Budget Spent</p>
@@ -172,7 +170,7 @@ export default function UMKMDashboard() {
         </motion.div>
 
         <motion.div custom={3} initial="hidden" animate="visible" variants={reveal}>
-        <Card className="p-6 border-l-4 border-l-success">
+        <Card hover={false} className="p-6 border-l-4 border-l-success">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-text-muted mb-1">Hired Freelancers</p>
@@ -194,7 +192,7 @@ export default function UMKMDashboard() {
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[0.85fr_1.15fr]">
-        <Card className="p-6">
+        <Card hover={false} className="p-6">
           <h2 className="text-lg font-semibold text-text-heading mb-4 flex items-center gap-2">
             <Briefcase className="w-5 h-5 text-primary" />
             Project Status Overview
@@ -202,7 +200,7 @@ export default function UMKMDashboard() {
           <ProjectStatusChart data={umkmData.projectStatus} />
         </Card>
 
-        <Card className="p-6">
+        <Card hover={false} className="p-6">
           <h2 className="text-lg font-semibold text-text-heading mb-4 flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-accent" />
             Applicant Trends
@@ -213,7 +211,7 @@ export default function UMKMDashboard() {
 
       {/* Active Projects & Recent Applicants */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="p-6">
+        <Card hover={false} className="p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-text-heading">Active Projects</h2>
             <Button variant="ghost" size="sm">
@@ -261,7 +259,7 @@ export default function UMKMDashboard() {
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card hover={false} className="p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-text-heading">Recent Applicants</h2>
             <Button variant="ghost" size="sm">

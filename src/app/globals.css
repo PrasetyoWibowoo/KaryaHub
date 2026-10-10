@@ -11,6 +11,7 @@ body {
 
 .dashboard-shell {
   background:
+    linear-gradient(180deg, #fafafa 0 5.75rem, transparent 5.75rem),
     linear-gradient(135deg, rgba(255, 255, 255, 0.42), rgba(238, 241, 255, 0.62)),
     #eef1f8;
 }
@@ -106,7 +107,7 @@ body {
 .dashboard-main::before {
   width: 30rem;
   height: 30rem;
-  top: -10rem;
+  top: 5rem;
   left: 8rem;
   background: radial-gradient(circle, rgba(129, 140, 248, 0.38) 0%, rgba(129, 140, 248, 0.08) 45%, transparent 72%);
 }
@@ -125,6 +126,13 @@ body {
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
+}
+
+@media (min-width: 1024px) {
+  .dashboard-tabs,
+  .dashboard-topbar-actions {
+    top: 2.25rem;
+  }
 }
 
 .dashboard-topbar {
@@ -220,7 +228,7 @@ body {
 }
 
 .dashboard-page-content {
-  padding-top: 5.25rem !important;
+  padding-top: 6.5rem !important;
   min-width: 0;
   overflow-x: hidden;
 }
@@ -328,10 +336,10 @@ body {
   .dashboard-tabs {
     top: max(1rem, env(safe-area-inset-top));
     left: 1rem;
-    right: 4.5rem;
+    right: 10.75rem;
     transform: none;
     flex: none;
-    max-width: calc(100vw - 6.5rem);
+    max-width: none;
   }
 
   .dashboard-tab {

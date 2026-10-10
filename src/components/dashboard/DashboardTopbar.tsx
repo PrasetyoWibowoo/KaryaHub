@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Bell, BriefcaseBusiness, ChartNoAxesCombined, LayoutDashboard, MessageSquare, Search, Users } from "lucide-react"
+import { Bell, BriefcaseBusiness, FileCheck2, FileText, LayoutDashboard, MessageSquare, Search, Wallet, Users, PlusCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export function DashboardTopbar() {
@@ -12,29 +12,29 @@ export function DashboardTopbar() {
   const tabs = isUmkm
     ? [
         { label: "Overview", href: "/umkm", icon: LayoutDashboard },
-        { label: "Clients", href: "/umkm", icon: Users },
+        { label: "Applicants", href: "/umkm/manage-jobs", icon: Users },
         { label: "Projects", href: "/umkm/manage-jobs", icon: BriefcaseBusiness },
-        { label: "Inbox", href: "/umkm/escrow-status", icon: MessageSquare },
-        { label: "Analytics", href: "/umkm", icon: ChartNoAxesCombined },
+        { label: "Escrow", href: "/umkm/escrow-status", icon: MessageSquare },
+        { label: "Post Job", href: "/umkm/create-job", icon: PlusCircle },
       ]
     : [
         { label: "Overview", href: "/freelancer", icon: LayoutDashboard },
-        { label: "Clients", href: "/freelancer", icon: Users },
-        { label: "Projects", href: "/jobs", icon: BriefcaseBusiness },
-        { label: "Inbox", href: "/freelancer/my-proposals", icon: MessageSquare },
-        { label: "Analytics", href: "/freelancer/ats-checker", icon: ChartNoAxesCombined },
+        { label: "Find Jobs", href: "/jobs", icon: BriefcaseBusiness },
+        { label: "Proposals", href: "/freelancer/my-proposals", icon: FileText },
+        { label: "ATS Checker", href: "/freelancer/ats-checker", icon: FileCheck2 },
+        { label: "Wallet", href: "/freelancer/wallet", icon: Wallet },
       ]
 
   return (
     <header className="dashboard-topbar">
       <Link href="/" className="dashboard-topbar-brand">
         <span className="dashboard-topbar-mark">K</span>
-        <span className="hidden sm:inline">KaryaHub</span>
+        <span>KaryaHub</span>
       </Link>
 
       <nav aria-label="Workspace navigation" className="dashboard-tabs">
         {tabs.map(({ label, href, icon: Icon }) => {
-          const active = label !== "Clients" && (pathname === href || (label === "Overview" && pathname === (isUmkm ? "/umkm" : "/freelancer")))
+          const active = pathname === href || (label === "Overview" && pathname === (isUmkm ? "/umkm" : "/freelancer"))
 
           return (
             <Link

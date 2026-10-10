@@ -178,29 +178,29 @@ export default function FreelancerDashboard() {
       <div className="workspace-analytics-grid">
         <Card hover={false} className="workspace-primary-panel p-6">
           <h2 className="text-lg font-semibold text-text-heading mb-4 flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-primary" />
-            Skills Distribution
-          </h2>
-          <SkillsRadarChart data={freelancerData.skillsData} />
-        </Card>
-
-        <Card hover={false} className="workspace-insight-panel p-6">
-          <h2 className="text-lg font-semibold text-text-heading mb-4 flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-accent" />
             Skills vs Job Opportunities
           </h2>
           <SkillsBarChart data={freelancerData.skillsData} />
         </Card>
+
+        <Card hover={false} className="workspace-insight-panel p-6">
+          <h2 className="text-lg font-semibold text-text-heading mb-4 flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-primary" />
+            Skills Distribution
+          </h2>
+          <SkillsRadarChart data={freelancerData.skillsData} />
+        </Card>
       </div>
 
       {/* Activity & Recommendations */}
-      <div className="workspace-projects-grid workspace-lower-grid">
-        <Card hover={false} className="workspace-projects-panel p-6">
+      <div className="workspace-lower-grid">
+        <Card hover={false} className="p-6">
           <h2 className="text-lg font-semibold text-text-heading mb-4">Recent Activity</h2>
           <ActivityTimeline activities={freelancerData.recentActivity} />
         </Card>
 
-        <Card hover={false} className="workspace-projects-panel p-6">
+        <Card hover={false} className="p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-text-heading">Recommended for You</h2>
             <Button variant="ghost" size="sm">

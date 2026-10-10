@@ -124,16 +124,9 @@ body {
 .dashboard-topbar {
   position: relative;
   z-index: 2;
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  justify-content: center;
-  min-height: 0;
-  height: 3rem;
-  margin: 1.75rem 2rem 0;
-  padding: 0;
-  overflow: visible;
+  display: contents;
   background: none !important;
+  background-image: none !important;
   border: 0 !important;
   box-shadow: none !important;
 }
@@ -142,12 +135,18 @@ body {
   display: flex;
   align-items: center;
   gap: 0.3rem;
-  flex: 0 1 auto;
+  position: absolute;
+  top: 1.75rem;
+  left: 50%;
+  z-index: 3;
+  transform: translateX(-50%);
+  flex: none;
   min-width: 0;
   max-width: min(100%, 39rem);
   margin: 0;
   padding: 0;
   background: none !important;
+  background-image: none !important;
   border: 0 !important;
   box-shadow: none !important;
   overflow-x: auto;
@@ -166,7 +165,7 @@ body {
   padding: 0 0.82rem;
   border: 1px solid transparent;
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.9);
+  background: #ffffff;
   color: #6b7280;
   font-size: 0.8rem;
   font-weight: 600;
@@ -195,13 +194,20 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  flex-shrink: 0;
   position: absolute;
-  right: 0;
+  top: 1.75rem;
+  right: 2rem;
+  z-index: 3;
+  flex-shrink: 0;
   padding: 0;
   background: none !important;
+  background-image: none !important;
   border: 0 !important;
   box-shadow: none !important;
+}
+
+.dashboard-page-content {
+  padding-top: 5.25rem !important;
 }
 
 .dashboard-icon-button,
@@ -212,7 +218,7 @@ body {
   place-items: center;
   border: 1px solid rgba(255, 255, 255, 0.78);
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.9);
+  background: #ffffff;
   color: #6b7280;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
   transition: transform 180ms ease, background-color 180ms ease, color 180ms ease;
@@ -295,18 +301,26 @@ body {
   }
 
   .dashboard-topbar {
-    margin: 1rem 1rem 0;
-    gap: 0.5rem;
-    justify-content: space-between;
+    margin: 0;
   }
 
   .dashboard-tabs {
-    flex: 1 1 auto;
+    top: 1rem;
+    left: 1rem;
+    right: 4.5rem;
+    transform: none;
+    flex: none;
     max-width: none;
   }
 
   .dashboard-topbar-actions {
+    top: 1rem;
+    right: 1rem;
     gap: 0.35rem;
+  }
+
+  .dashboard-page-content {
+    padding-top: 4.5rem !important;
   }
 
   .dashboard-main > div {

@@ -1,6 +1,7 @@
 import { FadeIn } from "@/components/ui/FadeIn"
 import { Card } from "@/components/ui/Card"
 import { Button } from "@/components/ui/Button"
+import Link from "next/link"
 
 export function CTASection() {
   return (
@@ -10,13 +11,13 @@ export function CTASection() {
           <Card className="bg-white border border-border shadow-soft p-12 sm:p-20 relative overflow-hidden rounded-3xl">
             <div className="relative z-10 mb-10">
               <h2 className="font-display text-4xl sm:text-5xl font-bold text-text-heading mb-4">
-                Unlock Your Career Potential
+                Mulai Langkah Baru Bersama KaryaHub
               </h2>
               <p className="text-text-muted text-lg max-w-xl mx-auto mb-8">
-                Thousands of professionals found their dream job with our tools, you can too.
+                Buat profil, temukan peluang yang relevan, atau bantu bisnis Anda berkembang bersama talenta lokal terbaik.
               </p>
-              <Button variant="black" size="lg" className="rounded-full px-8 shadow-card">
-                Get Started
+              <Button variant="black" size="lg" className="rounded-full px-8 shadow-card" asChild>
+                <Link href="/register">Daftar Sekarang</Link>
               </Button>
             </div>
 

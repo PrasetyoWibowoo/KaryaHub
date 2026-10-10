@@ -49,9 +49,9 @@ export function Navbar() {
         </Link>
 
         <div className="hidden lg:flex lg:absolute lg:left-1/2 lg:-translate-x-1/2 items-center bg-white/80 backdrop-blur-md border border-border/50 rounded-full p-1 shadow-soft">
-          <Link href="#about" className="px-6 py-2.5 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors">About</Link>
-          <Link href="#features" className="px-6 py-2.5 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors">Features</Link>
-          <Link href="#faqs" className="px-6 py-2.5 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors">FAQs</Link>
+          <Link href="#about" className="px-6 py-2.5 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors">Tentang</Link>
+          <Link href="#features" className="px-6 py-2.5 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors">Fitur</Link>
+          <Link href="#faqs" className="px-6 py-2.5 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors">Tanya Jawab</Link>
           <motion.div
             className="inline-flex ml-2"
             initial="rest"
@@ -61,7 +61,7 @@ export function Navbar() {
           >
             <Link href="/jobs">
             <Button variant="black" className="rounded-full px-5 py-2.5 text-sm h-auto flex items-center gap-2">
-              Find jobs
+              Cari Proyek
               <motion.span
                 aria-hidden="true"
                 className="font-bold text-accent"
@@ -77,10 +77,10 @@ export function Navbar() {
 
         <div className="flex items-center gap-3">
           <Link href="/login">
-            <Button variant="primary" className="rounded-2xl px-8 h-12 font-bold shadow-sm">Login</Button>
+            <Button variant="primary" className="rounded-2xl px-8 h-12 font-bold shadow-sm">Masuk</Button>
           </Link>
           <Link href="/register">
-            <Button variant="outline" className="rounded-2xl px-8 h-12 font-bold bg-white shadow-sm">Sign Up</Button>
+            <Button variant="outline" className="rounded-2xl px-8 h-12 font-bold bg-white shadow-sm">Daftar</Button>
           </Link>
         </div>
       </div>

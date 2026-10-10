@@ -4,14 +4,14 @@ import { Code2, Palette, Filter } from "lucide-react"
 
 export function FeaturesSection() {
   return (
-    <section className="py-24 bg-surface-alt relative border-t border-border/50">
+    <section id="features" className="py-24 bg-surface-alt relative border-t border-border/50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <FadeIn className="text-center mb-16">
           <h2 className="font-display text-4xl sm:text-5xl font-bold text-text-heading tracking-tight mb-4">
-            Tools That Work Hard as You
+            Fitur yang Membantu Anda Bekerja Lebih Cerdas
           </h2>
           <p className="text-text-muted text-lg max-w-xl mx-auto">
-            Explore features that streamline your search and connect you with the right opportunities.
+            Dari pencarian proyek hingga pembayaran aman, semua kebutuhan kerja freelance dan UMKM tersedia dalam satu platform.
           </p>
         </FadeIn>
 
@@ -33,7 +33,7 @@ export function FeaturesSection() {
                       </div>
                     </div>
                     <p className="text-sm text-text-heading font-medium leading-relaxed mb-6">
-                      Looking for a flutter specialist who professional experiences, Ensure app can using clearly
+                      Mencari spesialis Flutter untuk membangun aplikasi yang cepat, rapi, dan mudah digunakan.
                     </p>
                     <div className="flex gap-2">
                       <span className="px-3 py-1.5 bg-surface-alt rounded-full text-xs font-bold text-text-muted border border-border">Senior</span>
@@ -44,9 +44,9 @@ export function FeaturesSection() {
                   <div className="absolute w-[80%] h-24 bg-white/60 rounded-3xl shadow-sm border border-white top-10 translate-y-8 scale-95 z-0 blur-[1px]"></div>
                 </div>
                 <div className="pb-10 pt-4">
-                  <h3 className="text-[1.75rem] font-bold text-text-heading mb-3">Find Jobs That Fit You</h3>
+                  <h3 className="text-[1.75rem] font-bold text-text-heading mb-3">Temukan Proyek yang Sesuai</h3>
                   <p className="text-text-muted text-base leading-relaxed pr-8">
-                    Joblynx suggests roles that fit your skills, boosting your chances as a candidate.
+                    KaryaHub membantu menampilkan peluang yang selaras dengan keahlian, minat, dan lokasi Anda.
                   </p>
                 </div>
               </Card>
@@ -56,9 +56,9 @@ export function FeaturesSection() {
             <FadeIn delay={0.2} className="flex-1 flex flex-col">
               <Card className="p-10 pt-0 bg-white border-none shadow-sm hover:shadow-card transition-shadow overflow-hidden flex-1 flex flex-col-reverse rounded-[2.5rem]">
                 <div className="pt-8">
-                  <h3 className="text-[1.75rem] font-bold text-text-heading mb-3">Analyze Your Preferences</h3>
+                  <h3 className="text-[1.75rem] font-bold text-text-heading mb-3">Pahami Peluang Anda</h3>
                   <p className="text-text-muted text-base leading-relaxed pr-8">
-                    Explore job types, high-opportunity areas, and track your profile with analytics.
+                    Gunakan insight dan data untuk memahami jenis proyek, area peluang, serta perkembangan profil Anda.
                   </p>
                 </div>
                 <div className="flex-1 flex items-end justify-center relative pb-8 border-b border-border/60 min-h-[180px]">
@@ -104,9 +104,9 @@ export function FeaturesSection() {
                   </div>
                 </div>
                 <div className="pb-10 pt-4">
-                  <h3 className="text-[1.75rem] font-bold text-text-heading mb-3">Easily Manage Documents.</h3>
+                  <h3 className="text-[1.75rem] font-bold text-text-heading mb-3">Kelola Dokumen dengan Mudah</h3>
                   <p className="text-text-muted text-base leading-relaxed pr-8">
-                    Easily import and export multiple job-related files in one place resumes, cover letters, portfolios, and more.
+                    Simpan dan kelola resume, surat lamaran, portofolio, dan dokumen proyek dari satu tempat.
                   </p>
                 </div>
               </Card>
@@ -116,9 +116,9 @@ export function FeaturesSection() {
             <FadeIn delay={0.4} className="flex-1 flex flex-col">
               <Card className="p-10 pb-0 bg-white border-none shadow-sm hover:shadow-card transition-shadow overflow-hidden flex-1 flex flex-col-reverse rounded-[2.5rem]">
                 <div className="pb-8 pt-6">
-                  <h3 className="text-[1.75rem] font-bold text-text-heading mb-3">Find Your Dream Job, No Noise</h3>
+                  <h3 className="text-[1.75rem] font-bold text-text-heading mb-3">Cari Peluang Tanpa Gangguan</h3>
                   <p className="text-text-muted text-base leading-relaxed pr-8">
-                    Use accurate and detailed filters to narrow down jobs that truly align with your goals, skills, and location.
+                    Saring lowongan berdasarkan keahlian, tujuan, dan lokasi agar waktu Anda fokus pada peluang yang relevan.
                   </p>
                 </div>
                 <div className="flex-1 flex flex-col justify-center relative border-b border-border/60 min-h-[160px]">
@@ -159,7 +159,7 @@ export function FeaturesSection() {
                   <div className="w-14 h-14 bg-accent rounded-2xl shadow-md flex items-center justify-center text-white transform -translate-x-10 -rotate-12 z-0"><Palette className="w-7 h-7"/></div>
                 </div>
                 <h3 className="text-xl font-bold text-text-heading max-w-[160px] leading-tight text-right">
-                  Connect with your portfolio platforms.
+                  Hubungkan portofolio Anda.
                 </h3>
               </Card>
             </FadeIn>

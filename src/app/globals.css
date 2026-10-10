@@ -60,6 +60,8 @@ body {
   position: relative;
   z-index: 1;
   isolation: isolate;
+  min-width: 0;
+  overflow-x: hidden;
   padding-left: 16rem;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.42), rgba(238, 241, 255, 0.62)),
@@ -134,7 +136,7 @@ body {
 .dashboard-tabs {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.55rem;
   position: absolute;
   top: 1.75rem;
   left: 50%;
@@ -142,7 +144,7 @@ body {
   transform: translateX(-50%);
   flex: none;
   min-width: 0;
-  max-width: min(100%, 39rem);
+  max-width: calc(100vw - 16rem);
   margin: 0;
   padding: 0;
   background: none !important;
@@ -161,13 +163,13 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  min-height: 2.35rem;
-  padding: 0 0.82rem;
+  min-height: 3.25rem;
+  padding: 0 1.35rem;
   border: 1px solid transparent;
   border-radius: 9999px;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.92);
   color: #6b7280;
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-weight: 600;
   white-space: nowrap;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
@@ -208,13 +210,15 @@ body {
 
 .dashboard-page-content {
   padding-top: 5.25rem !important;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 .dashboard-icon-button,
 .dashboard-avatar {
   display: grid;
-  width: 2.35rem;
-  height: 2.35rem;
+  width: 3rem;
+  height: 3rem;
   place-items: center;
   border: 1px solid rgba(255, 255, 255, 0.78);
   border-radius: 9999px;
@@ -241,6 +245,12 @@ body {
   display: grid;
   grid-template-columns: minmax(0, 1.45fr) minmax(18rem, 0.75fr);
   gap: 1rem;
+}
+
+.dashboard-shell,
+.dashboard-main,
+.dashboard-page-content {
+  max-width: 100%;
 }
 
 .workspace-primary-panel,
@@ -311,6 +321,12 @@ body {
     transform: none;
     flex: none;
     max-width: none;
+  }
+
+  .dashboard-tab {
+    min-height: 2.75rem;
+    padding: 0 0.95rem;
+    font-size: 0.875rem;
   }
 
   .dashboard-topbar-actions {

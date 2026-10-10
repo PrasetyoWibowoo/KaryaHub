@@ -13,20 +13,20 @@ export function Footer() {
               <div className="w-16 h-20 bg-white border border-border rounded-xl shadow-sm rotate-[10deg] flex items-center justify-center"><FileText className="text-text-muted" /></div>
             </div>
             <h2 className="font-display text-4xl font-bold text-text-heading tracking-tight leading-tight">
-              Find A Job <span className="text-text-muted">That Is</span><br/>
-              <span className="text-text-muted">Relevant</span> To You Now
+              Temukan Peluang <span className="text-text-muted">yang</span><br/>
+              <span className="text-text-muted">Relevan</span> untuk Anda
             </h2>
           </div>
           <div className="flex gap-4">
-            <Button variant="outline" className="rounded-full px-6">Follow Us</Button>
-            <Button variant="primary" className="rounded-full px-6">Sign Up Now</Button>
+            <Button variant="outline" className="rounded-full px-6">Ikuti Kami</Button>
+            <Button variant="primary" className="rounded-full px-6" asChild><Link href="/register">Daftar Sekarang</Link></Button>
           </div>
         </div>
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-bold text-text-muted pt-6 border-t border-border uppercase tracking-widest">
           <div className="flex gap-6">
             <Link href="#" className="hover:text-text-heading transition-colors">Legal</Link>
-            <Link href="#" className="hover:text-text-heading transition-colors">User Agreement</Link>
-            <Link href="#" className="hover:text-text-heading transition-colors">Privacy Policy</Link>
+            <Link href="#" className="hover:text-text-heading transition-colors">Ketentuan Pengguna</Link>
+            <Link href="#" className="hover:text-text-heading transition-colors">Kebijakan Privasi</Link>
           </div>
           <div>
             © 2026 KaryaHub. All Rights Reserved.

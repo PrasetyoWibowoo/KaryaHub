@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Bell, BriefcaseBusiness, FileCheck2, FileText, LayoutDashboard, MessageSquare, Search, Wallet, Users, PlusCircle } from "lucide-react"
+import { Bell, BriefcaseBusiness, ChartNoAxesCombined, LayoutDashboard, MessageSquare, Search, Users } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export function DashboardTopbar() {
@@ -12,24 +12,23 @@ export function DashboardTopbar() {
   const tabs = isUmkm
     ? [
         { label: "Overview", href: "/umkm", icon: LayoutDashboard },
-        { label: "Applicants", href: "/umkm/manage-jobs", icon: Users },
+        { label: "Clients", href: "/umkm/manage-jobs", icon: Users },
         { label: "Projects", href: "/umkm/manage-jobs", icon: BriefcaseBusiness },
-        { label: "Escrow", href: "/umkm/escrow-status", icon: MessageSquare },
-        { label: "Post Job", href: "/umkm/create-job", icon: PlusCircle },
+        { label: "Inbox", href: "/umkm/escrow-status", icon: MessageSquare },
+        { label: "Analytics", href: "/umkm", icon: ChartNoAxesCombined },
       ]
     : [
         { label: "Overview", href: "/freelancer", icon: LayoutDashboard },
-        { label: "Find Jobs", href: "/jobs", icon: BriefcaseBusiness },
-        { label: "Proposals", href: "/freelancer/my-proposals", icon: FileText },
-        { label: "ATS Checker", href: "/freelancer/ats-checker", icon: FileCheck2 },
-        { label: "Wallet", href: "/freelancer/wallet", icon: Wallet },
+        { label: "Clients", href: "/jobs", icon: Users },
+        { label: "Projects", href: "/freelancer/my-proposals", icon: BriefcaseBusiness },
+        { label: "Inbox", href: "/freelancer/my-proposals", icon: MessageSquare },
+        { label: "Analytics", href: "/freelancer/ats-checker", icon: ChartNoAxesCombined },
       ]
 
   return (
     <header className="dashboard-topbar">
       <Link href="/" className="dashboard-topbar-brand">
         <span className="dashboard-topbar-mark">K</span>
-        <span>KaryaHub</span>
       </Link>
 
       <nav aria-label="Workspace navigation" className="dashboard-tabs">

@@ -128,13 +128,14 @@ body {
   align-items: center;
   gap: 1.25rem;
   justify-content: center;
-  min-height: 3.5rem;
+  min-height: 0;
+  height: 3rem;
   margin: 1.75rem 2rem 0;
   padding: 0;
   overflow: visible;
-  background: transparent;
-  border: 0;
-  box-shadow: none;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
 }
 
 .dashboard-tabs {
@@ -146,7 +147,9 @@ body {
   max-width: min(100%, 39rem);
   margin: 0;
   padding: 0;
-  background: transparent;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -163,7 +166,7 @@ body {
   padding: 0 0.82rem;
   border: 1px solid transparent;
   border-radius: 9999px;
-  background: rgba(248, 249, 253, 0.82);
+  background: rgba(255, 255, 255, 0.9);
   color: #6b7280;
   font-size: 0.8rem;
   font-weight: 600;
@@ -196,7 +199,9 @@ body {
   position: absolute;
   right: 0;
   padding: 0;
-  background: transparent;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
 }
 
 .dashboard-icon-button,
@@ -207,7 +212,7 @@ body {
   place-items: center;
   border: 1px solid rgba(255, 255, 255, 0.78);
   border-radius: 9999px;
-  background: rgba(248, 249, 253, 0.82);
+  background: rgba(255, 255, 255, 0.9);
   color: #6b7280;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
   transition: transform 180ms ease, background-color 180ms ease, color 180ms ease;

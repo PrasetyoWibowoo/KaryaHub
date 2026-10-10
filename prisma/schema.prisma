@@ -176,6 +176,7 @@ model Proposal {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
+  @@unique([jobId, freelancerId])
   @@index([jobId])
   @@index([freelancerId])
   @@map("proposals")

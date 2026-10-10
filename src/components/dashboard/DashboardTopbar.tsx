@@ -27,10 +27,6 @@ export function DashboardTopbar() {
 
   return (
     <header className="dashboard-topbar">
-      <Link href="/" className="dashboard-topbar-brand">
-        <span className="dashboard-topbar-mark">K</span>
-      </Link>
-
       <nav aria-label="Workspace navigation" className="dashboard-tabs">
         {tabs.map(({ label, href, icon: Icon }) => {
           const active = pathname === href || (label === "Overview" && pathname === (isUmkm ? "/umkm" : "/freelancer"))

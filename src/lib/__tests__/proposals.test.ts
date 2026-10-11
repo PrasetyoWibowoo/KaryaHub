@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
-import { createProposalSchema } from '@/lib/validators/proposal'
+import { createProposalSchema, proposalQuerySchema } from '@/lib/validators/proposal'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@/generated/prisma'
 
@@ -115,5 +115,34 @@ describe('Proposal DB Constraints & Invariants', () => {
         },
       })
     ).rejects.toThrow()
+  })
+})
+
+describe('proposalQuerySchema', () => {
+  it('should default page/limit when omitted', () => {
+    const result = proposalQuerySchema.safeParse({})
+    expect(result.success).toBe(true)
+    expect(result.data).toMatchObject({ page: 1, limit: 20 })
+  })
+
+  it('should reject limit above 50', () => {
+    const result = proposalQuerySchema.safeParse({ limit: 100 })
+    expect(result.success).toBe(false)
+  })
+
+  it('should coerce string page/limit to numbers', () => {
+    const result = proposalQuerySchema.safeParse({ page: '3', limit: '10' })
+    expect(result.success).toBe(true)
+    expect(result.data).toMatchObject({ page: 3, limit: 10 })
+  })
+
+  it('should accept optional jobId as UUID', () => {
+    const result = proposalQuerySchema.safeParse({ jobId: '123e4567-e89b-12d3-a456-426614174000' })
+    expect(result.success).toBe(true)
+  })
+
+  it('should reject invalid jobId', () => {
+    const result = proposalQuerySchema.safeParse({ jobId: 'not-a-uuid' })
+    expect(result.success).toBe(false)
   })
 })

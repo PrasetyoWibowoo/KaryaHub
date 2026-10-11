@@ -2,47 +2,89 @@ import { requireAuth, requireRole } from '@/lib/auth-helpers'
 import { ok, fail } from '@/lib/api-response'
 import { prisma } from '@/lib/prisma'
 import { logger } from '@/lib/logger'
-import { createProposalSchema } from '@/lib/validators/proposal'
+import { createProposalSchema, proposalQuerySchema } from '@/lib/validators/proposal'
 import { Prisma } from '@/generated/prisma'
 
 export const runtime = 'nodejs'
 
-export async function GET() {
+const proposalSelect = {
+  id: true,
+  status: true,
+  bidAmount: true,
+  estimatedDays: true,
+  coverLetter: true,
+  createdAt: true,
+  job: {
+    select: {
+      id: true,
+      title: true,
+      budget: true,
+    },
+  },
+  freelancer: {
+    select: {
+      id: true,
+      fullName: true,
+    },
+  },
+} as const
+
+export async function GET(req: Request) {
   const { error, session } = await requireAuth()
   if (error) return error
 
-  const proposals = await prisma.proposal.findMany({
-    where: {
-      OR: [
-        { freelancerId: session.user.id },
-        { job: { employerId: session.user.id } },
-      ],
-    },
-    select: {
-      id: true,
-      status: true,
-      bidAmount: true,
-      estimatedDays: true,
-      coverLetter: true,
-      createdAt: true,
-      job: {
-        select: {
-          id: true,
-          title: true,
-          budget: true,
-        },
-      },
-      freelancer: {
-        select: {
-          id: true,
-          fullName: true,
-        },
-      },
-    },
-    orderBy: { createdAt: 'desc' },
+  const url = new URL(req.url)
+  const parsed = proposalQuerySchema.safeParse({
+    jobId: url.searchParams.get('jobId'),
+    page: url.searchParams.get('page'),
+    limit: url.searchParams.get('limit'),
   })
 
-  return ok('Daftar proposal', proposals)
+  if (!parsed.success) {
+    return fail('Query parameter tidak valid', 400, parsed.error.flatten())
+  }
+
+  const { jobId, page, limit } = parsed.data
+  const role = session.user.role as string
+
+  let where: Prisma.ProposalWhereInput
+
+  if (role === 'FREELANCER') {
+    where = { freelancerId: session.user.id }
+  } else if (role === 'UMKM') {
+    if (!jobId) return fail('Parameter jobId wajib untuk UMKM', 400)
+
+    const job = await prisma.job.findUnique({
+      where: { id: jobId },
+      select: { employerId: true },
+    })
+
+    if (!job) return fail('Pekerjaan tidak ditemukan', 404)
+    if (job.employerId !== session.user.id) return fail('Forbidden', 403)
+
+    where = { jobId }
+  } else {
+    // ADMIN: semua proposal, filter jobId opsional
+    where = jobId ? { jobId } : {}
+  }
+
+  const skip = (page - 1) * limit
+
+  const [proposals, total] = await Promise.all([
+    prisma.proposal.findMany({
+      where,
+      select: proposalSelect,
+      orderBy: { createdAt: 'desc' },
+      skip,
+      take: limit,
+    }),
+    prisma.proposal.count({ where }),
+  ])
+
+  return ok('Daftar proposal', {
+    proposals,
+    pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
+  })
 }
 
 export async function POST(req: Request) {

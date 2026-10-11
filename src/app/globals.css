@@ -1,26 +1,99 @@
 @import "tailwindcss";
 
+@theme {
+  --color-navy-950: #0D1B33;
+  --color-navy-900: #132442;
+  --color-navy-800: #1A3055;
+  --color-navy-700: #233D6B;
+  --color-navy-600: #2C4F7C;
+  --color-navy-200: #C5D3E8;
+  --color-navy-100: #E4EAF4;
+
+  --color-lime-500: #A7C416;
+  --color-lime-400: #BBDA1C;
+  --color-lime-100: #F0F7D0;
+  --color-lime-50: #F7FBDF;
+
+  --color-bg-base: #FAFBFD;
+  --color-bg-surface: #FFFFFF;
+  --color-bg-subtle: #F2F4F8;
+  
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #4B5563;
+  --color-text-muted: #9CA3AF;
+  --color-text-inverse: #FAFBFD;
+
+  --color-border-default: #E4E8EF;
+  --color-border-focus: #A7C416;
+
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+  --color-info: #3B82F6;
+
+  --color-match-high-bg: #A7C416;
+  --color-match-high-text: #0D1B33;
+  --color-match-mid-bg: #0D1B33;
+  --color-match-mid-text: #FAFBFD;
+  --color-match-low-bg: #F2F4F8;
+  --color-match-low-text: #4B5563;
+
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --shadow-card: 0 1px 3px 0 rgba(13, 27, 51, 0.04);
+  --shadow-card-hover: 0 4px 16px rgba(13, 27, 51, 0.06);
+  --shadow-modal: 0 20px 50px rgba(13, 27, 51, 0.14);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #FAFBFD;
+  --foreground: #0F172A;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* WCAG AA Visible Focus Ring */
+:focus-visible {
+  outline: 2px solid #A7C416;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Shimmer animation for accessible skeleton loading */
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #E4E8EF 25%, #F2F4F8 50%, #E4E8EF 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite linear;
+  border-radius: 6px;
+}
+
+/* Respect user's motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

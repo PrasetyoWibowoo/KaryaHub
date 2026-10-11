@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
-import { createProposalSchema, proposalQuerySchema } from '@/lib/validators/proposal'
+import { createProposalSchema, proposalQuerySchema, decisionSchema } from '@/lib/validators/proposal'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@/generated/prisma'
 
@@ -144,5 +144,23 @@ describe('proposalQuerySchema', () => {
   it('should reject invalid jobId', () => {
     const result = proposalQuerySchema.safeParse({ jobId: 'not-a-uuid' })
     expect(result.success).toBe(false)
+  })
+})
+
+describe('decisionSchema', () => {
+  it('should accept ACCEPTED', () => {
+    expect(decisionSchema.safeParse({ status: 'ACCEPTED' }).success).toBe(true)
+  })
+
+  it('should accept REJECTED', () => {
+    expect(decisionSchema.safeParse({ status: 'REJECTED' }).success).toBe(true)
+  })
+
+  it('should reject invalid status value', () => {
+    expect(decisionSchema.safeParse({ status: 'PENDING' }).success).toBe(false)
+  })
+
+  it('should reject extra fields (strict)', () => {
+    expect(decisionSchema.safeParse({ status: 'ACCEPTED', extra: true }).success).toBe(false)
   })
 })

@@ -25,4 +25,6 @@ export const jobQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(50).default(20),
   category: z.string().optional(),
   search: z.string().optional(),
+  mine: z.coerce.boolean().optional(),
+  status: z.enum(['OPEN', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED']).optional(),
 })

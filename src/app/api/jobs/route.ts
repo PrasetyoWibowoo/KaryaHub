@@ -103,26 +103,41 @@ export async function GET(req: Request) {
     limit: url.searchParams.get('limit'),
     category: url.searchParams.get('category'),
     search: url.searchParams.get('search'),
+    mine: url.searchParams.get('mine'),
+    status: url.searchParams.get('status'),
   })
 
   if (!parsed.success) {
     return fail('Query parameter tidak valid', 400, parsed.error.flatten())
   }
 
-  const { page, limit, category, search } = parsed.data
+  const { page, limit, category, search, mine, status } = parsed.data
   const skip = (page - 1) * limit
 
+  // ponytail: mine branch adds session lookup; retain single query path. Upgrade: extract auth+where helper if reused.
+  let mineUserId: string | undefined
+  let mineIsAdmin = false
+  if (mine === true) {
+    const { error, session } = await requireRole(['UMKM', 'ADMIN'])
+    if (error) return error
+    mineUserId = session!.user.id
+    mineIsAdmin = (session!.user.role as string) === 'ADMIN'
+  }
+
   try {
-    const where: Prisma.JobWhereInput = {
-      status: 'OPEN',
-      ...(category && { category }),
-      ...(search && {
-        OR: [
-          { title: { contains: search, mode: 'insensitive' } },
-          { description: { contains: search, mode: 'insensitive' } },
-        ],
-      }),
-    }
+    const where: Prisma.JobWhereInput = mine === true
+      ? {
+          // ponytail: ADMIN mine sees all jobs (needed for ops). Filter by status if provided, else all.
+          ...(mineIsAdmin ? {} : { employerId: mineUserId }),
+          ...(status && { status: status as never }),
+          ...(category && { category }),
+          ...(search && { OR: [{ title: { contains: search, mode: 'insensitive' } }, { description: { contains: search, mode: 'insensitive' } }] }),
+        }
+      : {
+          status: 'OPEN',
+          ...(category && { category }),
+          ...(search && { OR: [{ title: { contains: search, mode: 'insensitive' } }, { description: { contains: search, mode: 'insensitive' } }] }),
+        }
 
     const [jobs, total] = await Promise.all([
       prisma.job.findMany({
@@ -136,6 +151,7 @@ export async function GET(req: Request) {
           estimatedHours: true,
           deadline: true,
           createdAt: true,
+          status: true,
           employer: {
             select: {
               id: true,

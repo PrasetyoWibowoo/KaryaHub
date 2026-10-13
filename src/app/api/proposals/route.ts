@@ -47,10 +47,16 @@ export async function GET(req: Request) {
   const { jobId, page, limit } = parsed.data
   const role = session.user.role as string
 
+  // ponytail: PENDING tetap di DB, tapi "hilang sendiri" saat job bukan OPEN.
+  // upgrade path: tambah kolom expiresAt/cron bila perlu expiry berbasis waktu.
+  const hidePendingIfNotOpen: Prisma.ProposalWhereInput = {
+    OR: [{ status: { not: 'PENDING' } }, { job: { status: 'OPEN' } }],
+  }
+
   let where: Prisma.ProposalWhereInput
 
   if (role === 'FREELANCER') {
-    where = { freelancerId: session.user.id }
+    where = { freelancerId: session.user.id, ...hidePendingIfNotOpen }
   } else if (role === 'UMKM') {
     if (!jobId) return fail('Parameter jobId wajib untuk UMKM', 400)
 
@@ -62,10 +68,10 @@ export async function GET(req: Request) {
     if (!job) return fail('Pekerjaan tidak ditemukan', 404)
     if (job.employerId !== session.user.id) return fail('Forbidden', 403)
 
-    where = { jobId }
+    where = { jobId, ...hidePendingIfNotOpen }
   } else {
     // ADMIN: semua proposal, filter jobId opsional
-    where = jobId ? { jobId } : {}
+    where = { ...(jobId ? { jobId } : {}), ...hidePendingIfNotOpen }
   }
 
   const skip = (page - 1) * limit

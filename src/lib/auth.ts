@@ -43,10 +43,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const valid = await bcrypt.compare(password, user.passwordHash)
         if (!valid) return null
 
-        console.log("Email received:", credentials?.email);
-        console.log("User found:", Boolean(user));
-        console.log("Password valid:", valid);
-
         return {
           id: user.id,
           email: user.email,

@@ -233,6 +233,7 @@ model EscrowTransaction {
   freelancerId      String?
   freelancer        User?        @relation("FreelancerEscrow", fields: [freelancerId], references: [id])
   amount            Decimal      @db.Decimal(14, 2)
+  midtransOrderId   String?      @unique
   midtransSnapToken String?
   paymentStatus     EscrowStatus @default(PENDING)
   createdAt         DateTime     @default(now())

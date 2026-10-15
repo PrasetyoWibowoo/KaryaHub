@@ -18,14 +18,10 @@ import {
 export default function EscrowReleasePage({
   params
 }: {
-  params: Promise<{ id: string }> | { id: string }
+  params: Promise<{ id: string }>
 }) {
   const router = useRouter()
-  const unwrappedParams =
-    typeof (params as any)?.then === "function"
-      ? use(params as Promise<{ id: string }>)
-      : (params as { id: string })
-  const transactionId = unwrappedParams.id || "1"
+  const transactionId = use(params).id || "1"
 
   const [rating, setRating] = useState(5)
   const [selectedTags, setSelectedTags] = useState<string[]>(["Pengerjaan Tepat Waktu", "Kualitas Desain Tinggi"])

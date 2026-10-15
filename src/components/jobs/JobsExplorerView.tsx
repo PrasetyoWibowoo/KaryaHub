@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
+import { useSearchParams } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { JobCard, JobItemData } from "./JobCard"
 import { Button } from "@/components/ui/Button"
@@ -164,10 +165,11 @@ const BUDGET_OPTIONS = [
 ]
 
 export function JobsExplorerView() {
+  const searchParams = useSearchParams()
   const [selectedCategory, setSelectedCategory] = useState<string>("Semua Kategori")
   const [selectedLocation, setSelectedLocation] = useState<string>("Semua Lokasi")
   const [budgetRange, setBudgetRange] = useState<string>("all")
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState(() => searchParams.get("q") ?? "")
   const [sortBy, setSortBy] = useState<string>("match")
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set(["1"]))
@@ -665,4 +667,3 @@ export function JobsExplorerView() {
     </div>
   )
 }
-

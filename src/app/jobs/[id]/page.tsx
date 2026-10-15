@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { use, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Sidebar } from "@/components/dashboard/Sidebar"
@@ -63,7 +63,8 @@ const JOB_DETAIL = {
   projectType: "Fixed Price"
 }
 
-export default function JobDetailPage({ params }: { params: { id: string } }) {
+export default function JobDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  use(params)
   const router = useRouter()
   const [showProposalForm, setShowProposalForm] = useState(false)
   const [proposalData, setProposalData] = useState({
@@ -293,4 +294,3 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
     </div>
   )
 }
-

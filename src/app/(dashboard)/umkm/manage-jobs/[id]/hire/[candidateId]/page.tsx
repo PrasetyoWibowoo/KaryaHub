@@ -44,16 +44,10 @@ const CANDIDATES_DATA: Record<string, any> = {
 export default function CandidateHirePage({
   params
 }: {
-  params: Promise<{ id: string; candidateId: string }> | { id: string; candidateId: string }
+  params: Promise<{ id: string; candidateId: string }>
 }) {
   const router = useRouter()
-  const unwrappedParams =
-    typeof (params as any)?.then === "function"
-      ? use(params as Promise<{ id: string; candidateId: string }>)
-      : (params as { id: string; candidateId: string })
-
-  const jobId = unwrappedParams.id || "1"
-  const candidateId = unwrappedParams.candidateId || "c1"
+  const { id: jobId = "1", candidateId = "c1" } = use(params)
   const candidate = CANDIDATES_DATA[candidateId] || CANDIDATES_DATA["c1"]
 
   return (

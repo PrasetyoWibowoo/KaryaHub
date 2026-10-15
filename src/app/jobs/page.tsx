@@ -3,6 +3,7 @@
 import { Sidebar } from "@/components/dashboard/Sidebar"
 import { DashboardTopbar } from "@/components/dashboard/DashboardTopbar"
 import { JobsExplorerView } from "@/components/jobs/JobsExplorerView"
+import { Suspense } from "react"
 
 export default function JobsPage() {
   return (
@@ -25,7 +26,9 @@ export default function JobsPage() {
       <main className="dashboard-main flex-1 flex flex-col min-h-screen relative z-10">
         <DashboardTopbar />
         <div className="dashboard-page-content flex-1">
-          <JobsExplorerView />
+          <Suspense fallback={<div className="min-h-[24rem]" aria-busy="true" />}>
+            <JobsExplorerView />
+          </Suspense>
         </div>
       </main>
     </div>

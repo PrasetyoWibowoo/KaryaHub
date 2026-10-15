@@ -1,6 +1,6 @@
 import { FadeIn } from "@/components/ui/FadeIn"
 import { Card } from "@/components/ui/Card"
-import { Code2, Palette, Filter } from "lucide-react"
+import { Code2, Palette, Filter, ShieldCheck } from "lucide-react"
 
 export function FeaturesSection() {
   return (
@@ -8,10 +8,10 @@ export function FeaturesSection() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <FadeIn className="text-center mb-16">
           <h2 className="font-display text-4xl sm:text-5xl font-bold text-text-heading tracking-tight mb-4">
-            Fitur yang Membantu Anda Bekerja Lebih Cerdas
+            Fitur Unggulan untuk UMKM & Talenta Lokal
           </h2>
           <p className="text-text-muted text-lg max-w-xl mx-auto">
-            Dari pencarian proyek hingga pembayaran aman, semua kebutuhan kerja freelance dan UMKM tersedia dalam satu platform.
+            AI ATS Evaluator gratis, sistem Escrow aman, dan talenta terverifikasi. Semua dalam satu platform untuk kesuksesan Anda.
           </p>
         </FadeIn>
 
@@ -28,25 +28,25 @@ export function FeaturesSection() {
                     <div className="flex items-center gap-4 mb-5">
                       <div className="w-10 h-10 rounded-full bg-error-light flex items-center justify-center text-error font-bold text-xs"><Palette className="w-5 h-5"/></div>
                       <div>
-                        <div className="font-bold text-base text-text-heading">Flutter Specialist</div>
-                        <div className="text-xs text-text-muted mt-0.5">French&apos;s</div>
+                        <div className="font-bold text-base text-text-heading">Mobile App Developer</div>
+                        <div className="text-xs text-text-muted mt-0.5">Warung Kopi Kenangan</div>
                       </div>
                     </div>
                     <p className="text-sm text-text-heading font-medium leading-relaxed mb-6">
-                      Mencari spesialis Flutter untuk membangun aplikasi yang cepat, rapi, dan mudah digunakan.
+                      Dibutuhkan developer untuk aplikasi mobile loyalty program dengan fitur QR code dan rewards.
                     </p>
                     <div className="flex gap-2">
-                      <span className="px-3 py-1.5 bg-surface-alt rounded-full text-xs font-bold text-text-muted border border-border">Senior</span>
-                      <span className="px-3 py-1.5 bg-surface-alt rounded-full text-xs font-bold text-text-muted border border-border">Full-time</span>
+                      <span className="px-3 py-1.5 bg-surface-alt rounded-full text-xs font-bold text-text-muted border border-border">Mid-Level</span>
+                      <span className="px-3 py-1.5 bg-surface-alt rounded-full text-xs font-bold text-text-muted border border-border">Project</span>
                       <span className="px-3 py-1.5 bg-surface-alt rounded-full text-xs font-bold text-text-muted border border-border">Remote</span>
                     </div>
                   </div>
                   <div className="absolute w-[80%] h-24 bg-white/60 rounded-3xl shadow-sm border border-white top-10 translate-y-8 scale-95 z-0 blur-[1px]"></div>
                 </div>
                 <div className="pb-10 pt-4">
-                  <h3 className="text-[1.75rem] font-bold text-text-heading mb-3">Temukan Proyek yang Sesuai</h3>
+                  <h3 className="text-[1.75rem] font-bold text-text-heading mb-3">Proyek dari UMKM Lokal</h3>
                   <p className="text-text-muted text-base leading-relaxed pr-8">
-                    KaryaHub membantu menampilkan peluang yang selaras dengan keahlian, minat, dan lokasi Anda.
+                    Dapatkan proyek nyata dari UMKM Indonesia yang membutuhkan keahlian Anda. Harga terjangkau, dampak nyata.
                   </p>
                 </div>
               </Card>
@@ -56,9 +56,9 @@ export function FeaturesSection() {
             <FadeIn delay={0.2} className="flex-1 flex flex-col">
               <Card className="p-10 pt-0 bg-white border-none shadow-sm hover:shadow-card transition-shadow overflow-hidden flex-1 flex flex-col-reverse rounded-[2.5rem]">
                 <div className="pt-8">
-                  <h3 className="text-[1.75rem] font-bold text-text-heading mb-3">Pahami Peluang Anda</h3>
+                  <h3 className="text-[1.75rem] font-bold text-text-heading mb-3">AI ATS Evaluator Gratis</h3>
                   <p className="text-text-muted text-base leading-relaxed pr-8">
-                    Gunakan insight dan data untuk memahami jenis proyek, area peluang, serta perkembangan profil Anda.
+                    Analisa CV Anda dengan AI dan dapatkan saran untuk meningkatkan peluang diterima hingga 3x lipat.
                   </p>
                 </div>
                 <div className="flex-1 flex items-end justify-center relative pb-8 border-b border-border/60 min-h-[180px]">
@@ -112,40 +112,40 @@ export function FeaturesSection() {
               </Card>
             </FadeIn>
 
-            {/* Find Your Dream Job */}
+            {/* Escrow Payment Aman */}
             <FadeIn delay={0.4} className="flex-1 flex flex-col">
               <Card className="p-10 pb-0 bg-white border-none shadow-sm hover:shadow-card transition-shadow overflow-hidden flex-1 flex flex-col-reverse rounded-[2.5rem]">
                 <div className="pb-8 pt-6">
-                  <h3 className="text-[1.75rem] font-bold text-text-heading mb-3">Cari Peluang Tanpa Gangguan</h3>
+                  <h3 className="text-[1.75rem] font-bold text-text-heading mb-3">Escrow Payment Aman</h3>
                   <p className="text-text-muted text-base leading-relaxed pr-8">
-                    Saring lowongan berdasarkan keahlian, tujuan, dan lokasi agar waktu Anda fokus pada peluang yang relevan.
+                    Dana ditahan di rekening bersama Midtrans sampai proyek selesai dan disetujui. UMKM dan talenta sama-sama terlindungi.
                   </p>
                 </div>
-                <div className="flex-1 flex flex-col justify-center relative border-b border-border/60 min-h-[160px]">
-                   <div className="flex items-center justify-between mb-6">
-                      <div className="flex -space-x-3">
-                        <div className="w-10 h-10 rounded-full bg-primary-light border-[3px] border-white font-bold flex items-center justify-center text-sm shadow-sm">a</div>
-                        <div className="w-10 h-10 rounded-full bg-black border-[3px] border-white font-bold flex items-center justify-center text-sm text-white shadow-sm">G</div>
-                        <div className="w-10 h-10 rounded-full bg-primary-light border-[3px] border-white font-bold flex items-center justify-center text-sm shadow-sm text-primary">AI</div>
-                        <div className="w-10 h-10 rounded-full bg-error-light border-[3px] border-white font-bold flex items-center justify-center text-sm text-error shadow-sm">O</div>
+                <div className="flex-1 flex flex-col justify-center relative border-b border-border/60 min-h-[170px] p-2">
+                  <div className="bg-surface-alt/70 border border-border rounded-2xl p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+                          <ShieldCheck className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-text-heading">Midtrans Escrow Vault</p>
+                          <p className="text-[10px] text-text-muted">ID: ESC-2024-8842</p>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2 px-4 py-2 border border-border rounded-full text-sm font-bold text-text-heading bg-white shadow-sm cursor-pointer hover:bg-surface-alt">
-                        <Filter className="w-4 h-4" /> Filter
-                      </div>
-                   </div>
-                   <div className="flex gap-4 mb-5 justify-between px-2">
-                      <div className="px-4 py-2 bg-white border border-border/80 rounded-full shadow-sm text-[13px] font-bold flex items-center gap-2 text-text-heading">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg" className="w-4 h-4" alt="BMW"/> UI/UX Design
-                      </div>
-                      <div className="px-4 py-2 bg-white border border-border/80 rounded-full shadow-sm text-[13px] font-bold flex items-center gap-2 text-text-heading">
-                        <div className="w-4 h-4 bg-accent rounded-[4px] flex items-center justify-center text-white text-[10px]">S</div> Brand Designer
-                      </div>
-                   </div>
-                   <div className="flex items-center justify-between text-[13px] text-text-muted font-semibold px-2">
-                     <div>Surabaya, Indonesia</div>
-                     <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 bg-primary rounded-full"></div> Level Junior</div>
-                     <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white font-bold text-[9px] border-2 border-white shadow-sm">Ps</div>
-                   </div>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        Dana Terkunci 100%
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs pt-1 border-t border-border/60">
+                      <span className="text-text-muted font-medium">Nilai Kontrak Kerja:</span>
+                      <strong className="text-text-heading font-extrabold">Rp 5.000.000</strong>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-[11px] text-emerald-700 bg-emerald-50/80 px-2.5 py-1 rounded-lg">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      <span>Otomatis cair setelah konfirmasi persetujuan deliverable</span>
+                    </div>
+                  </div>
                 </div>
               </Card>
             </FadeIn>
@@ -154,13 +154,24 @@ export function FeaturesSection() {
             <FadeIn delay={0.5}>
               <Card className="p-8 px-10 bg-white border-none shadow-sm hover:shadow-card transition-shadow flex items-center justify-between rounded-[2.5rem]" style={{ minHeight: 120 }}>
                 <div className="flex items-center gap-3">
-                  <div className="w-14 h-14 bg-primary rounded-2xl shadow-md flex items-center justify-center transform -rotate-12 z-10"><Code2 className="w-7 h-7 text-white"/></div>
-                  <div className="w-14 h-14 bg-primary rounded-2xl shadow-md flex items-center justify-center text-white font-bold text-2xl transform -translate-x-5 translate-y-3 z-20 border-2 border-white">Bē</div>
-                  <div className="w-14 h-14 bg-accent rounded-2xl shadow-md flex items-center justify-center text-white transform -translate-x-10 -rotate-12 z-0"><Palette className="w-7 h-7"/></div>
+                  <div className="w-12 h-12 bg-slate-950 rounded-2xl shadow-md flex items-center justify-center text-white font-bold text-base transform -rotate-6">
+                    <Code2 className="w-6 h-6" />
+                  </div>
+                  <div className="w-12 h-12 bg-emerald-600 rounded-2xl shadow-md flex items-center justify-center text-white font-bold text-xs transform translate-y-1">
+                    Figma
+                  </div>
+                  <div className="w-12 h-12 bg-indigo-600 rounded-2xl shadow-md flex items-center justify-center text-white transform rotate-6">
+                    <Palette className="w-6 h-6" />
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-text-heading max-w-[160px] leading-tight text-right">
-                  Hubungkan portofolio Anda.
-                </h3>
+                <div className="text-right">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-700 mb-1">
+                    Terverifikasi Vokasi
+                  </div>
+                  <h3 className="text-xl font-bold text-text-heading leading-tight">
+                    Portofolio Nyata
+                  </h3>
+                </div>
               </Card>
             </FadeIn>
           </div>

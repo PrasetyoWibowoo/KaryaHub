@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { 
   Search, 
   FileCheck2, 
@@ -11,110 +11,173 @@ import {
   Briefcase, 
   ShieldCheck, 
   LogOut,
-  LayoutDashboard
+  LayoutDashboard,
+  ArrowRightLeft,
+  Building2,
+  UserCheck2
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export function Sidebar() {
   const pathname = usePathname()
+  const router = useRouter()
+
+  const isFreelancerRoute = pathname.startsWith("/freelancer") || pathname === "/freelancer" || pathname.startsWith("/jobs")
+  const isUmkmRoute = pathname.startsWith("/umkm") || pathname === "/umkm"
 
   const freelancerLinks = [
-    { name: "Dashboard", href: "/freelancer", icon: LayoutDashboard },
-    { name: "Cari Lowongan", href: "/jobs", icon: Search },
-    { name: "ATS Checker", href: "/freelancer/ats-checker", icon: FileCheck2 },
-    { name: "Proposal Saya", href: "/freelancer/my-proposals", icon: FileText },
-    { name: "Dompet", href: "/freelancer/wallet", icon: Wallet },
+    { name: "Ringkasan", href: "/freelancer", icon: LayoutDashboard, badge: null },
+    { name: "Proyek & Progress", href: "/freelancer/projects", icon: Briefcase, badge: "2 Aktif" },
+    { name: "Cari Proyek", href: "/jobs", icon: Search, badge: "Katalog" },
+    { name: "AI ATS Checker", href: "/freelancer/ats-checker", icon: FileCheck2, badge: "AI" },
+    { name: "Proposal Saya", href: "/freelancer/my-proposals", icon: FileText, badge: null },
+    { name: "Dompet & Escrow", href: "/freelancer/wallet", icon: Wallet, badge: "Safe" },
   ]
 
   const umkmLinks = [
-    { name: "Dashboard", href: "/umkm", icon: LayoutDashboard },
-    { name: "Buat Lowongan", href: "/umkm/create-job", icon: PlusCircle },
-    { name: "Kelola Proyek", href: "/umkm/manage-jobs", icon: Briefcase },
-    { name: "Status Escrow", href: "/umkm/escrow-status", icon: ShieldCheck },
+    { name: "Ringkasan Bisnis", href: "/umkm", icon: LayoutDashboard, badge: null },
+    { name: "Posting Proyek", href: "/umkm/create-job", icon: PlusCircle, badge: "Cepat" },
+    { name: "Kelola Proyek", href: "/umkm/manage-jobs", icon: Briefcase, badge: null },
+    { name: "Status Escrow", href: "/umkm/escrow-status", icon: ShieldCheck, badge: "Midtrans" },
   ]
 
   return (
-    <aside className="dashboard-sidebar fixed left-0 top-0 h-screen w-64 bg-surface border-r border-border flex flex-col">
-      {/* Logo Area */}
-      <div className="h-16 flex items-center px-6 border-b border-border">
-        <Link href="/" className="flex items-center gap-1">
-          <span className="text-xl font-bold text-text-main tracking-tight">KaryaHub</span>
-          <span className="w-2 h-2 rounded-full bg-primary mt-1"></span>
+    <aside className="dashboard-sidebar">
+      {/* Brand Header */}
+      <div className="h-[4.25rem] flex items-center justify-between px-5 border-b border-white/60 bg-white/40">
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="w-8 h-8 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold font-display shadow-sm group-hover:scale-105 transition-transform">
+            K
+          </div>
+          <div className="flex flex-col">
+            <span className="text-base font-bold text-slate-950 tracking-tight font-display flex items-center gap-1.5">
+              KaryaHub
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            </span>
+            <span className="text-[10px] font-semibold text-slate-500 tracking-wider uppercase">
+              SDG 8 • Decent Work
+            </span>
+          </div>
         </Link>
       </div>
 
-      <div className="flex-1 overflow-y-auto py-6 flex flex-col gap-8 px-4">
-        {/* Freelancer Menu */}
+      <div className="flex-1 overflow-y-auto py-4 flex flex-col gap-4 px-3.5">
+        {/* Role Quick Switcher Tile */}
+        <div className="p-3 rounded-2xl bg-white/60 backdrop-blur-md border border-white/80 shadow-[0_4px_16px_rgba(0,0,0,0.02)] ring-1 ring-slate-900/[0.04]">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+              Peran Aktif
+            </span>
+            <span className={cn(
+              "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border",
+              isFreelancerRoute 
+                ? "bg-indigo-50/80 text-indigo-700 border-indigo-200/80" 
+                : "bg-emerald-50/80 text-emerald-700 border-emerald-200/80"
+            )}>
+              {isFreelancerRoute ? <UserCheck2 className="w-2.5 h-2.5" /> : <Building2 className="w-2.5 h-2.5" />}
+              {isFreelancerRoute ? "Freelancer" : "Mitra UMKM"}
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => router.push(isFreelancerRoute ? "/umkm" : "/freelancer")}
+            className="w-full h-8 px-2.5 rounded-xl bg-slate-900/5 hover:bg-slate-900/10 text-slate-700 hover:text-slate-950 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all border border-slate-900/5"
+            title="Ganti peran akun tanpa registrasi ulang"
+          >
+            <ArrowRightLeft className="w-3.5 h-3.5 text-slate-500" />
+            <span>Beralih ke {isFreelancerRoute ? "Mode UMKM" : "Mode Freelancer"}</span>
+          </button>
+        </div>
+        {/* Navigation Section */}
         <div>
-          <h3 className="px-2 text-xs font-semibold text-text-muted uppercase tracking-wider mb-3">
-            Menu Freelancer
-          </h3>
+          <div className="px-2.5 mb-2 flex items-center justify-between">
+            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+              {isFreelancerRoute ? "Menu Freelancer" : "Menu UMKM"}
+            </span>
+            <span className="text-[10px] font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
+              {isFreelancerRoute ? "Talenta" : "Bisnis"}
+            </span>
+          </div>
           <nav className="space-y-1">
-            {freelancerLinks.map((link) => {
+            {(isFreelancerRoute ? freelancerLinks : umkmLinks).map((link) => {
               const Icon = link.icon
-              const isActive = pathname === link.href
-              
+              const isActive = link.href === "/umkm" || link.href === "/freelancer"
+                ? pathname === link.href
+                : pathname.startsWith(link.href)
+
               return (
                 <Link
                   key={link.name}
                   href={link.href}
                   className={cn(
-                    "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                    isActive 
-                      ? "bg-primary/10 text-primary" 
-                      : "text-text-muted hover:bg-surface/50 hover:text-text-main"
+                    "flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 group",
+                    isActive
+                      ? "bg-slate-950 text-white shadow-md shadow-slate-950/15"
+                      : "text-slate-600 hover:text-slate-950 hover:bg-white/70"
                   )}
                 >
-                  <Icon className="w-5 h-5" />
-                  {link.name}
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <Icon className={cn(
+                      "w-4 h-4 shrink-0 transition-transform group-hover:scale-110",
+                      isActive ? "text-emerald-400" : "text-slate-400 group-hover:text-slate-700"
+                    )} />
+                    <span className="truncate">{link.name}</span>
+                  </div>
+                  {link.badge && (
+                    <span className={cn(
+                      "text-[9px] font-bold px-1.5 py-0.5 rounded-md uppercase tracking-wider",
+                      isActive 
+                        ? "bg-white/20 text-white" 
+                        : "bg-slate-100 text-slate-500 group-hover:bg-slate-200"
+                    )}>
+                      {link.badge}
+                    </span>
+                  )}
                 </Link>
               )
             })}
           </nav>
         </div>
 
-        {/* UMKM Menu */}
-        <div>
-          <h3 className="px-2 text-xs font-semibold text-text-muted uppercase tracking-wider mb-3">
-            Menu UMKM
-          </h3>
-          <nav className="space-y-1">
-            {umkmLinks.map((link) => {
-              const Icon = link.icon
-              const isActive = pathname === link.href
-              
-              return (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className={cn(
-                    "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                    isActive 
-                      ? "bg-primary/10 text-primary" 
-                      : "text-text-muted hover:bg-surface/50 hover:text-text-main"
-                  )}
-                >
-                  <Icon className="w-5 h-5" />
-                  {link.name}
-                </Link>
-              )
-            })}
-          </nav>
+        {/* Escrow Trust Micro Card */}
+        <div className="mt-auto p-3 rounded-2xl bg-emerald-500/08 border border-emerald-500/20 text-emerald-950">
+          <div className="flex items-center gap-2 mb-1">
+            <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span className="text-xs font-bold">Escrow Terproteksi</span>
+          </div>
+          <p className="text-[11px] text-emerald-800/80 leading-snug">
+            Transaksi aman via Midtrans Sandbox dengan jaminan perlindungan dana kerja.
+          </p>
         </div>
       </div>
 
-      {/* Logout Area */}
-      <div className="p-4 border-t border-border">
-        <button
-          onClick={async () => {
-            const { signOut } = await import("next-auth/react")
-            await signOut({ callbackUrl: "/" })
-          }}
-          className="flex w-full items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-text-muted hover:bg-surface/50 hover:text-text-main transition-colors"
-        >
-          <LogOut className="w-5 h-5" />
-          Logout
-        </button>
+      {/* User Card & Logout */}
+      <div className="p-3.5 border-t border-white/70 bg-white/50 backdrop-blur-md">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-8 h-8 rounded-xl bg-slate-900 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-sm">
+              {isFreelancerRoute ? "JD" : "TS"}
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs font-bold text-slate-950 truncate">
+                {isFreelancerRoute ? "John Doe" : "TechStartup Inc"}
+              </p>
+              <p className="text-[10px] text-slate-500 truncate">
+                {isFreelancerRoute ? "Talenta Vokasi" : "Mitra UMKM"}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={async () => {
+              const { signOut } = await import("next-auth/react")
+              await signOut({ callbackUrl: "/" })
+            }}
+            className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+            title="Keluar"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
+        </div>
       </div>
     </aside>
   )

@@ -1,128 +1,248 @@
 "use client"
 
+import { useState } from "react"
+import Link from "next/link"
 import { Card } from "@/components/ui/Card"
 import { Button } from "@/components/ui/Button"
 import { Badge } from "@/components/ui/Badge"
-import { Briefcase, Users, Eye, Edit, Trash2, PlusCircle, Search } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { cn } from "@/lib/utils"
+import { Briefcase, Eye, PlusCircle, Search, Filter, CheckCircle2, Clock, Layers, RotateCcw } from "lucide-react"
+import { JobCardItem, JobItem } from "@/components/dashboard/umkm/JobCardItem"
 
-const JOBS = [
-  { id: "1", title: "Desain UI/UX untuk Aplikasi Mobile", status: "OPEN", budget: 5000000, applicants: 8, views: 45, postedAt: "2 hari lalu", deadline: "7 hari lagi" },
-  { id: "2", title: "Website Company Profile", status: "IN_PROGRESS", budget: 8000000, applicants: 12, views: 67, postedAt: "1 minggu lalu", deadline: "14 hari lagi", freelancer: "John Doe" },
-  { id: "3", title: "Social Media Content Creation", status: "COMPLETED", budget: 3500000, applicants: 15, views: 89, postedAt: "2 minggu lalu", completedAt: "3 hari lalu", freelancer: "Jane Smith" },
-  { id: "4", title: "Logo & Brand Identity", status: "CANCELLED", budget: 4000000, applicants: 6, views: 34, postedAt: "3 minggu lalu" }
+const INITIAL_JOBS: JobItem[] = [
+  {
+    id: "1",
+    title: "Desain UI/UX & Prototipe Toko Online Mobile",
+    category: "UI/UX Design",
+    status: "OPEN",
+    budget: 5000000,
+    applicants: 8,
+    views: 142,
+    postedAt: "2 hari lalu",
+    deadline: "10 hari lagi",
+  },
+  {
+    id: "2",
+    title: "Pembuatan Website Company Profile & Katalog Produk UMKM",
+    category: "Web Development",
+    status: "IN_PROGRESS",
+    budget: 8500000,
+    applicants: 14,
+    views: 260,
+    postedAt: "1 minggu lalu",
+    deadline: "14 hari lagi",
+    freelancer: {
+      name: "Budi Pratama",
+      avatar: "B",
+      role: "Frontend Developer",
+      progress: 65,
+    },
+  },
+  {
+    id: "3",
+    title: "Foto Produk Katalog & Produksi 10 Video Reels / TikTok",
+    category: "Foto & Video",
+    status: "COMPLETED",
+    budget: 3500000,
+    applicants: 11,
+    views: 198,
+    postedAt: "3 minggu lalu",
+    completedAt: "Selesai 4 hari lalu",
+    freelancer: {
+      name: "Siti Rahma",
+      avatar: "S",
+      role: "Content Creator",
+      progress: 100,
+    },
+  },
+  {
+    id: "4",
+    title: "Redesain Logo & Panduan Brand Identity Kemasan Jamu",
+    category: "Branding",
+    status: "CANCELLED",
+    budget: 4000000,
+    applicants: 5,
+    views: 89,
+    postedAt: "1 bulan lalu",
+  },
 ]
 
 export default function ManageJobsPage() {
-  const router = useRouter()
-  const [filterStatus, setFilterStatus] = useState("ALL")
+  const [jobs, setJobs] = useState<JobItem[]>(INITIAL_JOBS)
+  const [filterStatus, setFilterStatus] = useState<string>("ALL")
   const [searchQuery, setSearchQuery] = useState("")
 
-  const filteredJobs = JOBS.filter(j => {
+  const filteredJobs = jobs.filter((j) => {
     const matchesStatus = filterStatus === "ALL" || j.status === filterStatus
-    const matchesSearch = j.title.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesSearch =
+      j.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      j.category.toLowerCase().includes(searchQuery.toLowerCase())
     return matchesStatus && matchesSearch
   })
 
-  const getStatusBadge = (status: string) => {
-    const variants: any = { OPEN: <Badge variant="success">Open</Badge>, IN_PROGRESS: <Badge variant="warning">In Progress</Badge>, COMPLETED: <Badge variant="primary">Completed</Badge>, CANCELLED: <Badge variant="error">Cancelled</Badge> }
-    return variants[status]
+  const stats = {
+    total: jobs.length,
+    open: jobs.filter((j) => j.status === "OPEN").length,
+    inProgress: jobs.filter((j) => j.status === "IN_PROGRESS").length,
+    completed: jobs.filter((j) => j.status === "COMPLETED").length,
   }
 
-  const stats = { total: JOBS.length, open: JOBS.filter(j => j.status === "OPEN").length, inProgress: JOBS.filter(j => j.status === "IN_PROGRESS").length, completed: JOBS.filter(j => j.status === "COMPLETED").length }
+  const handleCloseJob = (id: string) => {
+    if (confirm("Apakah Anda yakin ingin menutup lowongan proyek ini?")) {
+      setJobs(jobs.map((j) => (j.id === id ? { ...j, status: "CANCELLED" } : j)))
+    }
+  }
+
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 pb-12">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-text-heading">Kelola Proyek</h1>
-          <p className="text-text-muted mt-1">Pantau dan kelola semua proyek yang Anda posting</p>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-text-heading tracking-tight">Kelola Proyek & Lowongan</h1>
+          <p className="text-sm text-text-muted mt-1">Pantau pelamar, proses seleksi, dan status pengerjaan proyek UMKM Anda.</p>
         </div>
-        <Button onClick={() => router.push('/umkm/create-job')}>
-          <PlusCircle className="w-4 h-4 mr-2" />Post New Job
-        </Button>
+        <Link href="/umkm/create-job">
+          <Button className="gap-2 shadow-md shadow-primary/20">
+            <PlusCircle className="w-4 h-4" /> Posting Proyek Baru
+          </Button>
+        </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div><p className="text-sm text-text-muted mb-1">Total</p><p className="text-2xl font-bold">{stats.total}</p></div>
-            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center"><Briefcase className="w-5 h-5 text-primary" /></div>
+      {/* Bespoke Executive Job & Project Pipeline Console */}
+      <div className="rounded-2xl bg-white border border-slate-200/90 shadow-[0_4px_24px_-4px_rgba(15,23,42,0.05)] p-4 sm:p-5">
+        <div className="flex items-center justify-between pb-3.5 mb-3.5 border-b border-slate-100">
+          <div className="flex items-center gap-2.5">
+            <span className="flex h-2 w-2 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+            </span>
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-800">
+              Pipeline Rekrutmen & Proyek UMKM
+            </span>
           </div>
-        </Card>
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div><p className="text-sm text-text-muted mb-1">Open</p><p className="text-2xl font-bold text-success">{stats.open}</p></div>
-            <div className="w-10 h-10 rounded-lg bg-success/10 flex items-center justify-center"><Eye className="w-5 h-5 text-success" /></div>
-          </div>
-        </Card>
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div><p className="text-sm text-text-muted mb-1">In Progress</p><p className="text-2xl font-bold text-warning">{stats.inProgress}</p></div>
-            <div className="w-10 h-10 rounded-lg bg-warning/10 flex items-center justify-center"><Users className="w-5 h-5 text-warning" /></div>
-          </div>
-        </Card>
-        <Card className="p-4">
-          <div className="flex items-center justify-between">
-            <div><p className="text-sm text-text-muted mb-1">Completed</p><p className="text-2xl font-bold text-primary">{stats.completed}</p></div>
-            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center"><Briefcase className="w-5 h-5 text-primary" /></div>
-          </div>
-        </Card>
-      </div>
 
-      <Card className="p-4">
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
-            <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Cari proyek..."
-              className="w-full h-10 pl-10 pr-4 bg-surface border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" />
-          </div>
-          <div className="flex gap-2 flex-wrap">
-            {["ALL", "OPEN", "IN_PROGRESS", "COMPLETED"].map(f => (
-              <Button key={f} variant={filterStatus === f ? "default" : "outline"} size="sm" onClick={() => setFilterStatus(f)}>
-                {f === "ALL" ? "All" : f === "IN_PROGRESS" ? "Progress" : f}
-              </Button>
-            ))}
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-slate-500 font-medium">
+              Aktif: <strong className="text-slate-900">
+                {filterStatus === "ALL" ? "Semua Proyek" : filterStatus === "OPEN" ? "Menerima Pelamar" : filterStatus === "IN_PROGRESS" ? "Sedang Berjalan" : "Proyek Selesai"}
+              </strong>
+            </span>
+            {filterStatus !== "ALL" && (
+              <button
+                type="button"
+                onClick={() => setFilterStatus("ALL")}
+                className="inline-flex items-center gap-1 text-xs font-bold text-rose-600 hover:text-rose-700 underline underline-offset-2 ml-1"
+              >
+                <RotateCcw className="w-3 h-3" />
+                Reset
+              </button>
+            )}
           </div>
         </div>
-      </Card>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          {[
+            { id: "ALL", label: "Semua Proyek", count: stats.total, icon: Briefcase, caption: "Total Lowongan" },
+            { id: "OPEN", label: "Menerima Pelamar", count: stats.open, icon: Search, caption: "Buka Pelamar", pulse: true },
+            { id: "IN_PROGRESS", label: "Sedang Berjalan", count: stats.inProgress, icon: Clock, caption: "Pengerjaan Aktif" },
+            { id: "COMPLETED", label: "Proyek Selesai", count: stats.completed, icon: CheckCircle2, caption: "Escrow Dicairkan" },
+          ].map((stage) => {
+            const isSelected = filterStatus === stage.id
+            const Icon = stage.icon
+            return (
+              <button
+                key={stage.id}
+                type="button"
+                onClick={() => setFilterStatus(stage.id)}
+                className={cn(
+                  "text-left p-3.5 rounded-xl transition-all duration-200 flex flex-col justify-between relative group select-none min-h-[105px]",
+                  isSelected
+                    ? "bg-slate-950 text-white shadow-md ring-1 ring-slate-900"
+                    : "bg-slate-50/80 hover:bg-slate-100/90 text-slate-700 hover:text-slate-950 border border-slate-200/70"
+                )}
+              >
+                <div className="flex items-center justify-between gap-1 w-full mb-1">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <Icon className={cn(
+                      "w-3.5 h-3.5 shrink-0 transition-transform group-hover:scale-110",
+                      isSelected ? "text-emerald-400" : "text-slate-500 group-hover:text-slate-800"
+                    )} />
+                    <span className={cn(
+                      "text-[11px] font-bold truncate",
+                      isSelected ? "text-slate-200" : "text-slate-600 group-hover:text-slate-900"
+                    )}>
+                      {stage.label}
+                    </span>
+                  </div>
+                  {stage.pulse && !isSelected && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                  )}
+                </div>
+
+                <div className="mt-auto">
+                  <div className="flex items-baseline justify-between gap-2">
+                    <span className={cn(
+                      "text-2xl sm:text-3xl font-black font-display tracking-tight leading-none",
+                      isSelected ? "text-white" : "text-slate-950"
+                    )}>
+                      {stage.count}
+                    </span>
+                    <span className={cn(
+                      "text-[10px] font-bold uppercase tracking-wider",
+                      isSelected ? "text-emerald-400" : "text-slate-500"
+                    )}>
+                      {isSelected ? "Terpilih" : stage.caption}
+                    </span>
+                  </div>
+                </div>
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Modern Compact Search & Filter Toolbar */}
+      <div className="p-3.5 rounded-2xl bg-white/80 border border-slate-200/80 shadow-xs flex flex-col sm:flex-row gap-3 items-center justify-between">
+        <div className="flex-1 w-full relative">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Cari berdasarkan judul proyek atau kategori..."
+            className="w-full h-9.5 pl-10 pr-4 bg-slate-50/70 hover:bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
+          />
+        </div>
+        <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-between sm:justify-start">
+          <span className="text-xs text-slate-500 font-medium">
+            Menampilkan <strong className="text-slate-900">{filteredJobs.length}</strong> proyek
+          </span>
+          {filterStatus !== "ALL" && (
+            <button
+              type="button"
+              onClick={() => setFilterStatus("ALL")}
+              className="text-xs font-bold text-rose-600 hover:text-rose-800"
+            >
+              Reset Filter
+            </button>
+          )}
+        </div>
+      </div>
 
       <div className="space-y-4">
-        {filteredJobs.map((job) => (
-          <Card key={job.id} className="p-6">
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
-                  {getStatusBadge(job.status)}
-                  <span className="text-xs text-text-muted">Posted {job.postedAt}</span>
-                </div>
-                <h3 className="text-lg font-bold text-text-heading mb-1">{job.title}</h3>
-                {job.freelancer && <p className="text-sm text-text-muted">Freelancer: <span className="font-semibold text-text-heading">{job.freelancer}</span></p>}
-              </div>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 p-4 bg-surface-alt rounded-lg">
-              <div><p className="text-xs text-text-muted mb-1">Budget</p><p className="font-semibold text-primary">Rp {job.budget.toLocaleString('id-ID')}</p></div>
-              <div><p className="text-xs text-text-muted mb-1">Applicants</p><p className="font-semibold text-text-heading flex items-center gap-1"><Users className="w-4 h-4" />{job.applicants}</p></div>
-              <div><p className="text-xs text-text-muted mb-1">Views</p><p className="font-semibold text-text-heading flex items-center gap-1"><Eye className="w-4 h-4" />{job.views}</p></div>
-              <div><p className="text-xs text-text-muted mb-1">Deadline</p><p className="font-semibold text-text-heading">{job.deadline || job.completedAt || '-'}</p></div>
-            </div>
-            <div className="flex gap-2">
-              <Button variant="default" size="sm" onClick={() => router.push(`/umkm/manage-jobs/${job.id}`)}>
-                <Eye className="w-4 h-4 mr-2" />View Details
-              </Button>
-              {job.status === "OPEN" && (
-                <>
-                  <Button variant="outline" size="sm"><Edit className="w-4 h-4 mr-2" />Edit</Button>
-                  <Button variant="ghost" size="sm"><Trash2 className="w-4 h-4 mr-2" />Delete</Button>
-                </>
-              )}
-            </div>
+        {filteredJobs.length === 0 ? (
+          <Card className="p-12 text-center space-y-3">
+            <Layers className="w-12 h-12 text-text-muted mx-auto" />
+            <h3 className="text-lg font-bold text-text-heading">Tidak ada proyek yang sesuai</h3>
+            <p className="text-sm text-text-muted max-w-sm mx-auto">
+              Coba ubah kata kunci pencarian atau ganti status filter di atas.
+            </p>
           </Card>
-        ))}
+        ) : (
+          filteredJobs.map((job) => (
+            <JobCardItem key={job.id} job={job} onCloseJob={handleCloseJob} />
+          ))
+        )}
       </div>
     </div>
   )
 }
-
-
-

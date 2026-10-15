@@ -17,14 +17,32 @@ import {
   ArrowRight
 } from "lucide-react"
 import { motion } from "framer-motion"
+import Link from "next/link"
+import { useSearchParams } from "next/navigation"
+import { Suspense } from "react"
+import { UmkmClientsView } from "@/components/dashboard/UmkmClientsView"
+import { DashboardInboxView } from "@/components/dashboard/DashboardInboxView"
+import { 
+  ShieldCheck,
+  Building2,
+  Sparkles,
+  Zap,
+  ArrowUpRight,
+  Eye,
+  CheckCircle2,
+  FileCheck2,
+  Lock
+} from "lucide-react"
 
-// Mock data - in production, fetch from API
+// Mock data
 const umkmData = {
   name: "TechStartup Inc",
+  verifiedBadge: "Mitra UMKM Terverifikasi",
   stats: {
     activeProjects: 8,
     totalApplicants: 124,
     budgetSpent: 45000000,
+    escrowLocked: 12500000,
     hiredFreelancers: 15,
   },
   projectStatus: [
@@ -44,264 +62,365 @@ const umkmData = {
   activeProjects: [
     { 
       id: 1, 
-      title: "Website Redesign", 
+      title: "Website Redesign & Integrasi Midtrans", 
       freelancer: "John Doe",
+      avatar: "JD",
       status: "In Progress",
       progress: 65,
-      deadline: "2 days"
+      deadline: "2 hari lagi (14 Okt)",
+      budget: 5000000
     },
     { 
       id: 2, 
-      title: "Mobile App Development", 
+      title: "Mobile App Mitra UMKM (React Native)", 
       freelancer: "Jane Smith",
+      avatar: "JS",
       status: "In Progress",
       progress: 40,
-      deadline: "1 week"
+      deadline: "1 minggu lagi (19 Okt)",
+      budget: 8000000
     },
   ],
   recentApplicants: [
     {
       id: 1,
       name: "Alex Johnson",
-      job: "UI/UX Designer",
-      skills: ["Figma", "UI/UX", "Prototyping"],
-      matchScore: 92
+      job: "Senior UI/UX & Brand Designer",
+      skills: ["Figma", "UI/UX", "Packaging Design"],
+      matchScore: 92,
+      proposedBudget: 4800000,
+      duration: "14 hari",
     },
     {
       id: 2,
       name: "Sarah Williams",
-      job: "Full Stack Developer",
-      skills: ["React", "Node.js", "MongoDB"],
-      matchScore: 88
+      job: "Full Stack Engineer (Next.js)",
+      skills: ["React", "TypeScript", "PostgreSQL"],
+      matchScore: 88,
+      proposedBudget: 5200000,
+      duration: "12 hari",
     },
   ]
 }
 
-export default function UMKMDashboard() {
-  const reveal = {
-    hidden: { opacity: 0, y: 16 },
-    visible: (index: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: { delay: index * 0.06, duration: 0.35, ease: [0.16, 1, 0.3, 1] as const }
-    })
+function UmkmDashboardContent() {
+  const searchParams = useSearchParams()
+  const currentTab = searchParams.get("tab") || "overview"
+  const defaultContact = searchParams.get("contact") || undefined
+
+  if (currentTab === "clients") {
+    return <UmkmClientsView />
+  }
+
+  if (currentTab === "inbox") {
+    return <DashboardInboxView role="umkm" defaultContactId={defaultContact} />
   }
 
   return (
-    <div className="space-y-8 pb-8">
-      {/* Header */}
-      <div className="border-b border-border pb-7">
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-accent">Business workspace</p>
-          <h1 className="font-display text-3xl font-bold tracking-tight text-text-heading sm:text-4xl">
-            Welcome, {umkmData.name}
+    <div className="space-y-5 pb-12">
+      {/* Compact Executive Header */}
+      <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 text-white shadow-md relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-1.5 relative z-10">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              Escrow Protection Aktif
+            </span>
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white/10 text-zinc-300 border border-white/15">
+              <Building2 className="w-3 h-3 text-indigo-400" />
+              {umkmData.verifiedBadge}
+            </span>
+          </div>
+
+          <h1 className="text-xl sm:text-2xl font-bold font-display tracking-tight text-white">
+            Workspace UMKM: {umkmData.name}
           </h1>
-          <p className="mt-2 max-w-lg text-sm leading-relaxed text-text-muted">
-            Keep your hiring pipeline moving with a clear view of active work, applicants, and spend.
+          <p className="text-xs text-zinc-300 max-w-xl line-clamp-1 sm:line-clamp-none">
+            Kelola proyek digitalisasi usaha Anda secara terpusat, rekrut talenta vokasi terbaik, dan tinjau skor ATS pelamar.
           </p>
         </div>
-        <Button variant="black" className="shrink-0">
-          <PlusCircle className="w-4 h-4 mr-2" />
-          Post New Job
-        </Button>
+
+        <div className="flex items-center gap-2 relative z-10 shrink-0">
+          <Link href="/umkm/escrow-status">
+            <Button variant="outline" size="sm" className="bg-white/10 hover:bg-white/20 text-white hover:text-white border-white/20 text-xs font-semibold h-9 px-3.5">
+              <ShieldCheck className="w-3.5 h-3.5 mr-1.5 text-emerald-400" />
+              Status Escrow
+            </Button>
+          </Link>
+          <Link href="/umkm/create-job">
+            <Button variant="primary" size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white border-none text-xs font-bold h-9 px-4 shadow-sm">
+              <PlusCircle className="w-3.5 h-3.5 mr-1.5" />
+              Posting Proyek
+            </Button>
+          </Link>
         </div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <motion.div custom={0} initial="hidden" animate="visible" variants={reveal}>
-        <Card hover={false} className="p-6 border-l-4 border-l-primary">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-text-muted mb-1">Active Projects</p>
-              <p className="text-2xl font-bold text-text-heading">
-                {umkmData.stats.activeProjects}
-              </p>
+      {/* 4-Pillar Unified Workspace Deck */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        {/* Pillar 1: Anggaran & Escrow */}
+        <Card hover={false} className="p-4 rounded-2xl bg-white/80 border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Anggaran Diamankan</span>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+                <Lock className="w-2.5 h-2.5 text-emerald-600" /> Rekber Aktif
+              </span>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-              <Briefcase className="w-6 h-6 text-primary" />
-            </div>
+            <p className="text-2xl font-extrabold text-slate-950 tracking-tight">
+              Rp {umkmData.stats.budgetSpent.toLocaleString("id-ID")}
+            </p>
+            <p className="text-xs text-slate-500 mt-1">
+              Rp {umkmData.stats.escrowLocked.toLocaleString("id-ID")} terkunci di proyek aktif
+            </p>
           </div>
-          <div className="mt-4 flex items-center text-xs text-success">
-            <TrendingUp className="w-3 h-3 mr-1" />
-            +15% from last month
+          <div className="pt-3 mt-2 border-t border-slate-100 flex items-center justify-between">
+            <Link href="/umkm/escrow-status" className="text-xs font-bold text-slate-800 hover:text-emerald-700 flex items-center gap-1">
+              Pantau Escrow <ArrowUpRight className="w-3.5 h-3.5 text-emerald-600" />
+            </Link>
           </div>
         </Card>
-        </motion.div>
 
-        <motion.div custom={1} initial="hidden" animate="visible" variants={reveal}>
-        <Card hover={false} className="p-6 border-l-4 border-l-accent">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-text-muted mb-1">Total Applicants</p>
-              <p className="text-2xl font-bold text-text-heading">
-                {umkmData.stats.totalApplicants}
-              </p>
+        {/* Pillar 2: Proyek Aktif */}
+        <Card hover={false} className="p-4 rounded-2xl bg-white/80 border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Proyek Berjalan</span>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                2 Kontrak
+              </span>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">
-              <Users className="w-6 h-6 text-accent" />
+            <p className="text-2xl font-extrabold text-slate-950 tracking-tight">
+              {umkmData.stats.activeProjects} Proyek Aktif
+            </p>
+            <div className="mt-2 space-y-1">
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="text-slate-500">Progress Rata-rata</span>
+                <span className="font-bold text-slate-900">65%</span>
+              </div>
+              <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                <div className="h-full bg-slate-900 rounded-full" style={{ width: "65%" }} />
+              </div>
             </div>
           </div>
-          <div className="mt-4 flex items-center text-xs text-success">
-            <TrendingUp className="w-3 h-3 mr-1" />
-            +28% from last month
+          <div className="pt-3 mt-2 border-t border-slate-100 flex items-center justify-between">
+            <Link href="/umkm/manage-jobs" className="text-xs font-bold text-slate-800 hover:text-indigo-600 flex items-center gap-1">
+              Kelola Proyek <ArrowRight className="w-3.5 h-3.5 text-indigo-600" />
+            </Link>
           </div>
         </Card>
-        </motion.div>
 
-        <motion.div custom={2} initial="hidden" animate="visible" variants={reveal}>
-        <Card hover={false} className="p-6 border-l-4 border-l-warning">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-text-muted mb-1">Budget Spent</p>
-              <p className="text-2xl font-bold text-text-heading">
-                Rp {(umkmData.stats.budgetSpent / 1000000).toFixed(1)}M
-              </p>
+        {/* Pillar 3: Pelamar & AI ATS */}
+        <Card hover={false} className="p-4 rounded-2xl bg-white/80 border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Pipeline Pelamar</span>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
+                Auto-Ranked
+              </span>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-warning/10 flex items-center justify-center">
-              <DollarSign className="w-6 h-6 text-warning" />
-            </div>
+            <p className="text-2xl font-extrabold text-slate-950 tracking-tight">
+              {umkmData.stats.totalApplicants} Pelamar Masuk
+            </p>
+            <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
+              <FileCheck2 className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+              Skor ATS match tertinggi: <strong className="text-indigo-700">94%</strong>
+            </p>
           </div>
-          <div className="mt-4 flex items-center text-xs text-text-muted">
-            65% of total budget
+          <div className="pt-3 mt-2 border-t border-slate-100 flex items-center justify-between">
+            <Link href="/umkm/manage-jobs" className="text-xs font-bold text-slate-800 hover:text-indigo-600 flex items-center gap-1">
+              Review Ranking ATS <ArrowRight className="w-3.5 h-3.5 text-indigo-600" />
+            </Link>
           </div>
         </Card>
-        </motion.div>
 
-        <motion.div custom={3} initial="hidden" animate="visible" variants={reveal}>
-        <Card hover={false} className="p-6 border-l-4 border-l-success">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-text-muted mb-1">Hired Freelancers</p>
-              <p className="text-2xl font-bold text-text-heading">
-                {umkmData.stats.hiredFreelancers}
-              </p>
+        {/* Pillar 4: SDG 8 Vokasi Impact */}
+        <Card hover={false} className="p-4 rounded-2xl bg-white/80 border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Talenta Vokasi Direkrut</span>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-0.5">
+                <TrendingUp className="w-2.5 h-2.5 text-emerald-600" /> +28% MoM
+              </span>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-success/10 flex items-center justify-center">
-              <CheckCircle className="w-6 h-6 text-success" />
-            </div>
+            <p className="text-2xl font-extrabold text-slate-950 tracking-tight">
+              {umkmData.stats.hiredFreelancers} Talenta Aktif
+            </p>
+            <p className="text-xs text-slate-500 mt-1 line-clamp-1">
+              Dampak positif ekonomi vokasi (SDG Goal 8)
+            </p>
           </div>
-          <div className="mt-4 flex items-center text-xs text-success">
-            <TrendingUp className="w-3 h-3 mr-1" />
-            +3 this month
+          <div className="pt-3 mt-2 border-t border-slate-100 flex items-center justify-between">
+            <Link href="/umkm?tab=clients" className="text-xs font-bold text-slate-800 hover:text-slate-950 flex items-center gap-1">
+              Daftar Talenta <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
         </Card>
-        </motion.div>
       </div>
 
-      {/* Charts Section */}
-      <div className="workspace-analytics-grid">
-        <Card hover={false} className="workspace-insight-panel p-6">
-          <h2 className="text-lg font-semibold text-text-heading mb-4 flex items-center gap-2">
-            <Briefcase className="w-5 h-5 text-primary" />
-            Project Status Overview
-          </h2>
-          <ProjectStatusChart data={umkmData.projectStatus} />
-        </Card>
-
-        <Card hover={false} className="workspace-primary-panel p-6">
-          <h2 className="text-lg font-semibold text-text-heading mb-4 flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-accent" />
-            Applicant Trends
-          </h2>
-          <ApplicantTrendChart data={umkmData.applicantTrend} />
-        </Card>
-      </div>
-
-      {/* Active Projects & Recent Applicants */}
-      <div className="workspace-lower-grid">
-        <Card hover={false} className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-text-heading">Active Projects</h2>
-            <Button variant="ghost" size="sm">
-              View All
-              <ArrowRight className="w-4 h-4 ml-1" />
-            </Button>
-          </div>
-          
-          <div className="space-y-4">
-            {umkmData.activeProjects.map((project) => (
-              <div key={project.id} className="p-4 rounded-lg border border-border">
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <h3 className="font-semibold text-text-heading text-sm">{project.title}</h3>
-                    <p className="text-xs text-text-muted mt-1">
-                      <Users className="w-3 h-3 inline mr-1" />
-                      {project.freelancer}
-                    </p>
-                  </div>
-                  <Badge variant="warning" className="text-xs">
-                    <Clock className="w-3 h-3 mr-1" />
-                    {project.deadline}
-                  </Badge>
-                </div>
-                
-                <div className="mb-2">
-                  <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="text-text-muted">Progress</span>
-                    <span className="font-semibold text-text-heading">{project.progress}%</span>
-                  </div>
-                  <div className="w-full h-2 bg-surface-alt rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-primary rounded-full transition-all"
-                      style={{ width: `${project.progress}%` }}
-                    />
-                  </div>
-                </div>
-
-                <Button variant="outline" size="sm" className="w-full mt-2">
-                  <FileText className="w-3 h-3 mr-1" />
-                  View Details
+      {/* Main Grid: Projects & Applicants */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        {/* Left Column: Active Projects & Applicant Growth Chart (7 cols) */}
+        <div className="lg:col-span-7 space-y-5">
+          <Card className="p-6 glass-card">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-base font-bold text-slate-950">Proyek Berjalan & Milestone Kerja</h2>
+                <p className="text-xs text-slate-500 mt-0.5">Pantau progress freelancer dan tinjau kiriman deliverable</p>
+              </div>
+              <Link href="/umkm/manage-jobs">
+                <Button variant="ghost" size="sm" className="text-xs font-semibold text-slate-600 hover:text-slate-950">
+                  Kelola Semua
+                  <ArrowRight className="w-3.5 h-3.5 ml-1" />
                 </Button>
-              </div>
-            ))}
-          </div>
-        </Card>
+              </Link>
+            </div>
 
-        <Card hover={false} className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-text-heading">Recent Applicants</h2>
-            <Button variant="ghost" size="sm">
-              View All
-              <ArrowRight className="w-4 h-4 ml-1" />
-            </Button>
-          </div>
-          
-          <div className="space-y-4">
-            {umkmData.recentApplicants.map((applicant) => (
-              <div key={applicant.id} className="p-4 rounded-lg border border-border hover:border-primary/50 transition-all">
-                <div className="flex items-start justify-between mb-2">
-                  <div>
-                    <h3 className="font-semibold text-text-heading text-sm">{applicant.name}</h3>
-                    <p className="text-xs text-text-muted mt-0.5">{applicant.job}</p>
+            <div className="space-y-3.5">
+              {umkmData.activeProjects.map((project) => (
+                <div key={project.id} className="p-4 rounded-2xl bg-white/70 border border-slate-200/80 shadow-xs hover:border-slate-300 transition-all">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 mb-2.5">
+                    <div>
+                      <h3 className="font-bold text-sm text-slate-950 leading-snug">{project.title}</h3>
+                      <p className="text-xs text-slate-500 mt-0.5 flex items-center gap-1.5">
+                        <span className="w-5 h-5 rounded-full bg-slate-900 text-white text-[10px] font-bold flex items-center justify-center">
+                          {project.avatar}
+                        </span>
+                        <span>Freelancer: <strong className="text-slate-800">{project.freelancer}</strong></span>
+                      </p>
+                    </div>
+                    <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 shrink-0 self-start">
+                      Rp {project.budget.toLocaleString("id-ID")}
+                    </span>
                   </div>
-                  <Badge variant="success" className="text-xs">
-                    {applicant.matchScore}% Match
-                  </Badge>
-                </div>
-                
-                <div className="flex flex-wrap gap-1.5 mb-3">
-                  {applicant.skills.map((skill) => (
-                    <Badge key={skill} variant="outline" className="text-xs">
-                      {skill}
-                    </Badge>
-                  ))}
-                </div>
 
-                <div className="flex gap-2">
-                  <Button variant="default" size="sm" className="flex-1">
-                    Accept
-                  </Button>
-                  <Button variant="outline" size="sm" className="flex-1">
-                    Review
-                  </Button>
+                  <div className="space-y-1.5 mb-3">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-slate-500">Progress Pengerjaan</span>
+                      <span className="font-bold text-slate-950">{project.progress}%</span>
+                    </div>
+                    <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
+                      <div 
+                        className="h-full bg-slate-900 rounded-full transition-all"
+                        style={{ width: `${project.progress}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
+                    <span className="text-slate-500 flex items-center gap-1">
+                      <Clock className="w-3.5 h-3.5 text-amber-600" />
+                      Tenggat: <strong className="text-slate-800">{project.deadline}</strong>
+                    </span>
+                    <Link href="/umkm?tab=clients">
+                      <Button variant="black" size="sm" className="text-xs h-8 px-3">
+                        <CheckCircle2 className="w-3 h-3 mr-1.5 text-emerald-400" />
+                        Tinjau Deliverable
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* Applicant Growth Trend Chart */}
+          <Card className="p-6 glass-card">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-base font-bold text-slate-950 flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-emerald-600" />
+                  Tren Pelamar Masuk vs Perekrutan
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">Pertumbuhan minat talenta vokasi terhadap lowongan usaha Anda</p>
               </div>
-            ))}
-          </div>
-        </Card>
+              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700">
+                Semester 1
+              </span>
+            </div>
+            <ApplicantTrendChart data={umkmData.applicantTrend} />
+          </Card>
+        </div>
+
+        {/* Right Column: Top Candidates with ATS & Project Status (5 cols) */}
+        <div className="lg:col-span-5 space-y-5">
+          {/* Top Candidates with ATS Score */}
+          <Card className="p-6 glass-card">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-base font-bold text-slate-950">Pelamar Teratas (Screener ATS)</h2>
+                <p className="text-xs text-slate-500 mt-0.5">Kandidat dengan tingkat kecocokan resume tertinggi</p>
+              </div>
+              <Link href="/umkm/manage-jobs">
+                <Button variant="ghost" size="sm" className="text-xs font-semibold text-slate-600 hover:text-slate-950">
+                  Semua
+                  <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                </Button>
+              </Link>
+            </div>
+
+            <div className="space-y-3">
+              {umkmData.recentApplicants.map((applicant) => (
+                <div key={applicant.id} className="p-4 rounded-2xl bg-white/70 border border-slate-200/80 hover:border-slate-300 transition-all">
+                  <div className="flex items-start justify-between gap-2 mb-1.5">
+                    <div>
+                      <h3 className="font-bold text-sm text-slate-950">{applicant.name}</h3>
+                      <p className="text-xs text-slate-500">{applicant.job}</p>
+                    </div>
+                    <span className="text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 shrink-0">
+                      ATS {applicant.matchScore}%
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs my-2 p-2 rounded-xl bg-slate-50 border border-slate-100">
+                    <span className="text-slate-500">Pengajuan: <strong className="text-slate-900">Rp {applicant.proposedBudget.toLocaleString("id-ID")}</strong></span>
+                    <span className="text-slate-500">Durasi: <strong className="text-slate-900">{applicant.duration}</strong></span>
+                  </div>
+
+                  <div className="flex flex-wrap gap-1 mb-3">
+                    {applicant.skills.map((s) => (
+                      <span key={s} className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600">
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Link href="/umkm/manage-jobs/1" className="flex-1">
+                      <Button variant="black" size="sm" className="w-full text-xs h-8 font-bold">
+                        <CheckCircle className="w-3 h-3 mr-1 text-emerald-400" />
+                        Terima & Rekrut
+                      </Button>
+                    </Link>
+                    <Link href="/umkm/manage-jobs/1">
+                      <Button variant="outline" size="sm" className="text-xs h-8 bg-white hover:bg-slate-100 text-slate-800 hover:text-slate-950 border-slate-200 hover:border-slate-300 font-semibold">
+                        Detail
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* Project Status Pie Chart */}
+          <Card className="p-6 glass-card">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-base font-bold text-slate-950">Status Keseluruhan Proyek</h2>
+              <span className="text-[11px] font-semibold text-slate-500">Distribusi Portfolio</span>
+            </div>
+            <ProjectStatusChart data={umkmData.projectStatus} />
+          </Card>
+        </div>
       </div>
     </div>
+  )
+}
+
+export default function UMKMDashboard() {
+  return (
+    <Suspense fallback={null}>
+      <UmkmDashboardContent />
+    </Suspense>
   )
 }

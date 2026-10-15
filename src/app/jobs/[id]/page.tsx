@@ -2,7 +2,9 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Navbar } from "@/components/shared/Navbar"
+import Link from "next/link"
+import { Sidebar } from "@/components/dashboard/Sidebar"
+import { DashboardTopbar } from "@/components/dashboard/DashboardTopbar"
 import { Card } from "@/components/ui/Card"
 import { Button } from "@/components/ui/Button"
 import { Badge } from "@/components/ui/Badge"
@@ -17,10 +19,14 @@ import {
   BookmarkPlus,
   Share2,
   CheckCircle,
+  CheckCircle2,
   Users,
   Star,
   ArrowLeft,
-  AlertCircle
+  AlertCircle,
+  ShieldCheck,
+  Sparkles,
+  Zap
 } from "lucide-react"
 
 // Mock data - in production, fetch from API based on params.id
@@ -67,6 +73,7 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
     portfolioLinks: ""
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [proposalSuccess, setProposalSuccess] = useState(false)
 
   const handleSubmitProposal = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -75,21 +82,33 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
     // Mock API call
     setTimeout(() => {
       setIsSubmitting(false)
-      alert("Proposal berhasil dikirim!")
+      setProposalSuccess(true)
       setShowProposalForm(false)
-    }, 2000)
+      setTimeout(() => setProposalSuccess(false), 4000)
+    }, 1200)
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      
-      <div className="pt-20 pb-12 px-4">
-        <div className="max-w-6xl mx-auto">
-          <Button variant="ghost" className="mb-6" onClick={() => router.back()}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Kembali ke Daftar Lowongan
-          </Button>
+    <div className="flex min-h-screen bg-surface-alt/40">
+      <Sidebar />
+      <div className="flex-1 min-w-0 flex flex-col">
+        <DashboardTopbar />
+        <main className="flex-1 p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+          <Link href="/jobs">
+            <Button variant="ghost" size="sm" className="mb-5 text-slate-600 hover:text-slate-950 font-bold">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Kembali ke Cari Proyek
+            </Button>
+          </Link>
+
+          {proposalSuccess && (
+            <div className="mb-6 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-800 flex items-center justify-between animate-fadeIn">
+              <div className="flex items-center gap-2.5 text-xs sm:text-sm font-bold">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                <span>Proposal Anda berhasil diajukan ke klien! Anda dapat memantau statusnya di menu <strong>Proposal Saya</strong>.</span>
+              </div>
+            </div>
+          )}
 
           <div className="grid lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6">
@@ -269,7 +288,7 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
               </Card>
             </div>
           </div>
-        </div>
+        </main>
       </div>
     </div>
   )

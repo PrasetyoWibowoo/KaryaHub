@@ -14,40 +14,42 @@ interface ApplicantTrendChartProps {
 
 export function ApplicantTrendChart({ data }: ApplicantTrendChartProps) {
   return (
-    <ResponsiveContainer width="100%" height={300}>
-      <LineChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#E4E4E7" />
-        <XAxis 
-          dataKey="month" 
-          tick={{ fill: '#52525B', fontSize: 12 }}
-        />
-        <YAxis 
-          tick={{ fill: '#52525B', fontSize: 12 }}
-        />
-        <Tooltip 
-          contentStyle={{ 
-            backgroundColor: '#fff', 
-            border: '1px solid #E4E4E7',
-            borderRadius: '8px',
-            fontSize: '12px'
-          }}
-        />
-        <Legend />
-        <Line 
-          type="monotone" 
-          dataKey="applicants" 
-          stroke="#27272A" 
-          strokeWidth={2}
-          name="Applicants"
-        />
-        <Line 
-          type="monotone" 
-          dataKey="hired" 
-          stroke="#15803D"
-          strokeWidth={2}
-          name="Hired"
-        />
-      </LineChart>
-    </ResponsiveContainer>
+    <div className="w-full h-[300px] min-h-[300px]">
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#E4E4E7" />
+          <XAxis 
+            dataKey="month" 
+            tick={{ fill: '#52525B', fontSize: 12 }}
+          />
+          <YAxis 
+            tick={{ fill: '#52525B', fontSize: 12 }}
+          />
+          <Tooltip 
+            contentStyle={{ 
+              backgroundColor: '#fff', 
+              border: '1px solid #E4E4E7',
+              borderRadius: '8px',
+              fontSize: '12px'
+            }}
+          />
+          <Legend />
+          <Line 
+            type="monotone" 
+            dataKey="applicants" 
+            stroke="#27272A" 
+            strokeWidth={2}
+            name="Applicants"
+          />
+          <Line 
+            type="monotone" 
+            dataKey="hired" 
+            stroke="#15803D"
+            strokeWidth={2}
+            name="Hired"
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
   )
 }

@@ -1,140 +1,223 @@
 "use client"
 
+import { useState, use } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Card } from "@/components/ui/Card"
 import { Button } from "@/components/ui/Button"
 import { Badge } from "@/components/ui/Badge"
-import { ArrowLeft, Users, Star, Mail, Phone, CheckCircle, XCircle, Eye, Download, Clock } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { ArrowLeft, CheckCircle2 } from "lucide-react"
+import { HireCandidateModal } from "@/components/dashboard/umkm/HireCandidateModal"
+import { CandidateCard, Candidate } from "@/components/dashboard/umkm/CandidateCard"
 
 const JOB_DATA = {
   id: "1",
-  title: "Desain UI/UX untuk Aplikasi Mobile Toko Online",
+  title: "Desain UI/UX & Prototipe Toko Online Mobile",
+  category: "UI/UX Design",
   status: "OPEN",
   budget: 5000000,
-  description: "Kami membutuhkan desainer UI/UX untuk aplikasi mobile e-commerce kami...",
-  postedAt: "2024-10-05",
-  deadline: "2024-10-20",
-  applicants: 8
+  postedAt: "05 Okt 2024",
+  deadline: "20 Okt 2024",
+  applicantsCount: 3,
+  description:
+    "Kami membutuhkan perombakan UI/UX komprehensif untuk aplikasi belanja online produk herbal UMKM kami di Android dan iOS. Target luaran meliputi wireframe, interaksi prototype Figma siap uji, dan aset siap handoff ke tim developer.",
+  deliverables: [
+    "Design System & Color Tokens (Figma)",
+    "Wireflow lengkap 25+ halaman utama",
+    "Prototipe interaktif clickable",
+    "Asset export @1x, @2x, @3x & Icon pack SVG",
+  ],
 }
 
-const APPLICANTS = [
-  { id: "1", name: "John Doe", atsScore: 92, proposedBudget: 4800000, estimatedDays: 14, coverLetter: "Saya memiliki 5 tahun pengalaman...", skills: ["Figma", "UI/UX", "Prototyping"], portfolio: "https://johndoe.com", email: "john@email.com", phone: "+62812345678", appliedAt: "2 hari lalu" },
-  { id: "2", name: "Jane Smith", atsScore: 88, proposedBudget: 5200000, estimatedDays: 12, coverLetter: "Portfolio saya mencakup berbagai project e-commerce...", skills: ["Adobe XD", "Figma", "User Research"], portfolio: "https://janesmith.com", email: "jane@email.com", phone: "+62823456789", appliedAt: "3 hari lalu" },
-  { id: "3", name: "Alex Johnson", atsScore: 85, proposedBudget: 4500000, estimatedDays: 16, coverLetter: "Saya tertarik dengan proyek ini...", skills: ["Sketch", "Figma", "Mobile Design"], portfolio: "https://alexj.com", email: "alex@email.com", phone: "+62834567890", appliedAt: "4 hari lalu" }
+const INITIAL_APPLICANTS: Candidate[] = [
+  {
+    id: "c1",
+    name: "Budi Pratama",
+    avatar: "B",
+    role: "Senior Product Designer",
+    location: "Bandung, Jawa Barat",
+    atsScore: 94,
+    proposedBudget: 4800000,
+    estimatedDays: 12,
+    coverLetter:
+      "Halo! Saya berpengalaman 4+ tahun merancang antarmuka mobile e-commerce UMKM di Indonesia. Portofolio saya mencakup aplikasi retail dengan kenaikan konversi checkout 35%. Siap menyelesaikan sesuai timeline Anda.",
+    skills: [
+      { name: "Figma", matched: true },
+      { name: "UI/UX", matched: true },
+      { name: "Prototyping", matched: true },
+      { name: "Design System", matched: true },
+      { name: "E-Commerce", matched: true },
+    ],
+    portfolioUrl: "https://behance.net",
+    appliedAt: "1 hari lalu",
+    status: "PENDING",
+  },
+  {
+    id: "c2",
+    name: "Siti Rahmawati",
+    avatar: "S",
+    role: "UI Designer & Visual Artist",
+    location: "Yogyakarta",
+    atsScore: 88,
+    proposedBudget: 5000000,
+    estimatedDays: 14,
+    coverLetter:
+      "Sangat tertarik dengan branding produk herbal UMKM ini! Saya memiliki spesialisasi desain clean & friendly untuk audiens lokal Indonesia. Figma master siap rapi dengan auto-layout.",
+    skills: [
+      { name: "Figma", matched: true },
+      { name: "Mobile UI", matched: true },
+      { name: "Iconography", matched: true },
+      { name: "Design System", matched: true },
+    ],
+    portfolioUrl: "https://dribbble.com",
+    appliedAt: "2 hari lalu",
+    status: "PENDING",
+  },
+  {
+    id: "c3",
+    name: "Alex Wijaya",
+    avatar: "A",
+    role: "UX Researcher & Mobile Dev",
+    location: "Jakarta Selatan",
+    atsScore: 81,
+    proposedBudget: 4500000,
+    estimatedDays: 16,
+    coverLetter:
+      "Menawarkan paket desain siap implementasi React Native. Saya bisa mendampingi proses implementasi agar developer tidak kesulitan menerjemahkan desain.",
+    skills: [
+      { name: "Figma", matched: true },
+      { name: "User Flow", matched: true },
+      { name: "React Native", matched: false },
+    ],
+    portfolioUrl: "https://github.com",
+    appliedAt: "3 hari lalu",
+    status: "PENDING",
+  },
 ]
 
-export default function JobDetailPage({ params }: { params: { id: string } }) {
+export default function JobDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }> | { id: string }
+}) {
   const router = useRouter()
+  const unwrappedParams =
+    typeof (params as any)?.then === "function"
+      ? use(params as Promise<{ id: string }>)
+      : (params as { id: string })
+  const jobId = unwrappedParams.id
 
-  const handleAccept = (applicantId: string) => {
-    alert(`Accepting applicant ${applicantId}`)
+  const [applicants, setApplicants] = useState<Candidate[]>(INITIAL_APPLICANTS)
+  const [filterType, setFilterType] = useState<"ALL" | "TOP_MATCH" | "UNDER_BUDGET">("ALL")
+  const [candidateToHire, setCandidateToHire] = useState<Candidate | null>(null)
+
+  const handleHireConfirm = (candidateId: string) => {
+    setApplicants((prev) =>
+      prev.map((c) => (c.id === candidateId ? { ...c, status: "HIRED" } : c))
+    )
   }
 
-  const handleReject = (applicantId: string) => {
-    alert(`Rejecting applicant ${applicantId}`)
+  const handleReject = (candidateId: string) => {
+    if (confirm("Tolak proposal dari kandidat ini?")) {
+      setApplicants((prev) =>
+        prev.map((c) => (c.id === candidateId ? { ...c, status: "REJECTED" } : c))
+      )
+    }
   }
+
+  const filteredCandidates = applicants.filter((c) => {
+    if (filterType === "TOP_MATCH") return c.atsScore >= 90
+    if (filterType === "UNDER_BUDGET") return c.proposedBudget <= JOB_DATA.budget
+    return true
+  })
+
   return (
-    <div className="space-y-6">
-      <Button variant="ghost" onClick={() => router.back()}>
-        <ArrowLeft className="w-4 h-4 mr-2" />Back to Jobs
-      </Button>
-
-      <Card className="p-6">
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex-1">
-            <Badge variant="success" className="mb-3">{JOB_DATA.status}</Badge>
-            <h1 className="text-3xl font-bold text-text-heading mb-2">{JOB_DATA.title}</h1>
-            <p className="text-text-muted">Posted on {JOB_DATA.postedAt}</p>
+    <div className="space-y-6 pb-16">
+      <div>
+        <Link
+          href="/umkm/manage-jobs"
+          className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-primary transition-colors mb-3 font-medium"
+        >
+          <ArrowLeft className="w-4 h-4" /> Kembali ke Daftar Proyek
+        </Link>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-1.5">
+              <Badge variant="success" className="font-semibold">{JOB_DATA.status}</Badge>
+              <Badge variant="neutral">{JOB_DATA.category}</Badge>
+              <span className="text-xs text-text-muted">ID: PROJ-{jobId}</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-text-heading tracking-tight">{JOB_DATA.title}</h1>
+          </div>
+          <div className="text-left sm:text-right">
+            <span className="text-xs text-text-muted block">Alokasi Budget</span>
+            <span className="text-2xl font-extrabold text-primary">Rp {JOB_DATA.budget.toLocaleString("id-ID")}</span>
           </div>
         </div>
+      </div>
 
-        <div className="grid grid-cols-3 gap-4 p-4 bg-surface-alt rounded-lg">
-          <div>
-            <p className="text-xs text-text-muted mb-1">Budget</p>
-            <p className="font-bold text-primary text-lg">Rp {JOB_DATA.budget.toLocaleString('id-ID')}</p>
-          </div>
-          <div>
-            <p className="text-xs text-text-muted mb-1">Deadline</p>
-            <p className="font-semibold text-text-heading">{JOB_DATA.deadline}</p>
-          </div>
-          <div>
-            <p className="text-xs text-text-muted mb-1">Applicants</p>
-            <p className="font-semibold text-text-heading flex items-center gap-1">
-              <Users className="w-4 h-4" />{JOB_DATA.applicants}
-            </p>
+      <Card className="p-6 space-y-4">
+        <h3 className="font-bold text-text-heading text-base">Deskripsi & Ruang Lingkup Pekerjaan</h3>
+        <p className="text-sm text-text-body leading-relaxed">{JOB_DATA.description}</p>
+        <div className="pt-2 border-t border-border">
+          <p className="text-xs font-semibold text-text-heading mb-2">Target Luaran (Deliverables):</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-text-muted">
+            {JOB_DATA.deliverables.map((d, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span>{d}</span>
+              </div>
+            ))}
           </div>
         </div>
       </Card>
 
-      <div>
-        <h2 className="text-2xl font-bold text-text-heading mb-4">Applicants ({APPLICANTS.length})</h2>
+      <div className="space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 className="text-xl font-bold text-text-heading">Evaluasi Pelamar ({filteredCandidates.length})</h2>
+            <p className="text-xs text-text-muted">Skor ATS dihitung otomatis berdasarkan kesesuaian skill & portofolio kandidat.</p>
+          </div>
+          <div className="flex gap-1.5">
+            {[
+              { id: "ALL", label: "Semua Pelamar" },
+              { id: "TOP_MATCH", label: "ATS Match >90%" },
+              { id: "UNDER_BUDGET", label: "Sesuai Budget" },
+            ].map((f) => (
+              <button
+                key={f.id}
+                onClick={() => setFilterType(f.id as any)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                  filterType === f.id
+                    ? "bg-primary text-white shadow-sm"
+                    : "bg-surface text-text-muted hover:bg-surface-alt border border-border"
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="space-y-4">
-          {APPLICANTS.map((a) => (
-            <Card key={a.id} className="p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-start gap-4">
-                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-                    <span className="text-2xl font-bold text-primary">{a.name.charAt(0)}</span>
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl font-bold text-text-heading mb-1">{a.name}</h3>
-                    <div className="flex items-center gap-3 text-sm text-text-muted mb-2">
-                      <span className="flex items-center gap-1"><Mail className="w-3 h-3" />{a.email}</span>
-                      <span className="flex items-center gap-1"><Phone className="w-3 h-3" />{a.phone}</span>
-                      <span className="flex items-center gap-1"><Clock className="w-3 h-3" />Applied {a.appliedAt}</span>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {a.skills.map((skill) => (
-                        <Badge key={skill} variant="outline" className="text-xs">{skill}</Badge>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <Badge variant={a.atsScore >= 90 ? "success" : a.atsScore >= 80 ? "warning" : "neutral"} className="text-sm">
-                  ATS: {a.atsScore}%
-                </Badge>
-              </div>
-
-              <div className="grid grid-cols-3 gap-4 p-4 bg-surface-alt rounded-lg mb-4">
-                <div>
-                  <p className="text-xs text-text-muted mb-1">Proposed Budget</p>
-                  <p className="font-semibold text-primary">Rp {a.proposedBudget.toLocaleString('id-ID')}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-text-muted mb-1">Duration</p>
-                  <p className="font-semibold text-text-heading">{a.estimatedDays} days</p>
-                </div>
-                <div>
-                  <p className="text-xs text-text-muted mb-1">Portfolio</p>
-                  <a href={a.portfolio} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-sm font-semibold">
-                    View Portfolio
-                  </a>
-                </div>
-              </div>
-
-              <div className="mb-4">
-                <p className="text-sm font-semibold text-text-heading mb-2">Cover Letter:</p>
-                <p className="text-sm text-text-body">{a.coverLetter}</p>
-              </div>
-
-              <div className="flex gap-2">
-                <Button onClick={() => handleAccept(a.id)} className="flex-1">
-                  <CheckCircle className="w-4 h-4 mr-2" />Accept & Hire
-                </Button>
-                <Button variant="outline" onClick={() => handleReject(a.id)} className="flex-1">
-                  <XCircle className="w-4 h-4 mr-2" />Reject
-                </Button>
-                <Button variant="ghost" size="sm">
-                  <Eye className="w-4 h-4 mr-2" />View Profile
-                </Button>
-              </div>
-            </Card>
+          {filteredCandidates.map((candidate) => (
+            <CandidateCard
+              key={candidate.id}
+              candidate={candidate}
+              jobId={jobId}
+              onHire={(c) => setCandidateToHire(c)}
+              onReject={handleReject}
+            />
           ))}
         </div>
       </div>
+      <HireCandidateModal
+        isOpen={Boolean(candidateToHire)}
+        candidate={candidateToHire}
+        jobTitle={JOB_DATA.title}
+        onClose={() => setCandidateToHire(null)}
+        onConfirmHire={handleHireConfirm}
+      />
     </div>
   )
 }
-
-
-

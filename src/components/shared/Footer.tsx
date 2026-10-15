@@ -1,37 +1,67 @@
 import Link from "next/link"
-import { Button } from "@/components/ui/Button"
-import { FileText } from "lucide-react"
 
 export function Footer() {
   return (
-    <footer className="bg-background pt-16 pb-8 border-t border-border">
+    <footer className="bg-background pt-6 sm:pt-10 pb-12 sm:pb-16 overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
-          <div className="max-w-md">
-            <div className="flex -space-x-4 mb-6">
-              <div className="w-16 h-20 bg-white border border-border rounded-xl shadow-sm rotate-[-10deg] flex items-center justify-center z-10"><FileText className="text-text-muted" /></div>
-              <div className="w-16 h-20 bg-white border border-border rounded-xl shadow-sm rotate-[10deg] flex items-center justify-center"><FileText className="text-text-muted" /></div>
+        
+        {/* Upper Content: Stacked Resume Cards & Large Two-Tone Heading */}
+        <div className="max-w-4xl">
+          
+          {/* Overlapping Document Cards Illustration */}
+          <div className="relative w-32 h-26 mb-6 sm:mb-8 select-none">
+            {/* Back Card (tilted left) */}
+            <div className="absolute left-1 top-1 w-18 h-22 sm:w-20 sm:h-24 bg-white rounded-2xl border border-slate-200/90 shadow-[0_8px_20px_rgba(0,0,0,0.03)] -rotate-10 p-3 flex flex-col justify-end gap-1.5 transition-transform hover:-rotate-12">
+              <div className="w-9 h-1.5 bg-slate-200/80 rounded-full" />
+              <div className="w-11 h-1.5 bg-slate-200/60 rounded-full" />
+              <div className="w-7 h-1.5 bg-slate-200/50 rounded-full" />
             </div>
-            <h2 className="font-display text-4xl font-bold text-text-heading tracking-tight leading-tight">
-              Temukan Peluang <span className="text-text-muted">yang</span><br/>
-              <span className="text-text-muted">Relevan</span> untuk Anda
-            </h2>
+
+            {/* Front Card (overlapping, slight tilt right) */}
+            <div className="absolute left-8 top-0 w-20 h-24 sm:w-22 sm:h-26 bg-white rounded-2xl border border-slate-200/90 shadow-[0_12px_28px_rgba(0,0,0,0.06)] rotate-3 p-3.5 flex flex-col justify-between z-10 transition-transform hover:rotate-6">
+              {/* Avatar circle silhouette */}
+              <div className="w-7 h-7 rounded-full bg-slate-100 border border-slate-200/80 flex items-center justify-center">
+                <svg className="w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+              </div>
+
+              {/* Resume content placeholder lines */}
+              <div className="space-y-1.5 mt-2">
+                <div className="w-12 h-1.5 bg-slate-300/80 rounded-full" />
+                <div className="w-10 h-1.5 bg-slate-200/80 rounded-full" />
+                <div className="w-7 h-1.5 bg-slate-200/60 rounded-full" />
+              </div>
+            </div>
           </div>
-          <div className="flex gap-4">
-            <Button variant="outline" className="rounded-full px-6">Ikuti Kami</Button>
-            <Button variant="primary" className="rounded-full px-6" asChild><Link href="/register">Daftar Sekarang</Link></Button>
+
+          {/* Heading with exact bold black & soft gray hierarchy */}
+          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-[70px] font-bold tracking-tight leading-[1.08] select-none">
+            <span className="text-slate-950 font-extrabold">Find A Job </span>
+            <span className="text-slate-400 font-bold">That Is</span>
+            <br />
+            <span className="text-slate-400 font-bold">Relevant To You Now</span>
+          </h2>
+        </div>
+
+        {/* Bottom Bar: Links and Copyright */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mt-20 sm:mt-28 md:mt-32 text-xs sm:text-sm">
+          <div className="flex flex-wrap items-center gap-6 sm:gap-9 font-medium text-slate-800">
+            <Link href="/legal" className="hover:text-slate-950 transition-colors">
+              Legal
+            </Link>
+            <Link href="/faq" className="hover:text-slate-950 transition-colors">
+              Help Center
+            </Link>
+            <Link href="/terms" className="hover:text-slate-950 transition-colors">
+              Term &amp; Conditions
+            </Link>
+          </div>
+          <div className="font-medium text-slate-600 sm:text-slate-500">
+            &copy;2025 Joblynx All Right Reserved
           </div>
         </div>
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-bold text-text-muted pt-6 border-t border-border uppercase tracking-widest">
-          <div className="flex gap-6">
-            <Link href="#" className="hover:text-text-heading transition-colors">Legal</Link>
-            <Link href="#" className="hover:text-text-heading transition-colors">Ketentuan Pengguna</Link>
-            <Link href="#" className="hover:text-text-heading transition-colors">Kebijakan Privasi</Link>
-          </div>
-          <div>
-            © 2026 KaryaHub. All Rights Reserved.
-          </div>
-        </div>
+
       </div>
     </footer>
   )

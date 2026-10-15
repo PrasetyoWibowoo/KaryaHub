@@ -69,7 +69,7 @@ const config: Config = {
 
         // Text colors
         text: {
-          heading: '#111827',
+          heading: '#000000ff',
           body: '#374151',
           muted: '#6B7280',
           subtle: '#9CA3AF',

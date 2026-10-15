@@ -1,15 +1,160 @@
-﻿"use client"
+"use client"
+
 import { useState } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Card } from "@/components/ui/Card"
 import { Button } from "@/components/ui/Button"
-import { Input } from "@/components/ui/Input"
 import { Badge } from "@/components/ui/Badge"
-import { Briefcase, DollarSign, Clock, FileText, Lightbulb, CheckCircle2 } from "lucide-react"
-const CATEGORIES = ["UI/UX Design", "Web Development", "Mobile Development", "Graphic Design", "Content Creation", "Video Production", "Digital Marketing", "SEO & SEM", "Copywriting", "Photography"]
+import { Briefcase, ArrowLeft, Eye, CheckCircle2 } from "lucide-react"
+import { CreateJobStep1 } from "@/components/dashboard/umkm/CreateJobStep1"
+import { CreateJobStep2 } from "@/components/dashboard/umkm/CreateJobStep2"
+import { CreateJobStep3 } from "@/components/dashboard/umkm/CreateJobStep3"
+import { JobLivePreview } from "@/components/dashboard/umkm/JobLivePreview"
+
 export default function CreateJobPage() {
-  const [formData, setFormData] = useState({ title: "", category: "", budget: "", estimatedDays: "", description: "", qualifications: "" })
+  const router = useRouter()
+  const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const handleSubmit = async (e: React.FormEvent) => { e.preventDefault(); setIsSubmitting(true); console.log("Creating job:", formData); setTimeout(() => { setIsSubmitting(false); alert("Proyek berhasil dipublikasikan!") }, 2000) }
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => { setFormData({ ...formData, [e.target.name]: e.target.value }) }
-  return (<div className="max-w-3xl mx-auto space-y-6"><div className="space-y-2"><div className="flex items-center gap-2"><div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center"><Briefcase className="w-5 h-5 text-primary" /></div><h1 className="text-3xl font-bold text-text-heading">Posting Proyek Baru</h1></div><p className="text-text-muted text-base leading-relaxed">Jelaskan kebutuhan digitalisasi UMKM Anda untuk mendapatkan talenta terbaik.</p></div><div className="grid grid-cols-1 md:grid-cols-3 gap-4"><Card className="p-4 bg-primary-light border-primary/20"><div className="flex items-start gap-3"><div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0"><CheckCircle2 className="w-4 h-4 text-primary" /></div><div><h3 className="font-semibold text-text-heading text-sm mb-1">Escrow Aman</h3><p className="text-xs text-text-muted">Dana dijamin aman hingga proyek selesai</p></div></div></Card><Card className="p-4 bg-success-light border-success/20"><div className="flex items-start gap-3"><div className="w-8 h-8 rounded-lg bg-success/20 flex items-center justify-center flex-shrink-0"><Lightbulb className="w-4 h-4 text-success" /></div><div><h3 className="font-semibold text-text-heading text-sm mb-1">Talenta Terverifikasi</h3><p className="text-xs text-text-muted">Hanya freelancer tervalidasi</p></div></div></Card><Card className="p-4 bg-accent-light border-accent/20"><div className="flex items-start gap-3"><div className="w-8 h-8 rounded-lg bg-accent/20 flex items-center justify-center flex-shrink-0"><Clock className="w-4 h-4 text-accent" /></div><div><h3 className="font-semibold text-text-heading text-sm mb-1">Proses Cepat</h3><p className="text-xs text-text-muted">Dapatkan proposal dalam 24 jam</p></div></div></Card></div><Card className="p-8"><form onSubmit={handleSubmit} className="space-y-6"><div><label className="block text-sm font-semibold text-text-heading mb-2">Judul Proyek <span className="text-red-500">*</span></label><Input name="title" value={formData.title} onChange={handleChange} placeholder="Contoh: Desain UI/UX untuk Aplikasi Mobile Toko Online" className="h-12" required /><p className="text-xs text-text-muted mt-1.5">Buat judul yang jelas dan deskriptif</p></div><div className="grid grid-cols-1 md:grid-cols-2 gap-6"><div><label className="block text-sm font-semibold text-text-heading mb-2">Kategori Pekerjaan <span className="text-red-500">*</span></label><div className="relative"><Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted pointer-events-none" /><select name="category" value={formData.category} onChange={handleChange} className="w-full h-12 pl-11 pr-4 bg-surface border-2 border-border rounded-xl text-text-heading font-medium focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none appearance-none cursor-pointer" required><option value="">Pilih kategori...</option>{CATEGORIES.map((cat) => <option key={cat} value={cat}>{cat}</option>)}</select></div></div><div><label className="block text-sm font-semibold text-text-heading mb-2">Budget (Rp) <span className="text-red-500">*</span></label><div className="relative"><DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted pointer-events-none" /><Input name="budget" type="number" value={formData.budget} onChange={handleChange} placeholder="5000000" className="h-12 pl-11" min="0" step="100000" required /></div><p className="text-xs text-text-muted mt-1.5">Dana akan di-hold dalam Escrow</p></div></div><div><label className="block text-sm font-semibold text-text-heading mb-2">Estimasi Waktu (Hari) <span className="text-red-500">*</span></label><div className="relative max-w-xs"><Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted pointer-events-none" /><Input name="estimatedDays" type="number" value={formData.estimatedDays} onChange={handleChange} placeholder="14" className="h-12 pl-11" min="1" max="365" required /></div></div><div><label className="block text-sm font-semibold text-text-heading mb-2">Deskripsi Lengkap <span className="text-red-500">*</span></label><textarea name="description" value={formData.description} onChange={handleChange} placeholder="Jelaskan detail proyek, latar belakang bisnis, fitur yang diharapkan..." rows={8} className="w-full px-4 py-3 bg-surface border-2 border-border rounded-xl text-text-heading placeholder:text-text-subtle focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none resize-none" required /><p className="text-xs text-text-muted mt-1.5">Deskripsi detail membantu freelancer memahami kebutuhan</p></div><div><label className="block text-sm font-semibold text-text-heading mb-2">Kualifikasi & Skill</label><Input name="qualifications" value={formData.qualifications} onChange={handleChange} placeholder="Figma, UI Design, Prototyping" className="h-12" /><p className="text-xs text-text-muted mt-1.5">Pisahkan dengan koma</p>{formData.qualifications && (<div className="flex flex-wrap gap-2 mt-3">{formData.qualifications.split(",").map((skill, idx) => <Badge key={idx} variant="outline">{skill.trim()}</Badge>)}</div>)}</div><div className="pt-4 border-t border-border"><Button type="submit" variant="primary" size="lg" isLoading={isSubmitting} className="w-full h-14 text-base font-bold shadow-primary"><FileText className="w-5 h-5 mr-2" />Publikasikan Proyek & Deposit Escrow</Button><p className="text-xs text-text-muted text-center mt-3">Dengan mempublikasikan, Anda setuju dengan <span className="text-primary font-medium cursor-pointer hover:underline">Terms of Service</span></p></div></form></Card><Card className="p-6 bg-surface-alt border-dashed"><div className="flex items-start gap-4"><div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0"><Lightbulb className="w-5 h-5 text-primary" /></div><div><h3 className="font-semibold text-text-heading mb-1.5">Tips Membuat Posting Menarik</h3><ul className="text-sm text-text-muted space-y-1 list-disc list-inside"><li>Gunakan judul yang spesifik</li><li>Jelaskan latar belakang bisnis</li><li>Sertakan contoh atau referensi visual</li><li>Tentukan budget realistis</li></ul></div></div></Card></div>)
+  const [showPreview, setShowPreview] = useState(false)
+  const [submittedSuccess, setSubmittedSuccess] = useState(false)
+
+  const [title, setTitle] = useState("")
+  const [category, setCategory] = useState("branding")
+  const [experienceLevel, setExperienceLevel] = useState("Menengah (Intermediate)")
+  const [description, setDescription] = useState("")
+  const [deliverables, setDeliverables] = useState("")
+  const [selectedSkills, setSelectedSkills] = useState<string[]>(["Figma", "Branding"])
+  const [budget, setBudget] = useState("3500000")
+  const [estimatedDays, setEstimatedDays] = useState("14")
+  const [paymentType, setPaymentType] = useState<"fixed" | "milestone">("fixed")
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setTimeout(() => {
+      setIsSubmitting(false)
+      setSubmittedSuccess(true)
+      setTimeout(() => router.push("/umkm/manage-jobs"), 1500)
+    }, 1200)
+  }
+
+  return (
+    <div className="space-y-8 max-w-5xl mx-auto pb-16">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <Link href="/umkm/manage-jobs" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-primary transition-colors mb-2 font-medium">
+            <ArrowLeft className="w-4 h-4" /> Kembali ke Kelola Proyek
+          </Link>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
+              <Briefcase className="w-5 h-5" />
+            </div>
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-text-heading tracking-tight">Posting Proyek Baru UMKM</h1>
+              <p className="text-sm text-text-muted">Publikasikan kebutuhan digitalisasi bisnis Anda dan temukan talenta terverifikasi.</p>
+            </div>
+          </div>
+        </div>
+        <Button variant="outline" size="sm" onClick={() => setShowPreview(!showPreview)} className="gap-2 self-start sm:self-auto">
+          <Eye className="w-4 h-4" /> {showPreview ? "Tutup Preview" : "Lihat Preview"}
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-3 gap-3 p-2 bg-surface rounded-2xl border border-border/80">
+        {[
+          { step: 1, label: "Informasi Dasar" },
+          { step: 2, label: "Deskripsi & Skill" },
+          { step: 3, label: "Budget & Escrow" },
+        ].map((item) => (
+          <button
+            key={item.step}
+            type="button"
+            onClick={() => setCurrentStep(item.step as 1 | 2 | 3)}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all ${
+              currentStep === item.step ? "bg-primary text-white font-semibold shadow-sm shadow-primary/20" : "text-text-muted hover:bg-surface-alt font-medium"
+            }`}
+          >
+            <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold ${currentStep === item.step ? "bg-white/20 text-white" : "bg-primary/10 text-primary"}`}>
+              {item.step}
+            </div>
+            <div className="hidden sm:block">
+              <p className="text-xs uppercase tracking-wider opacity-80 leading-none">Langkah {item.step}</p>
+              <p className="text-sm font-semibold truncate">{item.label}</p>
+            </div>
+          </button>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className={showPreview ? "lg:col-span-2 space-y-6" : "lg:col-span-3 space-y-6"}>
+          {submittedSuccess ? (
+            <Card className="p-12 text-center space-y-4">
+              <div className="w-16 h-16 rounded-full bg-emerald-500/10 text-emerald-500 mx-auto flex items-center justify-center">
+                <CheckCircle2 className="w-10 h-10" />
+              </div>
+              <h2 className="text-2xl font-bold text-text-heading">Proyek Berhasil Dipublikasikan!</h2>
+              <p className="text-text-muted max-w-md mx-auto text-sm">
+                Proyek Anda kini aktif di feed KaryaHub dan siap menerima penawaran proposal dari freelancer terverifikasi.
+              </p>
+              <Badge variant="success" className="px-3 py-1">Mengalihkan ke halaman Kelola Proyek...</Badge>
+            </Card>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {currentStep === 1 && (
+                <CreateJobStep1
+                  title={title}
+                  setTitle={setTitle}
+                  category={category}
+                  setCategory={setCategory}
+                  experienceLevel={experienceLevel}
+                  setExperienceLevel={setExperienceLevel}
+                  onNext={() => setCurrentStep(2)}
+                />
+              )}
+              {currentStep === 2 && (
+                <CreateJobStep2
+                  description={description}
+                  setDescription={setDescription}
+                  deliverables={deliverables}
+                  setDeliverables={setDeliverables}
+                  selectedSkills={selectedSkills}
+                  setSelectedSkills={setSelectedSkills}
+                  onBack={() => setCurrentStep(1)}
+                  onNext={() => setCurrentStep(3)}
+                />
+              )}
+              {currentStep === 3 && (
+                <CreateJobStep3
+                  paymentType={paymentType}
+                  setPaymentType={setPaymentType}
+                  budget={budget}
+                  setBudget={setBudget}
+                  estimatedDays={estimatedDays}
+                  setEstimatedDays={setEstimatedDays}
+                  isSubmitting={isSubmitting}
+                  onBack={() => setCurrentStep(2)}
+                  onPreview={() => setShowPreview(true)}
+                />
+              )}
+            </form>
+          )}
+        </div>
+
+        {showPreview && (
+          <div className="lg:col-span-1 space-y-4 sticky top-20">
+            <JobLivePreview
+              title={title}
+              category={category}
+              budget={budget}
+              estimatedDays={estimatedDays}
+              paymentType={paymentType}
+              description={description}
+              selectedSkills={selectedSkills}
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  )
 }

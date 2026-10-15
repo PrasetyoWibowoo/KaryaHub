@@ -98,14 +98,10 @@ const INITIAL_APPLICANTS: Candidate[] = [
 export default function JobDetailPage({
   params,
 }: {
-  params: Promise<{ id: string }> | { id: string }
+  params: Promise<{ id: string }>
 }) {
   const router = useRouter()
-  const unwrappedParams =
-    typeof (params as any)?.then === "function"
-      ? use(params as Promise<{ id: string }>)
-      : (params as { id: string })
-  const jobId = unwrappedParams.id
+  const jobId = use(params).id
 
   const [applicants, setApplicants] = useState<Candidate[]>(INITIAL_APPLICANTS)
   const [filterType, setFilterType] = useState<"ALL" | "TOP_MATCH" | "UNDER_BUDGET">("ALL")

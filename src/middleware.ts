@@ -20,11 +20,6 @@ export async function middleware(request: NextRequest) {
   // Auth routes
   const isAuthRoute = pathname.startsWith("/login") || pathname.startsWith("/register")
 
-  // If trying to access protected route without login
-  if (isProtectedRoute && !isLoggedIn) {
-    return NextResponse.redirect(new URL("/login", request.url))
-  }
-
   // If logged in and trying to access auth routes, redirect to dashboard
   if (isAuthRoute && isLoggedIn) {
     const redirectPath = userRole === "FREELANCER" ? "/freelancer" : "/umkm"

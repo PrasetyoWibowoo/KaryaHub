@@ -6,13 +6,9 @@ import { EscrowPaymentView } from "@/components/escrow/EscrowPaymentView"
 export default function EscrowPaymentDynamicPage({
   params
 }: {
-  params: Promise<{ id: string }> | { id: string }
+  params: Promise<{ id: string }>
 }) {
-  const unwrappedParams =
-    typeof (params as any)?.then === "function"
-      ? use(params as Promise<{ id: string }>)
-      : (params as { id: string })
-  const escrowId = unwrappedParams.id || "3"
+  const escrowId = use(params).id || "3"
 
   return <EscrowPaymentView escrowId={escrowId} />
 }

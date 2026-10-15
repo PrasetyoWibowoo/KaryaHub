@@ -13,10 +13,6 @@ export async function middleware(request: NextRequest) {
   const userRole = token?.role
 
   // Protected dashboard routes
-  const isFreelancerRoute = pathname.startsWith("/freelancer")
-  const isUMKMRoute = pathname.startsWith("/umkm")
-  const isProtectedRoute = isFreelancerRoute || isUMKMRoute
-
   // Auth routes
   const isAuthRoute = pathname.startsWith("/login") || pathname.startsWith("/register")
 
@@ -24,16 +20,6 @@ export async function middleware(request: NextRequest) {
   if (isAuthRoute && isLoggedIn) {
     const redirectPath = userRole === "FREELANCER" ? "/freelancer" : "/umkm"
     return NextResponse.redirect(new URL(redirectPath, request.url))
-  }
-
-  // Role-based access control
-  if (isLoggedIn && isProtectedRoute) {
-    if (isFreelancerRoute && userRole !== "FREELANCER") {
-      return NextResponse.redirect(new URL("/umkm", request.url))
-    }
-    if (isUMKMRoute && userRole !== "UMKM") {
-      return NextResponse.redirect(new URL("/freelancer", request.url))
-    }
   }
 
   return NextResponse.next()

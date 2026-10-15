@@ -1,15 +1,17 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { Card } from "@/components/ui/Card"
 import { Button } from "@/components/ui/Button"
-import { 
-  Send, 
-  Search, 
-  Paperclip, 
-  Smile, 
-  ShieldCheck, 
-  CheckCheck, 
+import { cn } from "@/lib/utils"
+import {
+  Send,
+  Search,
+  Paperclip,
+  Smile,
+  ShieldCheck,
+  CheckCheck,
   ArrowLeft,
   Circle,
   ExternalLink,
@@ -287,7 +289,7 @@ export function DashboardInboxView({ role, defaultContactId }: DashboardInboxVie
 
   const activeThread = threads.find(t => t.id === activeThreadId) || threads[0]
 
-  const filteredThreads = threads.filter(t => 
+  const filteredThreads = threads.filter(t =>
     t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     t.projectTitle.toLowerCase().includes(searchQuery.toLowerCase())
   )
@@ -379,11 +381,19 @@ export function DashboardInboxView({ role, defaultContactId }: DashboardInboxVie
                     key={thread.id}
                     type="button"
                     onClick={() => setActiveThreadId(thread.id)}
-                    className={`w-full p-3.5 text-left transition-all flex items-start gap-3 hover:bg-surface-alt ${
-                      isActive ? "bg-slate-100/90 shadow-xs" : ""
-                    }`}
+                    className={cn(
+                      "w-full p-3.5 text-left transition-colors flex items-start gap-3 relative z-10 cursor-pointer select-none",
+                      isActive ? "text-slate-950 font-medium" : "text-slate-700 hover:bg-white/60"
+                    )}
                   >
-                    <div className="relative shrink-0">
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeChatThreadIndicator"
+                        className="absolute inset-0 bg-white border-l-4 border-indigo-600 shadow-xs -z-10"
+                        transition={{ type: "spring", stiffness: 420, damping: 28, mass: 0.8 }}
+                      />
+                    )}
+                    <div className="relative shrink-0 z-10">
                       <div className="w-11 h-11 rounded-xl bg-indigo-600 text-white font-bold text-sm flex items-center justify-center shadow-sm">
                         {thread.avatar}
                       </div>
@@ -392,7 +402,7 @@ export function DashboardInboxView({ role, defaultContactId }: DashboardInboxVie
                       )}
                     </div>
 
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 relative z-10">
                       <div className="flex items-center justify-between gap-1 mb-0.5">
                         <p className="text-xs font-bold text-text-heading truncate">
                           {thread.name}
@@ -469,24 +479,25 @@ export function DashboardInboxView({ role, defaultContactId }: DashboardInboxVie
                 const isMe = msg.sender === "me"
 
                 return (
-                  <div
+                  <motion.div
                     key={msg.id}
+                    initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ type: "spring", stiffness: 420, damping: 28 }}
                     className={`flex flex-col ${isMe ? "items-end" : "items-start"}`}
                   >
                     <div
-                      className={`max-w-[85%] sm:max-w-[70%] rounded-2xl p-3.5 text-xs leading-relaxed shadow-soft ${
-                        isMe
+                      className={`max-w-[85%] sm:max-w-[70%] rounded-2xl p-3.5 text-xs leading-relaxed shadow-soft ${isMe
                           ? "bg-text-heading text-white rounded-br-none"
                           : "bg-surface border border-border text-text-heading rounded-bl-none"
-                      }`}
+                        }`}
                     >
                       <p>{msg.text}</p>
 
                       {/* Attachment preview if present */}
                       {msg.attachment && (
-                        <div className={`mt-2.5 p-2.5 rounded-xl border flex items-center justify-between gap-2 ${
-                          isMe ? "bg-white/10 border-white/20 text-white" : "bg-surface-alt border-border text-text-heading"
-                        }`}>
+                        <div className={`mt-2.5 p-2.5 rounded-xl border flex items-center justify-between gap-2 ${isMe ? "bg-white/10 border-white/20 text-white" : "bg-surface-alt border-border text-text-heading"
+                          }`}>
                           <div className="flex items-center gap-2 min-w-0">
                             <FileCode2 className="w-4 h-4 shrink-0 text-indigo-400" />
                             <span className="text-[11px] font-medium truncate">{msg.attachment.title}</span>
@@ -503,14 +514,13 @@ export function DashboardInboxView({ role, defaultContactId }: DashboardInboxVie
                         </div>
                       )}
 
-                      <div className={`flex items-center justify-end gap-1 mt-1 text-[10px] ${
-                        isMe ? "text-white/70" : "text-text-muted"
-                      }`}>
+                      <div className={`flex items-center justify-end gap-1 mt-1 text-[10px] ${isMe ? "text-white/70" : "text-text-muted"
+                        }`}>
                         <span>{msg.time}</span>
                         {isMe && <CheckCheck className="w-3 h-3 text-emerald-400" />}
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 )
               })}
               <div ref={messagesEndRef} />
@@ -545,15 +555,17 @@ export function DashboardInboxView({ role, defaultContactId }: DashboardInboxVie
                 className="flex-1 h-10 px-3.5 text-xs bg-surface-alt border border-border rounded-xl text-text-heading placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
               />
 
-              <Button
-                type="submit"
-                variant="black"
-                size="sm"
-                className="h-10 px-4 shrink-0 shadow-sm"
-              >
-                <Send className="w-3.5 h-3.5 mr-1" />
-                <span>Kirim</span>
-              </Button>
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.96 }}>
+                <Button
+                  type="submit"
+                  variant="black"
+                  size="sm"
+                  className="h-10 px-4 shrink-0 shadow-sm cursor-pointer"
+                >
+                  <Send className="w-3.5 h-3.5 mr-1" />
+                  <span>Kirim</span>
+                </Button>
+              </motion.div>
             </form>
           </div>
         ) : (

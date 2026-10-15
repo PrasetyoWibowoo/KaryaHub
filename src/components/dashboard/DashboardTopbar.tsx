@@ -17,6 +17,7 @@ import {
   Building2,
   Sparkles
 } from "lucide-react"
+import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 
 const routeTitles: Record<string, { title: string; section: string }> = {
@@ -145,29 +146,46 @@ function TopbarContent() {
         )}
       </div>
 
-      {/* Center: The Floating 3-Button Navbar (Flex-1 Centered, Guaranteed No-Overlap) */}
+      {/* Center: The Floating 3-Button Navbar with Bouncy Sliding Pill */}
       <div className="hidden md:flex items-center justify-center flex-1 px-3 min-w-0 pointer-events-auto">
-        <nav aria-label="Dashboard Primary Navigation" className="dashboard-floating-nav max-w-fit">
+        <nav aria-label="Dashboard Primary Navigation" className="dashboard-floating-nav max-w-fit relative">
           {navItems.map(({ label, href, icon: Icon, isActive }) => (
             <Link
               key={label}
               href={href}
               className={cn(
-                "dashboard-floating-tab group",
-                isActive && "dashboard-floating-tab-active"
+                "dashboard-floating-tab group relative z-0",
+                isActive && "dashboard-floating-tab-active text-white"
               )}
             >
+              {isActive && (
+                <motion.div
+                  layoutId="topbarFloatingActivePill"
+                  className="absolute inset-0 rounded-full bg-slate-950 shadow-[0_4px_16px_-2px_rgba(15,23,42,0.35)] -z-10"
+                  transition={{
+                    type: "spring",
+                    stiffness: 420,
+                    damping: 27,
+                    mass: 0.8,
+                  }}
+                />
+              )}
               <Icon 
                 className={cn(
-                  "h-3.5 w-3.5 shrink-0 transition-transform group-hover:scale-110",
+                  "h-3.5 w-3.5 shrink-0 transition-transform duration-200 group-hover:scale-110 relative z-10",
                   isActive ? "text-emerald-400" : "text-slate-400 group-hover:text-slate-900"
                 )} 
                 aria-hidden="true" 
               />
-              <span className="hidden xl:inline">{label}</span>
-              <span className="xl:hidden">{label.replace(" Saya", "").replace(" & Progress", "").replace(" Talenta", "").replace(" Bisnis", "")}</span>
+              <span className="hidden xl:inline relative z-10">{label}</span>
+              <span className="xl:hidden relative z-10">{label.replace(" Saya", "").replace(" & Progress", "").replace(" Talenta", "").replace(" Bisnis", "")}</span>
               {isActive && (
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse ml-0.5" />
+                <motion.span 
+                  layoutId="topbarActiveDot"
+                  className="w-1.5 h-1.5 rounded-full bg-emerald-400 ml-0.5 relative z-10"
+                  animate={{ scale: [1, 1.25, 1], opacity: [0.8, 1, 0.8] }}
+                  transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                />
               )}
             </Link>
           ))}
@@ -182,10 +200,13 @@ function TopbarContent() {
           <span>Escrow Aktif</span>
         </div>
 
-        <button
+        <motion.button
           type="button"
           onClick={handleToggle}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-white hover:bg-slate-100 text-slate-800 hover:text-slate-950 border border-slate-200/90 hover:border-slate-300 shadow-xs hover:shadow-sm transition-all"
+          whileHover={{ scale: 1.02, y: -1 }}
+          whileTap={{ scale: 0.96 }}
+          transition={{ type: "spring", stiffness: 450, damping: 25 }}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-white hover:bg-slate-100 text-slate-800 hover:text-slate-950 border border-slate-200/90 hover:border-slate-300 shadow-xs hover:shadow-sm"
           title="Beralih peran demo secara instan"
         >
           <ArrowRightLeft className="w-3.5 h-3.5 text-slate-500" />
@@ -195,33 +216,49 @@ function TopbarContent() {
           <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-slate-100 text-slate-700">
             Demo
           </span>
-        </button>
+        </motion.button>
 
         {/* Quick Messages */}
-        <Link
-          href={inboxHref}
-          className="dashboard-icon-button relative"
-          aria-label="Buka Chat & Diskusi"
-          title="Buka Pusat Pesan & Diskusi"
-        >
-          <MessageSquare className="h-4 w-4" aria-hidden="true" />
-          <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-emerald-500" />
-        </Link>
+        <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.94 }}>
+          <Link
+            href={inboxHref}
+            className="dashboard-icon-button relative"
+            aria-label="Buka Chat & Diskusi"
+            title="Buka Pusat Pesan & Diskusi"
+          >
+            <MessageSquare className="h-4 w-4" aria-hidden="true" />
+            <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-emerald-500" />
+          </Link>
+        </motion.div>
 
-        <button type="button" className="dashboard-icon-button" aria-label="Search workspace">
+        <motion.button 
+          whileHover={{ scale: 1.06 }} 
+          whileTap={{ scale: 0.94 }}
+          type="button" 
+          className="dashboard-icon-button" 
+          aria-label="Search workspace"
+        >
           <Search className="h-4 w-4" aria-hidden="true" />
-        </button>
-        <button type="button" className="dashboard-icon-button relative" aria-label="View notifications">
+        </motion.button>
+        <motion.button 
+          whileHover={{ scale: 1.06 }} 
+          whileTap={{ scale: 0.94 }}
+          type="button" 
+          className="dashboard-icon-button relative" 
+          aria-label="View notifications"
+        >
           <Bell className="h-4 w-4" aria-hidden="true" />
           <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-indigo-500" />
-        </button>
-        <div 
-          className="dashboard-avatar ring-2 ring-white/80 shadow-xs" 
+        </motion.button>
+        <motion.div 
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="dashboard-avatar ring-2 ring-white/80 shadow-xs cursor-pointer" 
           aria-label="Signed in user"
           title={isUmkm ? "TechStartup Inc (UMKM)" : "John Doe (Freelancer)"}
         >
           {isUmkm ? "TS" : "JD"}
-        </div>
+        </motion.div>
       </div>
     </header>
   )

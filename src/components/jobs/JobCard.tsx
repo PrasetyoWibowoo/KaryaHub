@@ -1,5 +1,6 @@
 "use client"
 
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/Button"
 import { Building2, Clock, MapPin, ShieldCheck, Bookmark, Sparkles, ArrowRight, Send, CheckCircle2 } from "lucide-react"
 import Link from "next/link"
@@ -44,10 +45,18 @@ export function JobCard(props: JobCardProps) {
   }
 
   return (
-    <div className={cn(
-      "group p-5 rounded-2xl bg-white/85 hover:bg-white border border-slate-200/80 hover:border-slate-300 shadow-xs hover:shadow-md transition-all flex justify-between relative",
-      viewMode === "list" ? "flex-col md:flex-row md:items-center gap-4" : "flex-col"
-    )}>
+    <motion.div 
+      layout
+      whileHover={{ y: -3 }}
+      transition={{ 
+        layout: { type: "spring", stiffness: 350, damping: 28 },
+        y: { duration: 0.2, ease: "easeOut" }
+      }}
+      className={cn(
+        "group p-5 rounded-2xl bg-white/85 hover:bg-white border border-slate-200/80 hover:border-slate-300 shadow-xs hover:shadow-md transition-shadow flex justify-between relative",
+        viewMode === "list" ? "flex-col md:flex-row md:items-center gap-4" : "flex-col"
+      )}
+    >
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2 mb-2">
           <div className="flex flex-wrap items-center gap-1.5">
@@ -135,6 +144,6 @@ export function JobCard(props: JobCardProps) {
           </Link>
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }

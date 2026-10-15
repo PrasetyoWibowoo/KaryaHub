@@ -18,12 +18,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button"
 
     const variants = {
-      primary: "bg-primary text-white hover:bg-primary-hover shadow-primary border border-transparent hover:-translate-y-0.5",
-      default: "bg-primary text-white hover:bg-primary-hover shadow-primary border border-transparent hover:-translate-y-0.5",
-      outline: "border-2 border-border text-text-heading bg-surface hover:border-primary hover:text-primary active:scale-95",
-      ghost: "bg-transparent text-text-body hover:text-text-heading hover:bg-surface-alt active:scale-95",
-      accent: "bg-accent text-white hover:bg-accent-hover shadow-soft active:scale-95",
-      black: "bg-black text-white hover:bg-black-hover shadow-lg border border-transparent hover:-translate-y-0.5",
+      primary: "bg-primary text-white hover:bg-primary-hover shadow-primary border border-transparent hover:-translate-y-0.5 active:scale-[0.97]",
+      default: "bg-primary text-white hover:bg-primary-hover shadow-primary border border-transparent hover:-translate-y-0.5 active:scale-[0.97]",
+      outline: "border-2 border-border text-text-heading bg-surface hover:border-primary hover:text-primary active:scale-[0.97]",
+      ghost: "bg-transparent text-text-body hover:text-text-heading hover:bg-surface-alt active:scale-[0.97]",
+      accent: "bg-accent text-white hover:bg-accent-hover shadow-soft active:scale-[0.97]",
+      black: "bg-black text-white hover:bg-black-hover shadow-lg border border-transparent hover:-translate-y-0.5 active:scale-[0.97]",
     }
 
     const sizes = {

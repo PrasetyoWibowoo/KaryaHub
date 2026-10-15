@@ -18,6 +18,7 @@ const navArrowVariants = {
 export function Navbar() {
   const [isVisible, setIsVisible] = useState(true)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [hoveredNav, setHoveredNav] = useState<string | null>(null)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -61,26 +62,32 @@ export function Navbar() {
             </span>
           </div>
         </Link>
-        {/* Center Floating Pill Navigation (Struktur Seperti Sebelumnya) */}
-        <div className="hidden lg:flex lg:absolute lg:left-1/2 lg:-translate-x-1/2 items-center bg-white/80 backdrop-blur-md border border-border/50 rounded-full p-1.5 shadow-soft">
-          <Link
-            href="#about"
-            className="px-5 py-2 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors"
-          >
-            Tentang
-          </Link>
-          <Link
-            href="#features"
-            className="px-5 py-2 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors"
-          >
-            Fitur
-          </Link>
-          <Link
-            href="#faqs"
-            className="px-5 py-2 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors"
-          >
-            Tanya Jawab
-          </Link>
+        {/* Center Floating Pill Navigation with Sliding Hover Indicator */}
+        <div 
+          onMouseLeave={() => setHoveredNav(null)}
+          className="hidden lg:flex lg:absolute lg:left-1/2 lg:-translate-x-1/2 items-center bg-white/80 backdrop-blur-md border border-border/50 rounded-full p-1.5 shadow-soft relative"
+        >
+          {[
+            { label: "Tentang", href: "#about" },
+            { label: "Fitur", href: "#features" },
+            { label: "Tanya Jawab", href: "#faqs" },
+          ].map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              onMouseEnter={() => setHoveredNav(item.label)}
+              className="relative px-5 py-2 text-sm font-semibold text-text-muted hover:text-text-heading transition-colors duration-200"
+            >
+              {hoveredNav === item.label && (
+                <motion.div
+                  layoutId="navbarCenterHoverPill"
+                  className="absolute inset-0 rounded-full bg-slate-100/90 -z-10"
+                  transition={{ type: "spring", stiffness: 450, damping: 30 }}
+                />
+              )}
+              <span className="relative z-10">{item.label}</span>
+            </Link>
+          ))}
 
           {/* Floating Pill Action Button: Cari Proyek */}
           <motion.div
@@ -108,18 +115,22 @@ export function Navbar() {
 
         {/* Clean Floating Right Buttons */}
         <div className="hidden lg:flex items-center gap-3">
-          <Link
-            href="/login"
-            className="inline-flex items-center justify-center rounded-full px-6 py-2.5 text-sm font-semibold text-slate-700 hover:text-slate-950 bg-white/80 hover:bg-slate-100 backdrop-blur-md border border-slate-200/80 shadow-xs hover:shadow-sm hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200"
-          >
-            Masuk
-          </Link>
-          <Link
-            href="/register"
-            className="inline-flex items-center justify-center rounded-full px-6 py-2.5 text-sm font-bold text-white bg-slate-950 hover:bg-slate-800 backdrop-blur-md shadow-[0_2px_10px_rgba(0,0,0,0.12)] hover:shadow-[0_4px_18px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200"
-          >
-            Daftar Sekarang
-          </Link>
+          <motion.div whileHover={{ scale: 1.03, y: -1 }} whileTap={{ scale: 0.97 }}>
+            <Link
+              href="/login"
+              className="inline-flex items-center justify-center rounded-full px-6 py-2.5 text-sm font-semibold text-slate-700 hover:text-slate-950 bg-white/80 hover:bg-slate-100 backdrop-blur-md border border-slate-200/80 shadow-xs hover:shadow-sm transition-all"
+            >
+              Masuk
+            </Link>
+          </motion.div>
+          <motion.div whileHover={{ scale: 1.03, y: -1 }} whileTap={{ scale: 0.97 }}>
+            <Link
+              href="/register"
+              className="inline-flex items-center justify-center rounded-full px-6 py-2.5 text-sm font-bold text-white bg-slate-950 hover:bg-slate-800 backdrop-blur-md shadow-[0_2px_10px_rgba(0,0,0,0.12)] hover:shadow-[0_4px_18px_rgba(0,0,0,0.2)] transition-all"
+            >
+              Daftar Sekarang
+            </Link>
+          </motion.div>
         </div>
 
         {/* Mobile Toggle Button */}

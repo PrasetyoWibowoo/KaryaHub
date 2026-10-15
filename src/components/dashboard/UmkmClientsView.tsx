@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { Card } from "@/components/ui/Card"
 import { Button } from "@/components/ui/Button"
 import { Badge } from "@/components/ui/Badge"
@@ -329,99 +330,122 @@ export function UmkmClientsView({ onOpenChat }: UmkmClientsViewProps) {
       </div>
 
       {/* Deliverable Review Modal */}
-      {selectedDeliverable && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
-          <Card hover={false} className="w-full max-w-lg p-6 bg-surface shadow-2xl relative">
-            <button
-              type="button"
-              onClick={() => setSelectedDeliverable(null)}
-              className="absolute right-4 top-4 p-1.5 rounded-lg text-text-muted hover:text-text-heading hover:bg-surface-alt transition-colors"
+      <AnimatePresence>
+        {selectedDeliverable && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ type: "spring", stiffness: 380, damping: 28 }}
+              className="w-full max-w-lg"
             >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="mb-4">
-              <span className="text-xs font-semibold text-indigo-600 uppercase tracking-wider">
-                Review Deliverable Proyek
-              </span>
-              <h3 className="text-lg font-bold font-display text-text-heading mt-0.5">
-                {selectedDeliverable.project.title}
-              </h3>
-              <p className="text-xs text-text-muted mt-1">
-                Dikerjakan oleh: <strong className="text-text-heading">{selectedDeliverable.name}</strong>
-              </p>
-            </div>
-
-            <div className="p-4 rounded-xl bg-surface-alt border border-border mb-4 space-y-2">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-semibold text-text-heading">
-                  {selectedDeliverable.project.latestDeliverable.title}
-                </span>
-                <span className="text-text-muted">
-                  {selectedDeliverable.project.latestDeliverable.submittedAt}
-                </span>
-              </div>
-              <p className="text-xs text-text-muted leading-relaxed">
-                "{selectedDeliverable.project.latestDeliverable.notes}"
-              </p>
-              <div className="pt-2">
-                <a 
-                  href={selectedDeliverable.project.latestDeliverable.url} 
-                  target="_blank" 
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:underline"
+              <Card hover={false} className="w-full p-6 bg-surface shadow-2xl relative">
+                <button
+                  type="button"
+                  onClick={() => setSelectedDeliverable(null)}
+                  className="absolute right-4 top-4 p-1.5 rounded-lg text-text-muted hover:text-text-heading hover:bg-surface-alt transition-colors cursor-pointer"
                 >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                  Buka Tautan Deliverable di Tab Baru
-                </a>
-              </div>
-            </div>
+                  <X className="w-5 h-5" />
+                </button>
 
-            <div className="space-y-3 pt-2 border-t border-border">
-              <div className="flex gap-2">
-                <Button 
-                  variant="black" 
-                  className="flex-1 text-xs"
-                  onClick={() => {
-                    setReviewToast(`Deliverable untuk ${selectedDeliverable.project.title} telah disetujui! Status proyek diperbarui.`)
-                    setTimeout(() => setReviewToast(null), 3500)
-                    setSelectedDeliverable(null)
-                  }}
-                >
-                  <CheckCircle2 className="w-3.5 h-3.5 mr-1.5 text-emerald-400" />
-                  Setujui Deliverable
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="flex-1 text-xs"
-                  onClick={() => {
-                    setReviewToast(`Catatan revisi telah berhasil dikirimkan ke ${selectedDeliverable.name}.`)
-                    setTimeout(() => setReviewToast(null), 3500)
-                    setSelectedDeliverable(null)
-                  }}
-                >
-                  Minta Revisi
-                </Button>
-              </div>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="w-full text-xs text-text-muted"
-                onClick={() => setSelectedDeliverable(null)}
-              >
-                Tutup
-              </Button>
-            </div>
-          </Card>
-        </div>
-      )}
+                <div className="mb-4">
+                  <span className="text-xs font-semibold text-indigo-600 uppercase tracking-wider">
+                    Review Deliverable Proyek
+                  </span>
+                  <h3 className="text-lg font-bold font-display text-text-heading mt-0.5">
+                    {selectedDeliverable.project.title}
+                  </h3>
+                  <p className="text-xs text-text-muted mt-1">
+                    Dikerjakan oleh: <strong className="text-text-heading">{selectedDeliverable.name}</strong>
+                  </p>
+                </div>
 
-      {reviewToast && (
-        <div className="fixed bottom-6 right-6 z-50 p-4 bg-slate-950 text-white rounded-2xl shadow-2xl border border-slate-800 flex items-center gap-2.5 text-xs font-bold animate-fadeIn">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-          <span>{reviewToast}</span>
-        </div>
-      )}
+                <div className="p-4 rounded-xl bg-surface-alt border border-border mb-4 space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-semibold text-text-heading">
+                      {selectedDeliverable.project.latestDeliverable.title}
+                    </span>
+                    <span className="text-text-muted">
+                      {selectedDeliverable.project.latestDeliverable.submittedAt}
+                    </span>
+                  </div>
+                  <p className="text-xs text-text-muted leading-relaxed">
+                    "{selectedDeliverable.project.latestDeliverable.notes}"
+                  </p>
+                  <div className="pt-2">
+                    <a 
+                      href={selectedDeliverable.project.latestDeliverable.url} 
+                      target="_blank" 
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:underline"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      Buka Tautan Deliverable di Tab Baru
+                    </a>
+                  </div>
+                </div>
+
+                <div className="space-y-3 pt-2 border-t border-border">
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="black" 
+                      className="flex-1 text-xs cursor-pointer"
+                      onClick={() => {
+                        setReviewToast(`Deliverable untuk ${selectedDeliverable.project.title} telah disetujui! Status proyek diperbarui.`)
+                        setTimeout(() => setReviewToast(null), 3500)
+                        setSelectedDeliverable(null)
+                      }}
+                    >
+                      <CheckCircle2 className="w-3.5 h-3.5 mr-1.5 text-emerald-400" />
+                      Setujui Deliverable
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="flex-1 text-xs cursor-pointer"
+                      onClick={() => {
+                        setReviewToast(`Catatan revisi telah berhasil dikirimkan ke ${selectedDeliverable.name}.`)
+                        setTimeout(() => setReviewToast(null), 3500)
+                        setSelectedDeliverable(null)
+                      }}
+                    >
+                      Minta Revisi
+                    </Button>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="w-full text-xs text-text-muted cursor-pointer"
+                    onClick={() => setSelectedDeliverable(null)}
+                  >
+                    Tutup
+                  </Button>
+                </div>
+              </Card>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {reviewToast && (
+          <motion.div 
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            className="fixed bottom-6 right-6 z-50 p-4 bg-slate-950 text-white rounded-2xl shadow-2xl border border-slate-800 flex items-center gap-2.5 text-xs font-bold"
+          >
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <span>{reviewToast}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

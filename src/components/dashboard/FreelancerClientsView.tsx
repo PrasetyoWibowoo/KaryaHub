@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { Card } from "@/components/ui/Card"
 import { Button } from "@/components/ui/Button"
 import { 
@@ -271,91 +272,115 @@ export function FreelancerClientsView({ onOpenChat }: FreelancerClientsViewProps
       </div>
 
       {/* Modal Submit Deliverable */}
-      {selectedSubmit && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
-          <Card hover={false} className="w-full max-w-lg p-6 bg-surface shadow-2xl relative">
-            <button
-              type="button"
-              onClick={() => setSelectedSubmit(null)}
-              className="absolute right-4 top-4 p-1.5 rounded-lg text-text-muted hover:text-text-heading hover:bg-surface-alt transition-colors"
+      <AnimatePresence>
+        {selectedSubmit && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ type: "spring", stiffness: 380, damping: 28 }}
+              className="w-full max-w-lg"
             >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="mb-4">
-              <span className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">
-                Serahkan Hasil Pekerjaan (Deliverable)
-              </span>
-              <h3 className="text-lg font-bold font-display text-text-heading mt-0.5">
-                {selectedSubmit.project.title}
-              </h3>
-              <p className="text-xs text-text-muted mt-1">
-                Klien Penerima: <strong className="text-text-heading">{selectedSubmit.name}</strong>
-              </p>
-            </div>
-
-            <form onSubmit={handleSubmitDeliverable} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-text-heading mb-1.5">
-                  Tautan File Hasil Kerja (GitHub PR, Figma, Drive, atau Link Demo) <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="url"
-                  required
-                  placeholder="https://github.com/... atau https://figma.com/..."
-                  value={deliverableUrl}
-                  onChange={(e) => setDeliverableUrl(e.target.value)}
-                  className="w-full h-11 px-3.5 bg-surface-alt border border-border rounded-xl text-sm text-text-heading placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-text-heading mb-1.5">
-                  Catatan untuk Klien UMKM <span className="text-red-500">*</span>
-                </label>
-                <textarea
-                  required
-                  rows={4}
-                  placeholder="Jelaskan ringkasan fitur yang diselesaikan, cara pengujian, dan instruksi peninjauan..."
-                  value={deliverableNotes}
-                  onChange={(e) => setDeliverableNotes(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-surface-alt border border-border rounded-xl text-sm text-text-heading placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 resize-none"
-                />
-              </div>
-
-              <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200/60 text-xs text-emerald-800 flex items-start gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                <span>Setelah klien menyetujui hasil kerja, dana escrow sebesar Rp {selectedSubmit.project.budget.toLocaleString('id-ID')} akan otomatis dicairkan ke saldo dompet Anda.</span>
-              </div>
-
-              <div className="pt-2 flex justify-end gap-2">
-                <Button 
+              <Card hover={false} className="w-full p-6 bg-surface shadow-2xl relative">
+                <button
                   type="button"
-                  variant="outline" 
-                  size="sm"
                   onClick={() => setSelectedSubmit(null)}
+                  className="absolute right-4 top-4 p-1.5 rounded-lg text-text-muted hover:text-text-heading hover:bg-surface-alt transition-colors cursor-pointer"
                 >
-                  Batal
-                </Button>
-                <Button 
-                  type="submit" 
-                  variant="black" 
-                  size="sm"
-                >
-                  Kirimkan ke Klien
-                </Button>
-              </div>
-            </form>
-          </Card>
-        </div>
-      )}
+                  <X className="w-5 h-5" />
+                </button>
 
-      {submitToast && (
-        <div className="fixed bottom-6 right-6 z-50 p-4 bg-slate-950 text-white rounded-2xl shadow-2xl border border-slate-800 flex items-center gap-2.5 text-xs font-bold animate-fadeIn">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-          <span>{submitToast}</span>
-        </div>
-      )}
+                <div className="mb-4">
+                  <span className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">
+                    Serahkan Hasil Pekerjaan (Deliverable)
+                  </span>
+                  <h3 className="text-lg font-bold font-display text-text-heading mt-0.5">
+                    {selectedSubmit.project.title}
+                  </h3>
+                  <p className="text-xs text-text-muted mt-1">
+                    Klien Penerima: <strong className="text-text-heading">{selectedSubmit.name}</strong>
+                  </p>
+                </div>
+
+                <form onSubmit={handleSubmitDeliverable} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-text-heading mb-1.5">
+                      Tautan File Hasil Kerja (GitHub PR, Figma, Drive, atau Link Demo) <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="url"
+                      required
+                      placeholder="https://github.com/... atau https://figma.com/..."
+                      value={deliverableUrl}
+                      onChange={(e) => setDeliverableUrl(e.target.value)}
+                      className="w-full h-11 px-3.5 bg-surface-alt border border-border rounded-xl text-sm text-text-heading placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-text-heading mb-1.5">
+                      Catatan untuk Klien UMKM <span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                      required
+                      rows={4}
+                      placeholder="Jelaskan ringkasan fitur yang diselesaikan, cara pengujian, dan instruksi peninjauan..."
+                      value={deliverableNotes}
+                      onChange={(e) => setDeliverableNotes(e.target.value)}
+                      className="w-full px-3.5 py-2.5 bg-surface-alt border border-border rounded-xl text-sm text-text-heading placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 resize-none"
+                    />
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200/60 text-xs text-emerald-800 flex items-start gap-2">
+                    <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <span>Setelah klien menyetujui hasil kerja, dana escrow sebesar Rp {selectedSubmit.project.budget.toLocaleString('id-ID')} akan otomatis dicairkan ke saldo dompet Anda.</span>
+                  </div>
+
+                  <div className="pt-2 flex justify-end gap-2">
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setSelectedSubmit(null)}
+                    >
+                      Batal
+                    </Button>
+                    <Button 
+                      type="submit" 
+                      variant="black" 
+                      size="sm"
+                      className="cursor-pointer"
+                    >
+                      Kirimkan ke Klien
+                    </Button>
+                  </div>
+                </form>
+              </Card>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {submitToast && (
+          <motion.div 
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            className="fixed bottom-6 right-6 z-50 p-4 bg-slate-950 text-white rounded-2xl shadow-2xl border border-slate-800 flex items-center gap-2.5 text-xs font-bold"
+          >
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <span>{submitToast}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

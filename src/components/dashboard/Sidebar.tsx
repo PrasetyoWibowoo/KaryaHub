@@ -16,6 +16,7 @@ import {
   Building2,
   UserCheck2
 } from "lucide-react"
+import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 
 export function Sidebar() {
@@ -78,15 +79,17 @@ export function Sidebar() {
               {isFreelancerRoute ? "Freelancer" : "Mitra UMKM"}
             </span>
           </div>
-          <button
+          <motion.button
             type="button"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
             onClick={() => router.push(isFreelancerRoute ? "/umkm" : "/freelancer")}
             className="w-full h-8 px-2.5 rounded-xl bg-slate-900/5 hover:bg-slate-900/10 text-slate-700 hover:text-slate-950 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all border border-slate-900/5"
             title="Ganti peran akun tanpa registrasi ulang"
           >
             <ArrowRightLeft className="w-3.5 h-3.5 text-slate-500" />
             <span>Beralih ke {isFreelancerRoute ? "Mode UMKM" : "Mode Freelancer"}</span>
-          </button>
+          </motion.button>
         </div>
         {/* Navigation Section */}
         <div>
@@ -98,6 +101,7 @@ export function Sidebar() {
               {isFreelancerRoute ? "Talenta" : "Bisnis"}
             </span>
           </div>
+
           <nav className="space-y-1">
             {(isFreelancerRoute ? freelancerLinks : umkmLinks).map((link) => {
               const Icon = link.icon
@@ -110,13 +114,24 @@ export function Sidebar() {
                   key={link.name}
                   href={link.href}
                   className={cn(
-                    "flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 group",
+                    "flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors duration-200 group relative z-0",
                     isActive
-                      ? "bg-slate-950 text-white shadow-md shadow-slate-950/15"
+                      ? "text-white font-bold"
                       : "text-slate-600 hover:text-slate-950 hover:bg-white/70"
                   )}
                 >
-                  <div className="flex items-center gap-2.5 min-w-0">
+                  {isActive && (
+                    <motion.div
+                      layoutId="dashboardSidebarActiveIndicator"
+                      className="absolute inset-0 rounded-xl bg-slate-950 shadow-md shadow-slate-950/15 -z-10"
+                      transition={{
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 28,
+                      }}
+                    />
+                  )}
+                  <div className="flex items-center gap-2.5 min-w-0 relative z-10">
                     <Icon className={cn(
                       "w-4 h-4 shrink-0 transition-transform group-hover:scale-110",
                       isActive ? "text-emerald-400" : "text-slate-400 group-hover:text-slate-700"
@@ -125,7 +140,7 @@ export function Sidebar() {
                   </div>
                   {link.badge && (
                     <span className={cn(
-                      "text-[9px] font-bold px-1.5 py-0.5 rounded-md uppercase tracking-wider",
+                      "text-[9px] font-bold px-1.5 py-0.5 rounded-md uppercase tracking-wider relative z-10",
                       isActive 
                         ? "bg-white/20 text-white" 
                         : "bg-slate-100 text-slate-500 group-hover:bg-slate-200"
@@ -167,7 +182,9 @@ export function Sidebar() {
               </p>
             </div>
           </div>
-          <button
+          <motion.button
+            whileHover={{ scale: 1.15 }}
+            whileTap={{ scale: 0.9 }}
             onClick={async () => {
               const { signOut } = await import("next-auth/react")
               await signOut({ callbackUrl: "/" })
@@ -176,7 +193,7 @@ export function Sidebar() {
             title="Keluar"
           >
             <LogOut className="w-4 h-4" />
-          </button>
+          </motion.button>
         </div>
       </div>
     </aside>

@@ -1,8 +1,9 @@
-﻿"use client"
+"use client"
 
 import Link from "next/link"
 import { useState, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
+import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/Button"
 import { SkillsRadarChart } from "@/components/dashboard/SkillsRadarChart"
 import { SkillsBarChart } from "@/components/dashboard/SkillsBarChart"
@@ -409,33 +410,63 @@ function FreelancerDashboardContent() {
                 <Target className="w-4 h-4 text-emerald-600" />
                 <h2 className="text-sm font-bold text-slate-950">Matriks Keahlian & Kebutuhan</h2>
               </div>
-              <div className="flex items-center p-0.5 bg-slate-100 rounded-lg text-[10px] font-bold">
+              <div className="flex items-center p-0.5 bg-slate-100 rounded-lg text-[10px] font-bold relative">
                 <button
                   type="button"
                   onClick={() => setSkillChartTab("radar")}
-                  className={cn("px-2 py-1 rounded-md transition-all flex items-center gap-1", skillChartTab === "radar" ? "bg-white text-slate-950 shadow-xs" : "text-slate-500 hover:text-slate-900")}
+                  className={cn(
+                    "relative z-10 px-2.5 py-1 rounded-md transition-colors flex items-center gap-1 cursor-pointer select-none",
+                    skillChartTab === "radar" ? "text-slate-950 font-bold" : "text-slate-500 hover:text-slate-900"
+                  )}
                 >
+                  {skillChartTab === "radar" && (
+                    <motion.div
+                      layoutId="skillChartActivePill"
+                      className="absolute inset-0 rounded-md bg-white shadow-xs -z-10"
+                      transition={{ type: "spring", stiffness: 450, damping: 30 }}
+                    />
+                  )}
                   <Compass className="w-3 h-3" />
                   Radar
                 </button>
                 <button
                   type="button"
                   onClick={() => setSkillChartTab("bars")}
-                  className={cn("px-2 py-1 rounded-md transition-all flex items-center gap-1", skillChartTab === "bars" ? "bg-white text-slate-950 shadow-xs" : "text-slate-500 hover:text-slate-900")}
+                  className={cn(
+                    "relative z-10 px-2.5 py-1 rounded-md transition-colors flex items-center gap-1 cursor-pointer select-none",
+                    skillChartTab === "bars" ? "text-slate-950 font-bold" : "text-slate-500 hover:text-slate-900"
+                  )}
                 >
+                  {skillChartTab === "bars" && (
+                    <motion.div
+                      layoutId="skillChartActivePill"
+                      className="absolute inset-0 rounded-md bg-white shadow-xs -z-10"
+                      transition={{ type: "spring", stiffness: 450, damping: 30 }}
+                    />
+                  )}
                   <BarChart3 className="w-3 h-3" />
                   Peluang
                 </button>
               </div>
             </div>
 
-            {/* Render Compact Chart */}
-            <div className="py-1">
-              {skillChartTab === "radar" ? (
-                <SkillsRadarChart data={freelancerData.skillsData} height={210} />
-              ) : (
-                <SkillsBarChart data={freelancerData.skillsData} height={210} />
-              )}
+            {/* Render Compact Chart with smooth transition */}
+            <div className="py-1 min-h-[220px]">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={skillChartTab}
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  {skillChartTab === "radar" ? (
+                    <SkillsRadarChart data={freelancerData.skillsData} height={210} />
+                  ) : (
+                    <SkillsBarChart data={freelancerData.skillsData} height={210} />
+                  )}
+                </motion.div>
+              </AnimatePresence>
             </div>
 
             {/* Skill Level Progress Strips */}

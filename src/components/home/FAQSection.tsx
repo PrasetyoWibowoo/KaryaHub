@@ -147,7 +147,7 @@ export function FAQSection() {
             Temukan jawaban transparan tentang alur kerja, proteksi Rekening Bersama Escrow, sistem penilaian AI ATS, dan panduan untuk UMKM maupun talenta vokasi.
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-2 relative">
             {CATEGORIES.map((cat) => {
               const isActive = selectedCategory === cat.id
               return (
@@ -158,13 +158,25 @@ export function FAQSection() {
                     setSelectedCategory(cat.id)
                     setOpenIndex(null)
                   }}
-                  className={`px-4 py-2 rounded-full text-xs font-bold transition-all duration-200 ${
+                  className={`relative px-4 py-2 rounded-full text-xs font-bold transition-colors duration-200 z-10 cursor-pointer select-none ${
                     isActive
-                      ? "bg-slate-950 text-white shadow-sm scale-[1.02]"
-                      : "bg-white text-slate-600 hover:text-slate-950 hover:bg-slate-100/80 border border-slate-200/80"
+                      ? "text-white"
+                      : "text-slate-600 hover:text-slate-950 bg-white hover:bg-slate-100/80 border border-slate-200/80"
                   }`}
                 >
-                  {cat.label}
+                  {isActive && (
+                    <motion.div
+                      layoutId="faqCategoryActivePill"
+                      className="absolute inset-0 rounded-full bg-slate-950 shadow-sm -z-10"
+                      transition={{
+                        type: "spring",
+                        stiffness: 420,
+                        damping: 28,
+                        mass: 0.8
+                      }}
+                    />
+                  )}
+                  <span className="relative z-10">{cat.label}</span>
                 </button>
               )
             })}
@@ -172,7 +184,15 @@ export function FAQSection() {
         </FadeIn>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1.35fr_0.9fr] gap-8 items-start">
-          <div className="space-y-3.5">
+          <AnimatePresence mode="wait">
+            <motion.div 
+              key={selectedCategory}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="space-y-3.5"
+            >
 
             {filteredFaqs.map((faq, i) => {
               const isOpen = openIndex === i
@@ -258,7 +278,8 @@ export function FAQSection() {
                 </div>
               )
             })}
-          </div>
+            </motion.div>
+          </AnimatePresence>
 
           <div className="lg:sticky lg:top-28 space-y-4">
             <div className="rounded-3xl bg-slate-950 text-white p-7 sm:p-8 shadow-[0_24px_50px_-16px_rgba(15,23,42,0.4)] border border-white/10 relative overflow-hidden">

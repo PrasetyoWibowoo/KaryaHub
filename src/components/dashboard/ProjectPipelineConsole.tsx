@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { motion } from "framer-motion"
 import { Layers, Clock, FileCheck2, CheckCircle2, ShieldCheck, Lock, ArrowRight, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -73,23 +74,36 @@ export function ProjectPipelineConsole({
         </div>
 
         {/* 4 Interactive Segmented Pipeline Controls */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 relative">
           {stages.map((stage) => {
             const isSelected = filterStatus === stage.id
             const Icon = stage.icon
             return (
-              <button
+              <motion.button
                 key={stage.id}
                 type="button"
+                whileTap={{ scale: 0.98 }}
                 onClick={() => onSelectFilter(stage.id)}
                 className={cn(
-                  "text-left p-3.5 rounded-xl transition-all duration-200 flex flex-col justify-between relative group select-none min-h-[105px]",
+                  "text-left p-3.5 rounded-xl transition-colors duration-200 flex flex-col justify-between relative group select-none min-h-[105px] z-10 cursor-pointer",
                   isSelected
-                    ? "bg-slate-950 text-white shadow-md ring-1 ring-slate-900"
+                    ? "text-white"
                     : "bg-slate-50/80 hover:bg-slate-100/90 text-slate-700 hover:text-slate-950 border border-slate-200/70"
                 )}
               >
-                <div className="flex items-center justify-between gap-1 w-full mb-1">
+                {isSelected && (
+                  <motion.div
+                    layoutId="pipelineSelectedStageIndicator"
+                    className="absolute inset-0 rounded-xl bg-slate-950 shadow-md ring-1 ring-slate-900 -z-10"
+                    transition={{
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 28,
+                      mass: 0.8
+                    }}
+                  />
+                )}
+                <div className="flex items-center justify-between gap-1 w-full mb-1 relative z-10">
                   <div className="flex items-center gap-1.5 min-w-0">
                     <Icon className={cn(
                       "w-3.5 h-3.5 shrink-0 transition-transform group-hover:scale-110",
@@ -107,7 +121,7 @@ export function ProjectPipelineConsole({
                   )}
                 </div>
 
-                <div className="mt-auto">
+                <div className="mt-auto relative z-10">
                   <div className="flex items-baseline justify-between gap-2">
                     <span className={cn(
                       "text-2xl sm:text-3xl font-black font-display tracking-tight leading-none",
@@ -123,7 +137,7 @@ export function ProjectPipelineConsole({
                     </span>
                   </div>
                 </div>
-              </button>
+              </motion.button>
             )
           })}
         </div>

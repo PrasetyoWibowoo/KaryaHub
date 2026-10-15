@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { JobCard, JobItemData } from "./JobCard"
 import { Button } from "@/components/ui/Button"
 import { 
@@ -336,21 +337,41 @@ export function JobsExplorerView() {
             </select>
 
             {/* View Mode Toggle */}
-            <div className="h-11 p-1 bg-white/80 border border-slate-200/90 rounded-xl flex items-center gap-1">
+            <div className="h-11 p-1 bg-white/80 border border-slate-200/90 rounded-xl flex items-center gap-1 relative">
               <button
                 type="button"
                 onClick={() => setViewMode("grid")}
-                className={cn("p-2 rounded-lg transition-all", viewMode === "grid" ? "bg-slate-950 text-white shadow-xs" : "text-slate-500 hover:text-slate-950")}
+                className={cn(
+                  "p-2 rounded-lg transition-colors relative z-10 cursor-pointer select-none",
+                  viewMode === "grid" ? "text-white" : "text-slate-500 hover:text-slate-950"
+                )}
                 title="Tampilan Grid"
               >
+                {viewMode === "grid" && (
+                  <motion.div
+                    layoutId="jobsViewModePill"
+                    className="absolute inset-0 rounded-lg bg-slate-950 shadow-xs -z-10"
+                    transition={{ type: "spring", stiffness: 450, damping: 30 }}
+                  />
+                )}
                 <LayoutGrid className="w-4 h-4" />
               </button>
               <button
                 type="button"
                 onClick={() => setViewMode("list")}
-                className={cn("p-2 rounded-lg transition-all", viewMode === "list" ? "bg-slate-950 text-white shadow-xs" : "text-slate-500 hover:text-slate-950")}
+                className={cn(
+                  "p-2 rounded-lg transition-colors relative z-10 cursor-pointer select-none",
+                  viewMode === "list" ? "text-white" : "text-slate-500 hover:text-slate-950"
+                )}
                 title="Tampilan List"
               >
+                {viewMode === "list" && (
+                  <motion.div
+                    layoutId="jobsViewModePill"
+                    className="absolute inset-0 rounded-lg bg-slate-950 shadow-xs -z-10"
+                    transition={{ type: "spring", stiffness: 450, damping: 30 }}
+                  />
+                )}
                 <List className="w-4 h-4" />
               </button>
             </div>
@@ -358,9 +379,8 @@ export function JobsExplorerView() {
         </div>
       </div>
 
-
       {/* Category Horizontal Filter Pills */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar relative">
         {CATEGORIES.map((cat) => {
           const isActive = selectedCategory === cat
           const count = cat === "Semua Kategori" 
@@ -372,15 +392,22 @@ export function JobsExplorerView() {
               type="button"
               onClick={() => setSelectedCategory(cat)}
               className={cn(
-                "px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 shrink-0",
+                "relative px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 shrink-0 z-10 cursor-pointer select-none",
                 isActive
-                  ? "bg-slate-950 text-white shadow-sm"
-                  : "bg-white/80 hover:bg-slate-50 text-slate-600 hover:text-slate-950 border border-slate-200/80 hover:border-slate-300 shadow-xs"
+                  ? "text-white"
+                  : "bg-white/80 hover:bg-slate-50 text-slate-600 hover:text-slate-950 border border-slate-200/80 shadow-xs"
               )}
             >
-              <span>{cat}</span>
+              {isActive && (
+                <motion.div
+                  layoutId="jobsCategoryActivePill"
+                  className="absolute inset-0 rounded-xl bg-slate-950 shadow-sm -z-10"
+                  transition={{ type: "spring", stiffness: 420, damping: 28, mass: 0.8 }}
+                />
+              )}
+              <span className="relative z-10">{cat}</span>
               <span className={cn(
-                "text-[10px] px-1.5 py-0.2 rounded-full font-bold",
+                "text-[10px] px-1.5 py-0.2 rounded-full font-bold relative z-10 transition-colors",
                 isActive ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500"
               )}>
                 {count}
@@ -500,11 +527,15 @@ export function JobsExplorerView() {
               </Button>
             </div>
           ) : (
-            <div className={cn(
-              viewMode === "grid" 
-                ? "grid grid-cols-1 md:grid-cols-2 gap-4" 
-                : "space-y-3"
-            )}>
+            <motion.div 
+              layout
+              transition={{ type: "spring", stiffness: 350, damping: 28 }}
+              className={cn(
+                viewMode === "grid" 
+                  ? "grid grid-cols-1 md:grid-cols-2 gap-4" 
+                  : "space-y-3"
+              )}
+            >
               {filteredJobs.map((job) => (
                 <JobCard
                   key={job.id}
@@ -515,109 +546,122 @@ export function JobsExplorerView() {
                   onQuickApply={handleOpenQuickApply}
                 />
               ))}
-            </div>
+            </motion.div>
           )}
         </div>
       </div>
 
 
       {/* Quick Apply Proposal Modal */}
-      {quickApplyJob && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-lg rounded-3xl bg-white border border-slate-200 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
-            <div className="p-5 border-b border-slate-100 flex items-start justify-between bg-slate-50/60">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                  Ajukan Proposal Cepat
-                </span>
-                <h3 className="text-base font-bold text-slate-950 line-clamp-1 mt-0.5">
-                  {quickApplyJob.title}
-                </h3>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Klien: <strong className="text-slate-800">{quickApplyJob.employerName}</strong> • Budget: <strong className="text-emerald-700">Rp {quickApplyJob.budget.toLocaleString("id-ID")}</strong>
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setQuickApplyJob(null)}
-                className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-800"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <form onSubmit={handleSubmitQuickApply} className="p-5 space-y-4">
-              <div className="grid grid-cols-2 gap-3">
+      <AnimatePresence>
+        {quickApplyJob && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm"
+          >
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ type: "spring", stiffness: 380, damping: 28 }}
+              className="w-full max-w-lg rounded-3xl bg-white border border-slate-200 shadow-2xl overflow-hidden"
+            >
+              <div className="p-5 border-b border-slate-100 flex items-start justify-between bg-slate-50/60">
                 <div>
-                  <label className="block text-xs font-bold text-slate-800 mb-1">
-                    Penawaran Biaya (Rp)
-                  </label>
-                  <input
-                    type="number"
-                    value={applyForm.proposedBudget}
-                    onChange={(e) => setApplyForm({ ...applyForm, proposedBudget: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-                    required
-                  />
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    Ajukan Proposal Cepat
+                  </span>
+                  <h3 className="text-base font-bold text-slate-950 line-clamp-1 mt-0.5">
+                    {quickApplyJob.title}
+                  </h3>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Klien: <strong className="text-slate-800">{quickApplyJob.employerName}</strong> • Budget: <strong className="text-emerald-700">Rp {quickApplyJob.budget.toLocaleString("id-ID")}</strong>
+                  </p>
                 </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-800 mb-1">
-                    Estimasi Pengerjaan (Hari)
-                  </label>
-                  <input
-                    type="number"
-                    value={applyForm.estimatedDays}
-                    onChange={(e) => setApplyForm({ ...applyForm, estimatedDays: e.target.value })}
-                    className="w-full h-10 px-3 rounded-xl border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-800 mb-1">
-                  Catatan Singkat / Cover Letter
-                </label>
-                <textarea
-                  rows={4}
-                  value={applyForm.coverLetter}
-                  onChange={(e) => setApplyForm({ ...applyForm, coverLetter: e.target.value })}
-                  className="w-full p-3 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 resize-none"
-                  placeholder="Ceritakan portfolio relevan Anda..."
-                  required
-                />
-              </div>
-
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-2 text-xs text-slate-600">
-                <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>Dana UMKM akan diamankan di Rekening Escrow sebelum Anda mulai bekerja.</span>
-              </div>
-
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
-                <Button
+                <button
                   type="button"
-                  variant="outline"
-                  size="sm"
                   onClick={() => setQuickApplyJob(null)}
-                  className="text-xs font-bold"
+                  className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-800 cursor-pointer"
                 >
-                  Batal
-                </Button>
-                <Button
-                  type="submit"
-                  variant="black"
-                  size="sm"
-                  isLoading={isSubmitting}
-                  className="text-xs font-bold"
-                >
-                  <Send className="w-3.5 h-3.5 mr-1 text-emerald-400" />
-                  Kirim Proposal Sekarang
-                </Button>
+                  <X className="w-4 h-4" />
+                </button>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
+
+              <form onSubmit={handleSubmitQuickApply} className="p-5 space-y-4">
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-800 mb-1">
+                      Penawaran Biaya (Rp)
+                    </label>
+                    <input
+                      type="number"
+                      value={applyForm.proposedBudget}
+                      onChange={(e) => setApplyForm({ ...applyForm, proposedBudget: e.target.value })}
+                      className="w-full h-10 px-3 rounded-xl border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-800 mb-1">
+                      Estimasi Pengerjaan (Hari)
+                    </label>
+                    <input
+                      type="number"
+                      value={applyForm.estimatedDays}
+                      onChange={(e) => setApplyForm({ ...applyForm, estimatedDays: e.target.value })}
+                      className="w-full h-10 px-3 rounded-xl border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-800 mb-1">
+                    Catatan Singkat / Cover Letter
+                  </label>
+                  <textarea
+                    rows={4}
+                    value={applyForm.coverLetter}
+                    onChange={(e) => setApplyForm({ ...applyForm, coverLetter: e.target.value })}
+                    className="w-full p-3 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 resize-none"
+                    placeholder="Ceritakan portfolio relevan Anda..."
+                    required
+                  />
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-2 text-xs text-slate-600">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Dana UMKM akan diamankan di Rekening Escrow sebelum Anda mulai bekerja.</span>
+                </div>
+
+                <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setQuickApplyJob(null)}
+                    className="text-xs font-bold"
+                  >
+                    Batal
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="black"
+                    size="sm"
+                    isLoading={isSubmitting}
+                    className="text-xs font-bold cursor-pointer"
+                  >
+                    <Send className="w-3.5 h-3.5 mr-1 text-emerald-400" />
+                    Kirim Proposal Sekarang
+                  </Button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

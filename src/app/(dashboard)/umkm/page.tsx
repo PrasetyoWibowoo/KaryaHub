@@ -157,7 +157,12 @@ function UmkmDashboardContent() {
       </div>
 
       {/* 4-Pillar Unified Workspace Deck */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5"
+      >
         {/* Pillar 1: Anggaran & Escrow */}
         <Card hover={false} className="p-4 rounded-2xl bg-white/80 border border-slate-200/80 shadow-xs flex flex-col justify-between">
           <div>
@@ -256,7 +261,7 @@ function UmkmDashboardContent() {
             </Link>
           </div>
         </Card>
-      </div>
+      </motion.div>
 
       {/* Main Grid: Projects & Applicants */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">

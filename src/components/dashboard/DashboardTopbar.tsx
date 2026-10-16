@@ -3,19 +3,22 @@
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { Suspense, useEffect, useState, type FormEvent } from "react"
-import { 
-  Bell, 
-  LayoutDashboard, 
-  MessageSquare, 
-  Search, 
-  ArrowRightLeft, 
-  ShieldCheck, 
+import { useSession } from "next-auth/react"
+import {
+  Bell,
+  LayoutDashboard,
+  MessageSquare,
+  Search,
+  ArrowRightLeft,
+  ShieldCheck,
   ChevronRight,
   X,
   Briefcase,
   Wallet,
   Building2,
-  Sparkles
+  Sparkles,
+  User,
+  LogOut
 } from "lucide-react"
 import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
@@ -28,16 +31,19 @@ const routeTitles: Record<string, { title: string; section: string }> = {
   "/freelancer/my-proposals": { title: "Proposal Saya", section: "Freelancer" },
   "/freelancer/wallet": { title: "Dompet & Escrow", section: "Freelancer" },
   "/freelancer/wallet/withdraw": { title: "Tarik Dana ke Bank", section: "Freelancer" },
+  "/freelancer/profile": { title: "Profil & Portofolio", section: "Freelancer" },
   "/umkm": { title: "Ikhtisar Bisnis", section: "UMKM" },
   "/umkm/create-job": { title: "Posting Proyek Baru", section: "UMKM" },
   "/umkm/manage-jobs": { title: "Kelola Proyek & Pelamar", section: "UMKM" },
   "/umkm/escrow-status": { title: "Rekening Bersama Escrow", section: "UMKM" },
   "/umkm/payment": { title: "Pembayaran Escrow Midtrans", section: "UMKM" },
+  "/umkm/profile": { title: "Profil Usaha UMKM", section: "UMKM" },
 }
 
 function TopbarContent() {
   const pathname = usePathname()
   const router = useRouter()
+  const { data: session } = useSession()
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false)
   const [isProfileOpen, setIsProfileOpen] = useState(false)
@@ -59,6 +65,14 @@ function TopbarContent() {
 
   const isUmkm = pathname.startsWith("/umkm")
   const isFreelancer = pathname.startsWith("/freelancer") || pathname.startsWith("/jobs")
+
+  // Derive user info from session with fallback to demo data
+  const userName = session?.user?.name || (isUmkm ? "TechStartup Inc" : "John Doe")
+  const userRole = session?.user?.role as string | undefined
+  const userInitials = userName.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()
+  const userSubtitle = isUmkm
+    ? (userRole === "UMKM" ? "Mitra UMKM Terverifikasi" : "Mitra UMKM Terverifikasi")
+    : (userRole === "FREELANCER" ? "Full Stack & UI/UX Specialist" : "Full Stack & UI/UX Specialist")
 
   // Role-specific distinct 3-button navigation
   const umkmNavItems = [
@@ -141,27 +155,31 @@ function TopbarContent() {
   }
 
   const inboxHref = isUmkm ? "/umkm?tab=inbox" : "/freelancer?tab=inbox"
-  const searchTarget = isUmkm ? "/umkm/manage-jobs" : "/jobs"
   const quickSearchItems = isUmkm
     ? [
-        { label: "Kelola proyek & pelamar", href: "/umkm/manage-jobs" },
-        { label: "Posting proyek baru", href: "/umkm/create-job" },
-        { label: "Pantau escrow", href: "/umkm/escrow-status" },
-      ]
+      { label: "Profil bisnis UMKM", href: "/umkm/profile" },
+      { label: "Kelola proyek & pelamar", href: "/umkm/manage-jobs" },
+      { label: "Posting proyek baru", href: "/umkm/create-job" },
+      { label: "Pantau escrow", href: "/umkm/escrow-status" },
+    ]
     : [
-        { label: "Cari proyek baru", href: "/jobs" },
-        { label: "Proposal saya", href: "/freelancer/my-proposals" },
-        { label: "Scan CV dengan ATS", href: "/freelancer/ats-checker" },
-      ]
+      { label: "Profil & Portofolio saya", href: "/freelancer/profile" },
+      { label: "Cari lowongan proyek", href: "/jobs" },
+      { label: "Scan CV dengan AI ATS", href: "/freelancer/ats-checker" },
+      { label: "Proposal saya", href: "/freelancer/my-proposals" },
+      { label: "Dompet & Escrow", href: "/freelancer/wallet" },
+    ]
   const notifications = isUmkm
     ? [
-        { title: "Proposal baru masuk", detail: "2 talenta mengajukan proposal untuk proyek aktif.", time: "12 menit lalu" },
-        { title: "Milestone siap ditinjau", detail: "John Doe mengirim deliverable terbaru.", time: "1 jam lalu" },
-      ]
+      { title: "Proposal baru masuk", detail: "2 talenta mengajukan proposal untuk proyek aktif.", time: "12 menit lalu" },
+      { title: "Milestone siap ditinjau", detail: "John Doe mengirim deliverable terbaru.", time: "1 jam lalu" },
+    ]
     : [
-        { title: "Proposal diterima", detail: "Toko Berkah Jaya mengundang Anda ke tahap berikutnya.", time: "18 menit lalu" },
-        { title: "Escrow diperbarui", detail: "Dana proyek Website Furniture sudah diamankan.", time: "2 jam lalu" },
-      ]
+      { title: "Proposal diterima", detail: "Toko Berkah Jaya mengundang Anda ke tahap berikutnya.", time: "18 menit lalu" },
+      { title: "Escrow diperbarui", detail: "Dana proyek Website Furniture sudah diamankan.", time: "2 jam lalu" },
+    ]
+
+  const searchTarget = isUmkm ? "/umkm/manage-jobs" : "/jobs"
 
   const submitSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -178,8 +196,8 @@ function TopbarContent() {
       <div className="flex-1 flex items-center justify-start gap-2.5 min-w-0">
         <div className={cn(
           "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border shrink-0 shadow-xs",
-          isUmkm 
-            ? "bg-emerald-500/10 text-emerald-800 border-emerald-500/25" 
+          isUmkm
+            ? "bg-emerald-500/10 text-emerald-800 border-emerald-500/25"
             : "bg-indigo-500/10 text-indigo-800 border-indigo-500/25"
         )}>
           {isUmkm ? (
@@ -232,17 +250,17 @@ function TopbarContent() {
                   }}
                 />
               )}
-              <Icon 
+              <Icon
                 className={cn(
                   "h-3.5 w-3.5 shrink-0 transition-colors duration-300 group-hover:scale-110 relative z-10",
                   isActive ? "text-emerald-400" : "text-slate-400 group-hover:text-slate-900"
-                )} 
-                aria-hidden="true" 
+                )}
+                aria-hidden="true"
               />
               <span className="hidden xl:inline relative z-10 transition-colors duration-300">{label}</span>
               <span className="xl:hidden relative z-10 transition-colors duration-300">{label.replace(" Saya", "").replace(" & Progress", "").replace(" Talenta", "").replace(" Bisnis", "")}</span>
               {isActive && (
-                <motion.span 
+                <motion.span
                   className="w-1.5 h-1.5 rounded-full bg-emerald-400 ml-0.5 relative z-10 shrink-0"
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ scale: [1, 1.25, 1], opacity: [0.8, 1, 0.8] }}
@@ -262,75 +280,75 @@ function TopbarContent() {
       <div className="flex-1 flex items-center justify-end min-w-0">
         <div className="dashboard-topbar-actions shrink-0">
 
-        <button
-          type="button"
-          onClick={handleToggle}
-          className="flex items-center gap-1.5 rounded-xl border border-slate-200/90 bg-white px-3 py-1.5 text-xs font-bold text-slate-800 shadow-xs transition-all hover:border-slate-300 hover:bg-slate-100 hover:text-slate-950 hover:shadow-sm active:scale-[0.98]"
-          title="Beralih peran demo secara instan"
-        >
-          <ArrowRightLeft className="w-3.5 h-3.5 text-slate-500" />
-          <span className="hidden sm:inline">
-            {isFreelancer ? "Ke Mode UMKM" : "Ke Mode Freelancer"}
-          </span>
-          <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-slate-100 text-slate-700">
-            Demo
-          </span>
-        </button>
-
-        {/* Quick Messages */}
-        <div>
-          <Link
-            href={inboxHref}
-            className="dashboard-icon-button relative transition-transform hover:scale-105 active:scale-95"
-            aria-label="Buka Chat & Diskusi"
-            title="Buka Pusat Pesan & Diskusi"
+          <button
+            type="button"
+            onClick={handleToggle}
+            className="flex items-center gap-1.5 rounded-xl border border-slate-200/90 bg-white px-3 py-1.5 text-xs font-bold text-slate-800 shadow-xs transition-all hover:border-slate-300 hover:bg-slate-100 hover:text-slate-950 hover:shadow-sm active:scale-[0.98]"
+            title="Beralih peran demo secara instan"
           >
-            <MessageSquare className="h-4 w-4" aria-hidden="true" />
-            <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-emerald-500" />
-          </Link>
-        </div>
+            <ArrowRightLeft className="w-3.5 h-3.5 text-slate-500" />
+            <span className="hidden sm:inline">
+              {isFreelancer ? "Ke Mode UMKM" : "Ke Mode Freelancer"}
+            </span>
+            <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-slate-100 text-slate-700">
+              Demo
+            </span>
+          </button>
 
-        <button
-          type="button"
-          onClick={() => {
-            setIsSearchOpen(true)
-            setIsNotificationsOpen(false)
-          }}
-          className="dashboard-icon-button transition-transform hover:scale-105 active:scale-95"
-          aria-label="Search workspace"
-          aria-expanded={isSearchOpen}
-        >
-          <Search className="h-4 w-4" aria-hidden="true" />
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            setIsNotificationsOpen((open) => !open)
-            setIsSearchOpen(false)
-          }}
-          className="dashboard-icon-button relative transition-transform hover:scale-105 active:scale-95"
-          aria-label="View notifications"
-          aria-expanded={isNotificationsOpen}
-        >
-          <Bell className="h-4 w-4" aria-hidden="true" />
-          {hasUnreadNotifications && (
-            <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-indigo-500" />
-          )}
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            setIsProfileOpen((open) => !open)
-            setIsSearchOpen(false)
-            setIsNotificationsOpen(false)
-          }}
-          className="dashboard-avatar ring-2 ring-white/80 shadow-xs transition-transform hover:scale-105 active:scale-95"
-          aria-label="Signed in user"
-          aria-expanded={isProfileOpen}
-          title={isUmkm ? "TechStartup Inc (UMKM)" : "John Doe (Freelancer)"}
-        >
-          {isUmkm ? "TS" : "JD"}
-        </button>
+          {/* Quick Messages */}
+          <div>
+            <Link
+              href={inboxHref}
+              className="dashboard-icon-button relative transition-transform hover:scale-105 active:scale-95"
+              aria-label="Buka Chat & Diskusi"
+              title="Buka Pusat Pesan & Diskusi"
+            >
+              <MessageSquare className="h-4 w-4" aria-hidden="true" />
+              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-emerald-500" />
+            </Link>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              setIsSearchOpen(true)
+              setIsNotificationsOpen(false)
+            }}
+            className="dashboard-icon-button transition-transform hover:scale-105 active:scale-95"
+            aria-label="Search workspace"
+            aria-expanded={isSearchOpen}
+          >
+            <Search className="h-4 w-4" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setIsNotificationsOpen((open) => !open)
+              setIsSearchOpen(false)
+            }}
+            className="dashboard-icon-button relative transition-transform hover:scale-105 active:scale-95"
+            aria-label="View notifications"
+            aria-expanded={isNotificationsOpen}
+          >
+            <Bell className="h-4 w-4" aria-hidden="true" />
+            {hasUnreadNotifications && (
+              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-indigo-500" />
+            )}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setIsProfileOpen((open) => !open)
+              setIsSearchOpen(false)
+              setIsNotificationsOpen(false)
+            }}
+            className="dashboard-avatar ring-2 ring-white/80 shadow-xs transition-transform hover:scale-105 active:scale-95"
+            aria-label="Signed in user"
+            aria-expanded={isProfileOpen}
+            title={`${userName} (${isUmkm ? "UMKM" : "Freelancer"})`}
+          >
+            {userInitials}
+          </button>
         </div>
       </div>
 
@@ -409,18 +427,48 @@ function TopbarContent() {
       {isProfileOpen && (
         <div className="absolute right-4 top-[calc(100%+0.5rem)] z-40 w-64 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl" role="menu" aria-label="Menu profil">
           <div className="border-b border-slate-100 px-4 py-3">
-            <p className="text-sm font-bold text-slate-950">{isUmkm ? "TechStartup Inc" : "John Doe"}</p>
-            <p className="mt-0.5 text-[11px] text-slate-500">{isUmkm ? "Mitra UMKM Terverifikasi" : "Full Stack & UI/UX Specialist"}</p>
+            <p className="text-sm font-bold text-slate-950">{userName}</p>
+            <p className="mt-0.5 text-[11px] text-slate-500">{userSubtitle}</p>
           </div>
-          <div className="p-2">
-            <Link href={isUmkm ? "/umkm" : "/freelancer"} onClick={() => setIsProfileOpen(false)} className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-slate-950">
-              Ringkasan workspace
+          <div className="p-2 space-y-0.5">
+            <Link
+              href={isUmkm ? "/umkm/profile" : "/freelancer/profile"}
+              onClick={() => setIsProfileOpen(false)}
+              className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 transition-colors hover:bg-slate-100"
+            >
+              <User className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Lihat Profil Lengkap</span>
             </Link>
-            <Link href={isUmkm ? "/umkm?tab=clients" : "/freelancer?tab=clients"} onClick={() => setIsProfileOpen(false)} className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-slate-950">
-              Profil & relasi
+            <Link
+              href={isUmkm ? "/umkm" : "/freelancer"}
+              onClick={() => setIsProfileOpen(false)}
+              className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950"
+            >
+              <LayoutDashboard className="w-3.5 h-3.5 text-slate-400" />
+              <span>Ringkasan Workspace</span>
             </Link>
-            <button type="button" onClick={() => setIsProfileOpen(false)} className="mt-1 w-full rounded-xl border-t border-slate-100 px-3 py-2.5 text-left text-sm font-bold text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-800">
-              Tutup menu
+            <button
+              type="button"
+              onClick={() => {
+                handleToggle()
+                setIsProfileOpen(false)
+              }}
+              className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950"
+            >
+              <ArrowRightLeft className="w-3.5 h-3.5 text-indigo-500" />
+              <span>Ganti ke Mode {isUmkm ? "Freelancer" : "UMKM"}</span>
+            </button>
+            <button
+              type="button"
+              onClick={async () => {
+                setIsProfileOpen(false)
+                const { signOut } = await import("next-auth/react")
+                await signOut({ callbackUrl: "/" })
+              }}
+              className="mt-1 flex w-full items-center gap-2 rounded-xl border-t border-slate-100 pt-2 px-3 py-2 text-xs font-bold text-red-600 transition-colors hover:bg-red-50"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Keluar (Sign Out)</span>
             </button>
           </div>
         </div>

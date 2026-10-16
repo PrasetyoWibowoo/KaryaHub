@@ -1,19 +1,19 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect, useCallback } from "react"
 import { useSearchParams } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { JobCard, JobItemData } from "./JobCard"
 import { Button } from "@/components/ui/Button"
-import { 
-  Search, 
-  Briefcase, 
-  MapPin, 
-  DollarSign, 
-  X, 
-  Layers, 
-  Filter, 
-  Sparkles, 
+import {
+  Search,
+  Briefcase,
+  MapPin,
+  DollarSign,
+  X,
+  Layers,
+  Filter,
+  Sparkles,
   SlidersHorizontal,
   Bookmark,
   LayoutGrid,
@@ -166,6 +166,8 @@ const BUDGET_OPTIONS = [
 
 export function JobsExplorerView() {
   const searchParams = useSearchParams()
+  const [jobs, setJobs] = useState<JobItemData[]>(EXPLORER_JOBS)
+  const [isLoading, setIsLoading] = useState(true)
   const [selectedCategory, setSelectedCategory] = useState<string>("Semua Kategori")
   const [selectedLocation, setSelectedLocation] = useState<string>("Semua Lokasi")
   const [budgetRange, setBudgetRange] = useState<string>("all")
@@ -181,6 +183,43 @@ export function JobsExplorerView() {
     estimatedDays: "7",
     coverLetter: ""
   })
+
+  // Fetch jobs from API on mount, fallback to dummy data on error
+  const fetchJobs = useCallback(async () => {
+    try {
+      setIsLoading(true)
+      const params = new URLSearchParams({ status: "OPEN", limit: "20" })
+      const res = await fetch(`/api/jobs?${params.toString()}`)
+      if (!res.ok) throw new Error("API request failed")
+      const json = await res.json()
+      if (json.success && json.data?.jobs?.length > 0) {
+        const mapped: JobItemData[] = json.data.jobs.map((j: Record<string, unknown>) => ({
+          id: j.id as string,
+          title: j.title as string,
+          employerName: (j.employer as Record<string, unknown>)?.fullName as string || "UMKM",
+          budget: j.budget as number,
+          category: j.category as string || "Lainnya",
+          skills: ((j.skills as Array<Record<string, unknown>>) || []).map((s) => s.name as string),
+          location: "Remote",
+          postedAt: j.createdAt ? new Date(j.createdAt as string).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }) : undefined,
+          deadline: j.deadline ? new Date(j.deadline as string).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }) : undefined,
+          matchScore: Math.floor(Math.random() * 15) + 80,
+          verified: true,
+          description: (j.description as string)?.slice(0, 150) || "",
+        }))
+        setJobs(mapped)
+      }
+      // If no jobs returned, keep EXPLORER_JOBS fallback (already set as initial state)
+    } catch {
+      // On error, keep EXPLORER_JOBS fallback (already set as initial state)
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchJobs()
+  }, [fetchJobs])
 
   const showToast = (msg: string) => {
     setToastNotice(msg)
@@ -209,7 +248,7 @@ export function JobsExplorerView() {
   }
 
   const filteredJobs = useMemo(() => {
-    return EXPLORER_JOBS.filter((job) => {
+    return jobs.filter((job) => {
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase()
         const matchTitle = job.title.toLowerCase().includes(q)
@@ -278,7 +317,7 @@ export function JobsExplorerView() {
                 100% Escrow Terlindungi
               </span>
               <span className="text-xs font-semibold text-slate-500">
-                {EXPLORER_JOBS.length} Proyek Aktif Terbuka
+                {jobs.length} Proyek Aktif Terbuka
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold font-display tracking-tight text-slate-950">
@@ -385,9 +424,9 @@ export function JobsExplorerView() {
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar relative">
         {CATEGORIES.map((cat) => {
           const isActive = selectedCategory === cat
-          const count = cat === "Semua Kategori" 
-            ? EXPLORER_JOBS.length 
-            : EXPLORER_JOBS.filter((j) => j.category === cat).length
+          const count = cat === "Semua Kategori"
+            ? jobs.length
+            : jobs.filter((j) => j.category === cat).length
           return (
             <button
               key={cat}
@@ -529,12 +568,12 @@ export function JobsExplorerView() {
               </Button>
             </div>
           ) : (
-            <motion.div 
+            <motion.div
               layout
               transition={{ type: "spring", stiffness: 350, damping: 28 }}
               className={cn(
-                viewMode === "grid" 
-                  ? "grid grid-cols-1 md:grid-cols-2 gap-4" 
+                viewMode === "grid"
+                  ? "grid grid-cols-1 md:grid-cols-2 gap-4"
                   : "space-y-3"
               )}
             >
@@ -557,13 +596,13 @@ export function JobsExplorerView() {
       {/* Quick Apply Proposal Modal */}
       <AnimatePresence>
         {quickApplyJob && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm"
           >
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}

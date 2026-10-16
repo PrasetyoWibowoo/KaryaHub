@@ -1,6 +1,6 @@
 "use client"
 
-import { use, useState } from "react"
+import { use, useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Sidebar } from "@/components/dashboard/Sidebar"
@@ -8,11 +8,11 @@ import { DashboardTopbar } from "@/components/dashboard/DashboardTopbar"
 import { Card } from "@/components/ui/Card"
 import { Button } from "@/components/ui/Button"
 import { Badge } from "@/components/ui/Badge"
-import { 
-  Briefcase, 
-  MapPin, 
-  Clock, 
-  DollarSign, 
+import {
+  Briefcase,
+  MapPin,
+  Clock,
+  DollarSign,
   Calendar,
   Building2,
   Send,
@@ -29,8 +29,8 @@ import {
   Zap
 } from "lucide-react"
 
-// Mock data - in production, fetch from API based on params.id
-const JOB_DETAIL = {
+// Fallback mock data - used when API returns empty or errors
+const JOB_DETAIL_FALLBACK = {
   id: "1",
   title: "Desain UI/UX untuk Aplikasi Mobile Toko Online",
   employerName: "Toko Berkah Jaya",
@@ -64,8 +64,10 @@ const JOB_DETAIL = {
 }
 
 export default function JobDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  use(params)
+  const { id } = use(params)
   const router = useRouter()
+  const [jobDetail, setJobDetail] = useState(JOB_DETAIL_FALLBACK)
+  const [isLoading, setIsLoading] = useState(true)
   const [showProposalForm, setShowProposalForm] = useState(false)
   const [proposalData, setProposalData] = useState({
     coverLetter: "",
@@ -76,10 +78,51 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [proposalSuccess, setProposalSuccess] = useState(false)
 
+  // Fetch job detail from API with fallback to mock data
+  useEffect(() => {
+    async function fetchJobDetail() {
+      try {
+        setIsLoading(true)
+        const res = await fetch(`/api/jobs/${id}`)
+        if (!res.ok) throw new Error("Failed to fetch job")
+        const json = await res.json()
+        if (json.success && json.data) {
+          const d = json.data
+          setJobDetail({
+            id: d.id,
+            title: d.title || JOB_DETAIL_FALLBACK.title,
+            employerName: d.employer?.fullName || JOB_DETAIL_FALLBACK.employerName,
+            employerLogo: d.employer?.profiles?.avatarUrl || null,
+            employerRating: 4.8,
+            employerJobsPosted: 12,
+            budget: d.budget || JOB_DETAIL_FALLBACK.budget,
+            category: d.category || JOB_DETAIL_FALLBACK.category,
+            skills: d.skills?.map((s: Record<string, unknown>) => s.name as string) || JOB_DETAIL_FALLBACK.skills,
+            location: "Remote",
+            postedAt: d.createdAt ? new Date(d.createdAt).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }) : JOB_DETAIL_FALLBACK.postedAt,
+            deadline: d.deadline ? new Date(d.deadline).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }) : JOB_DETAIL_FALLBACK.deadline,
+            applicants: d.proposalCount ?? JOB_DETAIL_FALLBACK.applicants,
+            status: d.status || JOB_DETAIL_FALLBACK.status,
+            description: d.description || JOB_DETAIL_FALLBACK.description,
+            requirements: JOB_DETAIL_FALLBACK.requirements,
+            timeline: JOB_DETAIL_FALLBACK.timeline,
+            workingHours: JOB_DETAIL_FALLBACK.workingHours,
+            projectType: JOB_DETAIL_FALLBACK.projectType,
+          })
+        }
+      } catch {
+        // On error, keep fallback data (already set as initial state)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchJobDetail()
+  }, [id])
+
   const handleSubmitProposal = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    
+
     // Mock API call
     setTimeout(() => {
       setIsSubmitting(false)
@@ -116,20 +159,20 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
               <Card className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
-                    <Badge variant="success" className="mb-3">{JOB_DETAIL.status}</Badge>
-                    <h1 className="text-3xl font-bold text-text-heading mb-2">{JOB_DETAIL.title}</h1>
+                    <Badge variant="success" className="mb-3">{jobDetail.status}</Badge>
+                    <h1 className="text-3xl font-bold text-text-heading mb-2">{jobDetail.title}</h1>
                     <div className="flex items-center gap-4 text-text-muted text-sm flex-wrap">
                       <div className="flex items-center gap-1">
                         <Building2 className="w-4 h-4" />
-                        <span className="font-medium">{JOB_DETAIL.employerName}</span>
+                        <span className="font-medium">{jobDetail.employerName}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <Star className="w-4 h-4 fill-warning text-warning" />
-                        <span>{JOB_DETAIL.employerRating}</span>
+                        <span>{jobDetail.employerRating}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
-                        <span>Posted {JOB_DETAIL.postedAt}</span>
+                        <span>Posted {jobDetail.postedAt}</span>
                       </div>
                     </div>
                   </div>
@@ -142,28 +185,28 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-border">
                   <div>
                     <p className="text-xs text-text-muted mb-1">Budget</p>
-                    <p className="font-bold text-primary text-lg">Rp {JOB_DETAIL.budget.toLocaleString('id-ID')}</p>
+                    <p className="font-bold text-primary text-lg">Rp {jobDetail.budget.toLocaleString('id-ID')}</p>
                   </div>
                   <div>
                     <p className="text-xs text-text-muted mb-1">Deadline</p>
-                    <p className="font-semibold text-text-heading">{JOB_DETAIL.deadline}</p>
+                    <p className="font-semibold text-text-heading">{jobDetail.deadline}</p>
                   </div>
                   <div>
                     <p className="text-xs text-text-muted mb-1">Location</p>
                     <p className="font-semibold text-text-heading flex items-center gap-1">
-                      <MapPin className="w-3 h-3" />{JOB_DETAIL.location}
+                      <MapPin className="w-3 h-3" />{jobDetail.location}
                     </p>
                   </div>
                   <div>
                     <p className="text-xs text-text-muted mb-1">Applicants</p>
                     <p className="font-semibold text-text-heading flex items-center gap-1">
-                      <Users className="w-3 h-3" />{JOB_DETAIL.applicants} applied
+                      <Users className="w-3 h-3" />{jobDetail.applicants} applied
                     </p>
                   </div>
                 </div>
 
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {JOB_DETAIL.skills.map((skill) => (
+                  {jobDetail.skills.map((skill: string) => (
                     <Badge key={skill} variant="outline">{skill}</Badge>
                   ))}
                 </div>
@@ -172,14 +215,14 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
               <Card className="p-6">
                 <h2 className="text-xl font-bold text-text-heading mb-4">Deskripsi Proyek</h2>
                 <div className="prose prose-sm max-w-none text-text-body whitespace-pre-line">
-                  {JOB_DETAIL.description}
+                  {jobDetail.description}
                 </div>
               </Card>
 
               <Card className="p-6">
                 <h2 className="text-xl font-bold text-text-heading mb-4">Persyaratan</h2>
                 <ul className="space-y-3">
-                  {JOB_DETAIL.requirements.map((req, idx) => (
+                  {jobDetail.requirements.map((req: string, idx: number) => (
                     <li key={idx} className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
                       <span className="text-text-body">{req}</span>
@@ -234,15 +277,15 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
                 <div className="space-y-3 text-sm">
                   <div className="flex items-center justify-between py-2 border-b border-border">
                     <span className="text-text-muted">Project Type</span>
-                    <span className="font-semibold text-text-heading">{JOB_DETAIL.projectType}</span>
+                    <span className="font-semibold text-text-heading">{jobDetail.projectType}</span>
                   </div>
                   <div className="flex items-center justify-between py-2 border-b border-border">
                     <span className="text-text-muted">Timeline</span>
-                    <span className="font-semibold text-text-heading">{JOB_DETAIL.timeline}</span>
+                    <span className="font-semibold text-text-heading">{jobDetail.timeline}</span>
                   </div>
                   <div className="flex items-center justify-between py-2">
                     <span className="text-text-muted">Working Hours</span>
-                    <span className="font-semibold text-text-heading">{JOB_DETAIL.workingHours}</span>
+                    <span className="font-semibold text-text-heading">{jobDetail.workingHours}</span>
                   </div>
                 </div>
               </Card>
@@ -254,17 +297,17 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
                     <Building2 className="w-6 h-6 text-primary" />
                   </div>
                   <div>
-                    <p className="font-semibold text-text-heading">{JOB_DETAIL.employerName}</p>
+                    <p className="font-semibold text-text-heading">{jobDetail.employerName}</p>
                     <div className="flex items-center gap-1 text-sm text-text-muted">
                       <Star className="w-3 h-3 fill-warning text-warning" />
-                      <span>{JOB_DETAIL.employerRating} rating</span>
+                      <span>{jobDetail.employerRating} rating</span>
                     </div>
                   </div>
                 </div>
                 <div className="space-y-2 text-sm">
                   <div className="flex items-center justify-between">
                     <span className="text-text-muted">Jobs Posted</span>
-                    <span className="font-semibold text-text-heading">{JOB_DETAIL.employerJobsPosted}</span>
+                    <span className="font-semibold text-text-heading">{jobDetail.employerJobsPosted}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-text-muted">Member Since</span>

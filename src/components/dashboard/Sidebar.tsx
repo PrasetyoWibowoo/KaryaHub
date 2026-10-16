@@ -2,14 +2,15 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { 
-  Search, 
-  FileCheck2, 
-  FileText, 
-  Wallet, 
-  PlusCircle, 
-  Briefcase, 
-  ShieldCheck, 
+import { useSession } from "next-auth/react"
+import {
+  Search,
+  FileCheck2,
+  FileText,
+  Wallet,
+  PlusCircle,
+  Briefcase,
+  ShieldCheck,
   LogOut,
   LayoutDashboard,
   ArrowRightLeft,
@@ -22,9 +23,15 @@ import { cn } from "@/lib/utils"
 export function Sidebar() {
   const pathname = usePathname()
   const router = useRouter()
+  const { data: session } = useSession()
 
   const isFreelancerRoute = pathname.startsWith("/freelancer") || pathname === "/freelancer" || pathname.startsWith("/jobs")
   const isUmkmRoute = pathname.startsWith("/umkm") || pathname === "/umkm"
+
+  // Derive user info from session with fallback to demo data
+  const userName = session?.user?.name || (isFreelancerRoute ? "John Doe" : "TechStartup Inc")
+  const userInitials = userName.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()
+  const userRoleLabel = isFreelancerRoute ? "Talenta Vokasi" : "Mitra UMKM"
 
   const freelancerLinks = [
     { name: "Ringkasan", href: "/freelancer", icon: LayoutDashboard, badge: null },
@@ -33,6 +40,7 @@ export function Sidebar() {
     { name: "AI ATS Checker", href: "/freelancer/ats-checker", icon: FileCheck2, badge: "AI" },
     { name: "Proposal Saya", href: "/freelancer/my-proposals", icon: FileText, badge: null },
     { name: "Dompet & Escrow", href: "/freelancer/wallet", icon: Wallet, badge: "Safe" },
+    { name: "Profil & Portofolio", href: "/freelancer/profile", icon: UserCheck2, badge: "SDG 8" },
   ]
 
   const umkmLinks = [
@@ -40,6 +48,7 @@ export function Sidebar() {
     { name: "Posting Proyek", href: "/umkm/create-job", icon: PlusCircle, badge: "Cepat" },
     { name: "Kelola Proyek", href: "/umkm/manage-jobs", icon: Briefcase, badge: null },
     { name: "Status Escrow", href: "/umkm/escrow-status", icon: ShieldCheck, badge: "Midtrans" },
+    { name: "Profil Usaha", href: "/umkm/profile", icon: Building2, badge: "Mitra" },
   ]
 
   return (
@@ -71,8 +80,8 @@ export function Sidebar() {
             </span>
             <span className={cn(
               "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border",
-              isFreelancerRoute 
-                ? "bg-indigo-50/80 text-indigo-700 border-indigo-200/80" 
+              isFreelancerRoute
+                ? "bg-indigo-50/80 text-indigo-700 border-indigo-200/80"
                 : "bg-emerald-50/80 text-emerald-700 border-emerald-200/80"
             )}>
               {isFreelancerRoute ? <UserCheck2 className="w-2.5 h-2.5" /> : <Building2 className="w-2.5 h-2.5" />}
@@ -141,8 +150,8 @@ export function Sidebar() {
                   {link.badge && (
                     <span className={cn(
                       "text-[9px] font-bold px-1.5 py-0.5 rounded-md uppercase tracking-wider relative z-10",
-                      isActive 
-                        ? "bg-white/20 text-white" 
+                      isActive
+                        ? "bg-white/20 text-white"
                         : "bg-slate-100 text-slate-500 group-hover:bg-slate-200"
                     )}>
                       {link.badge}
@@ -169,19 +178,24 @@ export function Sidebar() {
       {/* User Card & Logout */}
       <div className="p-3.5 border-t border-white/70 bg-white/50 backdrop-blur-md">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-xl bg-slate-900 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-sm">
-              {isFreelancerRoute ? "JD" : "TS"}
+          <Link
+            href={isFreelancerRoute ? "/freelancer/profile" : "/umkm/profile"}
+            className="flex items-center gap-2.5 min-w-0 group hover:opacity-85 transition-opacity"
+            title="Buka Profil Saya"
+          >
+            <div className="w-8 h-8 rounded-xl bg-slate-900 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+              {userInitials}
             </div>
             <div className="min-w-0">
-              <p className="text-xs font-bold text-slate-950 truncate">
-                {isFreelancerRoute ? "John Doe" : "TechStartup Inc"}
+              <p className="text-xs font-bold text-slate-950 truncate group-hover:text-indigo-600 transition-colors">
+                {userName}
               </p>
-              <p className="text-[10px] text-slate-500 truncate">
-                {isFreelancerRoute ? "Talenta Vokasi" : "Mitra UMKM"}
+              <p className="text-[10px] text-slate-500 truncate flex items-center gap-1">
+                <span>{userRoleLabel}</span>
+                <span className="text-[9px] text-indigo-500 font-bold">• Profil</span>
               </p>
             </div>
-          </div>
+          </Link>
           <motion.button
             whileHover={{ scale: 1.15 }}
             whileTap={{ scale: 0.9 }}

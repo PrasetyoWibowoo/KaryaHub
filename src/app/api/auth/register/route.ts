@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
-import type { Role } from "@prisma/client"
+import type { Role } from "@/generated/prisma"
 
 export async function POST(request: Request) {
   try {
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
 
     // Check if user already exists
     const existingUser = await prisma.users.findUnique({
-      where: { email }
+      where: { email: email.toLowerCase() }
     })
 
     if (existingUser) {
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     // Create user with profile
     const user = await prisma.users.create({
       data: {
-        email,
+        email: email.toLowerCase(),
         passwordHash,
         fullName: name,
         role: role.toUpperCase() as Role,
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
             phoneNumber: phone,
             bio: additionalData.bio || additionalData.description,
             companyName: additionalData.companyName,
-            portfolioUrl: additionalData.portfolio || additionalData.website
+            portfolioUrl: additionalData.portfolio || additionalData.website,
           }
         }
       },
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
     })
 
     // Handle skills for freelancers
-    if (role === "freelancer" && additionalData.skills?.length > 0) {
+    if (role.toUpperCase() === "FREELANCER" && additionalData.skills?.length > 0) {
       for (const skillName of additionalData.skills) {
         // Find or create skill
         const skill = await prisma.skills.upsert({
@@ -73,7 +73,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json(
-      { 
+      {
         success: true,
         user: {
           id: user.id,
